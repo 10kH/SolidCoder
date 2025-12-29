@@ -1,0 +1,2137 @@
+OpenRouter model initialized: x-ai/grok-4.1-fast
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int n, m;
+    cin >> n >> m;
+    vector<string> books(n);
+    for (int i = 0; i < n; i++) {
+        cin >> books[i];
+    }
+    vector<int> order(n);
+    iota(order.begin(), order.end(), 0);
+    sort(order.begin(), order.end(), [&](int i, int j) {
+        for (int k = 0; k < m; k++) {
+            if (books[i][k] != books[j][k]) {
+                bool odd_pos = (k % 2 == 0);
+                if (odd_pos) {
+                    return books[i][k] < books[j][k];
+                } else {
+                    return books[i][k] > books[j][k];
+                }
+            }
+        }
+        return false; // shouldn't happen
+    });
+    for (int i = 0; i < n; i++) {
+        cout << order[i] + 1;
+        if (i + 1 < n) cout << " ";
+        else cout << "\n";
+    }
+    return 0;
+}
+```
+```python
+import sys
+from functools import cmp_to_key
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+m = int(data[1])
+books = data[2:2 + n]
+
+def cmp_func(i, j):
+    for k in range(m):
+        if books[i][k] != books[j][k]:
+            if k % 2 == 0:
+                return -1 if books[i][k] < books[j][k] else 1
+            else:
+                return -1 if books[i][k] > books[j][k] else 1
+    return 0
+
+order = list(range(n))
+order.sort(key=cmp_to_key(cmp_func))
+
+print(' '.join(str(idx + 1) for idx in order))
+```
+completed 1/165, Solved: True, number of success = 1/1, acc = 100.0
+completed 2/165, Solved: True, number of success = 2/2, acc = 100.0
+completed 3/165, Solved: True, number of success = 3/3, acc = 100.0
+completed 4/165, Solved: True, number of success = 4/4, acc = 100.0
+completed 5/165, Solved: True, number of success = 5/5, acc = 100.0
+completed 6/165, Solved: True, number of success = 6/6, acc = 100.0
+completed 7/165, Solved: True, number of success = 7/7, acc = 100.0
+completed 8/165, Solved: True, number of success = 8/8, acc = 100.0
+completed 9/165, Solved: True, number of success = 9/9, acc = 100.0
+completed 10/165, Solved: True, number of success = 10/10, acc = 100.0
+completed 11/165, Solved: True, number of success = 11/11, acc = 100.0
+completed 12/165, Solved: True, number of success = 12/12, acc = 100.0
+completed 13/165, Solved: True, number of success = 13/13, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        string s;
+        cin >> s;
+        int ca = 0, cb = 0, cc = 0;
+        for (char ch : s) {
+            if (ch == 'A') ++ca;
+            else if (ch == 'B') ++cb;
+            else ++cc;
+        }
+        if (cb == ca + cc) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    s = data[index]
+    index += 1
+    ca = cb = cc = 0
+    for ch in s:
+        if ch == 'A':
+            ca += 1
+        elif ch == 'B':
+            cb += 1
+        else:
+            cc += 1
+    if cb == ca + cc:
+        print("YES")
+    else:
+        print("NO")
+```
+completed 14/165, Solved: True, number of success = 14/14, acc = 100.0
+completed 15/165, Solved: True, number of success = 15/15, acc = 100.0
+completed 16/165, Solved: True, number of success = 16/16, acc = 100.0
+completed 17/165, Solved: True, number of success = 17/17, acc = 100.0
+completed 18/165, Solved: True, number of success = 18/18, acc = 100.0
+completed 19/165, Solved: True, number of success = 19/19, acc = 100.0
+completed 20/165, Solved: True, number of success = 20/20, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; test++) {
+        int n, m;
+        cin >> n >> m;
+        vector<string> grid(n);
+        for (int i = 0; i < n; i++) {
+            cin >> grid[i];
+        }
+        
+        // col_pref[r][j] = #1's in row r, cols 0 to j-1
+        vector<vector<int>> col_pref(n, vector<int>(m + 1, 0));
+        for (int r = 0; r < n; r++) {
+            for (int j = 1; j <= m; j++) {
+                int is_one = (grid[r][j - 1] == '1' ? 1 : 0);
+                col_pref[r][j] = col_pref[r][j - 1] + is_one;
+            }
+        }
+        
+        // row_pref_zero[c][r] = #0's in col c, rows 0 to r-1
+        vector<vector<int>> row_pref_zero(m, vector<int>(n + 1, 0));
+        for (int c = 0; c < m; c++) {
+            for (int r = 1; r <= n; r++) {
+                int is_zero = (grid[r - 1][c] == '0' ? 1 : 0);
+                row_pref_zero[c][r] = row_pref_zero[c][r - 1] + is_zero;
+            }
+        }
+        
+        const long long INF = 1LL << 60;
+        long long ans = INF;
+        
+        for (int c1 = 0; c1 < m; c1++) {
+            for (int c2 = c1 + 3; c2 < m; c2++) {
+                int inner_l = c1 + 1;
+                int inner_r = c2 - 1;
+                int win = inner_r - inner_l + 1;
+                
+                // Z[r] = #1's row r, cols inner_l to inner_r
+                vector<int> Z(n);
+                for (int r = 0; r < n; r++) {
+                    Z[r] = col_pref[r][inner_r + 1] - col_pref[r][inner_l];
+                }
+                
+                // side_cost[r]
+                vector<int> side_cost(n, 0);
+                for (int r = 0; r < n; r++) {
+                    int lz = (grid[r][c1] == '0' ? 1 : 0);
+                    int rz = (grid[r][c2] == '0' ? 1 : 0);
+                    side_cost[r] = lz + rz;
+                }
+                
+                // prefix_mid[r+1] = sum total_mid[0..r]
+                vector<long long> prefix_mid(n + 1, 0);
+                for (int r = 0; r < n; r++) {
+                    long long tm = (long long)side_cost[r] + Z[r];
+                    prefix_mid[r + 1] = prefix_mid[r] + tm;
+                }
+                
+                // C[s] for s=1 to n-3: prefix_mid[s] + Z[s-1]
+                int max_s = n - 3;
+                if (max_s < 1) continue;
+                vector<long long> C(n + 1, 0);
+                for (int s = 1; s <= max_s; s++) {
+                    int p = s - 1;
+                    C[s] = prefix_mid[s] + Z[p];
+                }
+                
+                // prefix_max_C[k] = max C[1..k]
+                vector<long long> prefix_max_C(n + 1, LLONG_MIN / 2);
+                prefix_max_C[1] = C[1];
+                for (int k = 2; k <= max_s; k++) {
+                    prefix_max_C[k] = max(prefix_max_C[k - 1], C[k]);
+                }
+                
+                // now for each e=3 to n-2
+                int max_e = n - 2;
+                for (int e = 3; e <= max_e; e++) {
+                    int maxk = min(max_s, e - 2);
+                    if (maxk >= 1) {
+                        long long Ae = prefix_mid[e + 1] - Z[e + 1];
+                        long long maxCs = prefix_max_C[maxk];
+                        long long thisc = Ae - maxCs + 2LL * win;
+                        if (thisc < ans) ans = thisc;
+                    }
+                }
+            }
+        }
+        
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+idx = 0
+t = int(data[idx])
+idx += 1
+for _ in range(t):
+    line = data[idx]
+    idx += 1
+    n, m = map(int, line.split())
+    grid = []
+    for i in range(n):
+        grid.append(data[idx])
+        idx += 1
+    col_pref = [[0] * (m + 1) for _ in range(n)]
+    for r in range(n):
+        for j in range(1, m + 1):
+            is_one = 1 if grid[r][j - 1] == '1' else 0
+            col_pref[r][j] = col_pref[r][j - 1] + is_one
+    INF = 10**18
+    ans = INF
+    for c1 in range(m):
+        for c2 in range(c1 + 3, m):
+            inner_l = c1 + 1
+            inner_r = c2 - 1
+            win = inner_r - inner_l + 1
+            Z = [0] * n
+            for r in range(n):
+                Z[r] = col_pref[r][inner_r + 1] - col_pref[r][inner_l]
+            side_cost = [0] * n
+            for r in range(n):
+                lz = 1 if grid[r][c1] == '0' else 0
+                rz = 1 if grid[r][c2] == '0' else 0
+                side_cost[r] = lz + rz
+            prefix_mid = [0] * (n + 1)
+            for r in range(n):
+                tm = side_cost[r] + Z[r]
+                prefix_mid[r + 1] = prefix_mid[r] + tm
+            max_s = n - 3
+            if max_s < 1:
+                continue
+            C = [0] * (n + 1)
+            for s in range(1, max_s + 1):
+                p = s - 1
+                C[s] = prefix_mid[s] + Z[p]
+            prefix_max_C = [-10**18] * (n + 1)
+            prefix_max_C[1] = C[1]
+            for k in range(2, max_s + 1):
+                prefix_max_C[k] = max(prefix_max_C[k - 1], C[k])
+            max_e = n - 2
+            for e in range(3, max_e + 1):
+                maxk = min(max_s, e - 2)
+                if maxk >= 1:
+                    Ae = prefix_mid[e + 1] - Z[e + 1]
+                    maxCs = prefix_max_C[maxk]
+                    thisc = Ae - maxCs + 2 * win
+                    if thisc < ans:
+                        ans = thisc
+    print(ans)
+```
+completed 21/165, Solved: True, number of success = 21/21, acc = 100.0
+completed 22/165, Solved: True, number of success = 22/22, acc = 100.0
+completed 23/165, Solved: True, number of success = 23/23, acc = 100.0
+completed 24/165, Solved: True, number of success = 24/24, acc = 100.0
+completed 25/165, Solved: True, number of success = 25/25, acc = 100.0
+completed 26/165, Solved: True, number of success = 26/26, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+const int MOD = 1000000007;
+const int MAXN = 200010;
+ll fact[MAXN];
+void precompute() {
+    fact[0] = 1;
+    for(int i = 1; i < MAXN; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+    }
+}
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    precompute();
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++) {
+        int n;
+        cin >> n;
+        ll res = fact[2 * n] * 500000004LL % MOD;
+        cout << res << '\n';
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+idx = 0
+t = int(data[idx])
+idx += 1
+
+MOD = 1000000007
+MAXN = 200010
+fact = [0] * MAXN
+fact[0] = 1
+for i in range(1, MAXN):
+    fact[i] = fact[i - 1] * i % MOD
+
+inv2 = 500000004
+
+ans = []
+for _ in range(t):
+    n = int(data[idx])
+    idx += 1
+    res = fact[2 * n] * inv2 % MOD
+    ans.append(str(res))
+
+print('\n'.join(ans))
+```
+completed 27/165, Solved: True, number of success = 27/27, acc = 100.0
+completed 28/165, Solved: True, number of success = 28/28, acc = 100.0
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    a = int(data[index])
+    b = int(data[index + 1])
+    c = int(data[index + 2])
+    index += 3
+    if (a + c) % 2 == 0:
+        print(0)
+    else:
+        print(1)
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    a = int(data[index])
+    b = int(data[index + 1])
+    c = int(data[index + 2])
+    index += 3
+    if (a + c) % 2 == 0:
+        print(0)
+    else:
+        print(1)
+```
+completed 29/165, Solved: True, number of success = 29/29, acc = 100.0
+completed 30/165, Solved: True, number of success = 30/30, acc = 100.0
+completed 31/165, Solved: True, number of success = 31/31, acc = 100.0
+completed 32/165, Solved: True, number of success = 32/32, acc = 100.0
+completed 33/165, Solved: True, number of success = 33/33, acc = 100.0
+completed 34/165, Solved: True, number of success = 34/34, acc = 100.0
+completed 35/165, Solved: True, number of success = 35/35, acc = 100.0
+completed 36/165, Solved: True, number of success = 36/36, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+
+bool is_composite(ll x) {
+    if (x <= 1) return false;
+    if (x == 2 || x == 3) return false;
+    if (x % 2 == 0 || x % 3 == 0) return true;
+    for (ll i = 5; i * i <= x; i += 6) {
+        if (x % i == 0 || x % (i + 2) == 0) return true;
+    }
+    return false;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; test++) {
+        int n;
+        cin >> n;
+        vector<ll> a(n);
+        ll S = 0;
+        for (int i = 0; i < n; i++) {
+            cin >> a[i];
+            S += a[i];
+        }
+        if (is_composite(S)) {
+            cout << n << "\n";
+            for (int i = 1; i <= n; i++) cout << i << " ";
+            cout << "\n";
+        } else {
+            int idx = -1;
+            for (int i = 0; i < n; i++) {
+                if (a[i] % 2 == 1) {
+                    idx = i + 1;
+                    break;
+                }
+            }
+            cout << n - 1 << "\n";
+            for (int i = 1; i <= n; i++) {
+                if (i != idx) cout << i << " ";
+            }
+            cout << "\n";
+        }
+    }
+}
+```
+```python
+import sys
+
+def is_composite(x):
+    if x <= 1:
+        return False
+    if x == 2 or x == 3:
+        return False
+    if x % 2 == 0 or x % 3 == 0:
+        return True
+    i = 5
+    while i * i <= x:
+        if x % i == 0 or x % (i + 2) == 0:
+            return True
+        i += 6
+    return False
+
+input = sys.stdin.read
+data = input().split()
+index = 0
+t = int(data[index])
+index += 1
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    a = []
+    S = 0
+    for i in range(n):
+        ai = int(data[index])
+        index += 1
+        a.append(ai)
+        S += ai
+    if is_composite(S):
+        print(n)
+        print(' '.join(map(str, range(1, n + 1))))
+    else:
+        idx = -1
+        for i in range(n):
+            if a[i] % 2 == 1:
+                idx = i + 1
+                break
+        print(n - 1)
+        subset = [str(j) for j in range(1, n + 1) if j != idx]
+        print(' '.join(subset))
+```
+completed 37/165, Solved: True, number of success = 37/37, acc = 100.0
+completed 38/165, Solved: True, number of success = 38/38, acc = 100.0
+completed 39/165, Solved: True, number of success = 39/39, acc = 100.0
+completed 40/165, Solved: True, number of success = 40/40, acc = 100.0
+completed 41/165, Solved: True, number of success = 41/41, acc = 100.0
+completed 42/165, Solved: True, number of success = 42/42, acc = 100.0
+completed 43/165, Solved: True, number of success = 43/43, acc = 100.0
+completed 44/165, Solved: True, number of success = 44/44, acc = 100.0
+completed 45/165, Solved: True, number of success = 45/45, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; test++) {
+        int n;
+        cin >> n;
+        vector<int> a(n + 1);
+        for (int i = 1; i <= n; i++) {
+            cin >> a[i];
+        }
+        long long height = 1;
+        int consec = 0;
+        bool dead = false;
+        for (int i = 1; i <= n; i++) {
+            if (a[i] == 0) {
+                consec++;
+                if (consec >= 2) {
+                    dead = true;
+                }
+            } else {
+                consec = 0;
+                if (i == 1 || a[i - 1] == 0) {
+                    height += 1;
+                } else {
+                    height += 5;
+                }
+            }
+        }
+        if (dead) {
+            cout << -1 << endl;
+        } else {
+            cout << height << endl;
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    a = []
+    for j in range(n):
+        a.append(int(data[index]))
+        index += 1
+    
+    height = 1
+    consec = 0
+    dead = False
+    for i in range(n):
+        if a[i] == 0:
+            consec += 1
+            if consec >= 2:
+                dead = True
+        else:
+            consec = 0
+            if i == 0 or a[i-1] == 0:
+                height += 1
+            else:
+                height += 5
+    if dead:
+        print(-1)
+    else:
+        print(height)
+```
+completed 46/165, Solved: True, number of success = 46/46, acc = 100.0
+completed 47/165, Solved: True, number of success = 47/47, acc = 100.0
+completed 48/165, Solved: True, number of success = 48/48, acc = 100.0
+completed 49/165, Solved: True, number of success = 49/49, acc = 100.0
+completed 50/165, Solved: True, number of success = 50/50, acc = 100.0
+completed 51/165, Solved: True, number of success = 51/51, acc = 100.0
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    l = 1 - n
+    r = n
+    print(l, r)
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    l = 1 - n
+    r = n
+    print(l, r)
+```
+completed 52/165, Solved: True, number of success = 52/52, acc = 100.0
+completed 53/165, Solved: True, number of success = 53/53, acc = 100.0
+completed 54/165, Solved: True, number of success = 54/54, acc = 100.0
+completed 55/165, Solved: True, number of success = 55/55, acc = 100.0
+completed 56/165, Solved: True, number of success = 56/56, acc = 100.0
+completed 57/165, Solved: True, number of success = 57/57, acc = 100.0
+completed 58/165, Solved: True, number of success = 58/58, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin >> t;
+    for(int test = 0; test < t; test++) {
+        int n;
+        cin >> n;
+        string s1, s2;
+        cin >> s1 >> s2;
+        vector<vector<bool>> vis(2, vector<bool>(n, false));
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        vis[0][0] = true;
+        int dx[9] = {-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int dy[9] = {-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        while(!q.empty()) {
+            pair<int, int> p = q.front(); q.pop();
+            int r = p.first;
+            int c = p.second;
+            for(int d = 0; d < 9; d++) {
+                int nr = r + dx[d];
+                int nc = c + dy[d];
+                if(nr < 0 || nr > 1 || nc < 0 || nc >= n) continue;
+                if((nr == 0 ? s1[nc] : s2[nc]) != '0') continue;
+                if(vis[nr][nc]) continue;
+                vis[nr][nc] = true;
+                q.push({nr, nc});
+            }
+        }
+        if(vis[1][n - 1]) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    return 0;
+}
+```
+```python
+from collections import deque
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+idx = 0
+t = int(data[idx])
+idx += 1
+for _ in range(t):
+    n = int(data[idx])
+    idx += 1
+    s1 = data[idx]
+    idx += 1
+    s2 = data[idx]
+    idx += 1
+    vis = [[False] * n for _ in range(2)]
+    q = deque()
+    q.append((0, 0))
+    vis[0][0] = True
+    dx = [-1, -1, -1, 0, 0, 0, 1, 1, 1]
+    dy = [-1, 0, 1, -1, 0, 1, -1, 0, 1]
+    while q:
+        r, c = q.popleft()
+        for d in range(9):
+            nr = r + dx[d]
+            nc = c + dy[d]
+            if nr < 0 or nr > 1 or nc < 0 or nc >= n:
+                continue
+            if (nr == 0 and s1[nc] == '1') or (nr == 1 and s2[nc] == '1'):
+                continue
+            if vis[nr][nc]:
+                continue
+            vis[nr][nc] = True
+            q.append((nr, nc))
+    if vis[1][n - 1]:
+        print("YES")
+    else:
+        print("NO")
+```
+completed 59/165, Solved: True, number of success = 59/59, acc = 100.0
+completed 60/165, Solved: True, number of success = 60/60, acc = 100.0
+completed 61/165, Solved: True, number of success = 61/61, acc = 100.0
+completed 62/165, Solved: True, number of success = 62/62, acc = 100.0
+completed 63/165, Solved: True, number of success = 63/63, acc = 100.0
+completed 64/165, Solved: True, number of success = 64/64, acc = 100.0
+completed 65/165, Solved: True, number of success = 65/65, acc = 100.0
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int N;
+    cin >> N;
+    vector<ll> A(N);
+    for (auto &x : A) cin >> x;
+    string S;
+    cin >> S;
+    set<ll> rem(A.begin(), A.end());
+    vector<pair<ll, char>> ans;
+    ll diff = 0;
+    bool possible = true;
+    for (int i = 0; i < N && possible; ++i) {
+        bool req_pos = (S[i] == 'L');
+        ll threshL = req_pos ? -diff : -diff;
+        string left_c = req_pos ? ">" : "<";
+        ll threshR = req_pos ? diff : diff;
+        string right_c = req_pos ? "<" : ">";
+        // candL
+        ll candL_val = LLONG_MAX / 2;
+        if (left_c == ">") {
+            auto it = rem.lower_bound(threshL + 1);
+            if (it != rem.end()) candL_val = *it;
+        } else {
+            if (!rem.empty()) {
+                auto it = rem.begin();
+                if (*it < threshL) {
+                    candL_val = *it;
+                }
+            }
+        }
+        // candR
+        ll candR_val = LLONG_MAX / 2;
+        if (right_c == ">") {
+            auto it = rem.lower_bound(threshR + 1);
+            if (it != rem.end()) candR_val = *it;
+        } else {
+            if (!rem.empty()) {
+                auto it = rem.begin();
+                if (*it < threshR) {
+                    candR_val = *it;
+                }
+            }
+        }
+        // choose smallest cand
+        ll chosen = LLONG_MAX / 2;
+        if (candL_val < LLONG_MAX / 2 && candR_val < LLONG_MAX / 2) {
+            if (candL_val <= candR_val) {
+                chosen = candL_val;
+            } else {
+                chosen = candR_val;
+            }
+        } else if (candL_val < LLONG_MAX / 2) {
+            chosen = candL_val;
+        } else if (candR_val < LLONG_MAX / 2) {
+            chosen = candR_val;
+        } else {
+            possible = false;
+            continue;
+        }
+        // check cans for chosen
+        bool canL = false;
+        if (left_c == ">" && chosen > threshL) canL = true;
+        else if (left_c == "<" && chosen < threshL) canL = true;
+        bool canRR = false;
+        if (right_c == ">" && chosen > threshR) canRR = true;
+        else if (right_c == "<" && chosen < threshR) canRR = true;
+        if (!canL && !canRR) {
+            possible = false;
+            continue;
+        }
+        char side;
+        ll newd;
+        if (!canL) {
+            side = 'R';
+            newd = diff - chosen;
+        } else if (!canRR) {
+            side = 'L';
+            newd = diff + chosen;
+        } else {
+            ll newdL = diff + chosen;
+            ll newdR = diff - chosen;
+            ll absL = abs(newdL);
+            ll absR = abs(newdR);
+            if (absL <= absR) {
+                side = 'L';
+                newd = newdL;
+            } else {
+                side = 'R';
+                newd = newdR;
+            }
+        }
+        ans.emplace_back(chosen, side);
+        rem.erase(chosen);
+        diff = newd;
+    }
+    if (ans.size() == (size_t)N) {
+        for (auto [w, c] : ans) {
+            cout << w << " " << c << '\n';
+        }
+    } else {
+        cout << -1 << '\n';
+    }
+    return 0;
+}
+```
+```python
+import sys
+import bisect
+
+sys.setrecursionlimit(10**6)
+
+class SegTree:
+    def __init__(self, n):
+        self.n = n
+        self.inf = n
+        self.tree = [0] * (4 * n)
+        self.build(1, 0, n - 1)
+
+    def build(self, node, start, end):
+        if start == end:
+            self.tree[node] = start
+            return
+        mid = (start + end) // 2
+        self.build(2 * node, start, mid)
+        self.build(2 * node + 1, mid + 1, end)
+        self.tree[node] = min(self.tree[2 * node], self.tree[2 * node + 1])
+
+    def update(self, node, start, end, idx, val):
+        if start == end:
+            self.tree[node] = val
+            return
+        mid = (start + end) // 2
+        if idx <= mid:
+            self.update(2 * node, start, mid, idx, val)
+        else:
+            self.update(2 * node + 1, mid + 1, end, idx, val)
+        self.tree[node] = min(self.tree[2 * node], self.tree[2 * node + 1])
+
+    def query(self, node, start, end, l, r):
+        if r < start or end < l:
+            return self.inf
+        if l <= start and end <= r:
+            return self.tree[node]
+        mid = (start + end) // 2
+        p1 = self.query(2 * node, start, mid, l, r)
+        p2 = self.query(2 * node + 1, mid + 1, end, l, r)
+        return min(p1, p2)
+
+input_data = sys.stdin.read().split()
+idx = 0
+N = int(input_data[idx])
+idx += 1
+A = [int(input_data[idx + i]) for i in range(N)]
+idx += N
+S = input_data[idx]
+
+sorted_A = sorted(A)
+st = SegTree(N)
+diff = 0
+ans = []
+INF = float('inf')
+possible = True
+
+for i in range(N):
+    if not possible:
+        break
+    req_pos = (S[i] == 'L')
+    threshL = -diff
+    left_c = '>' if req_pos else '<'
+    threshR = diff
+    right_c = '<' if req_pos else '>'
+    # candL
+    candL_val = INF
+    if left_c == '>':
+        pos = bisect.bisect_left(sorted_A, threshL + 1)
+        if pos < N:
+            min_idx = st.query(1, 0, N - 1, pos, N - 1)
+            if min_idx < st.inf:
+                candL_val = sorted_A[min_idx]
+    else:  # '<'
+        min_idx = st.query(1, 0, N - 1, 0, N - 1)
+        if min_idx < st.inf and sorted_A[min_idx] < threshL:
+            candL_val = sorted_A[min_idx]
+    # candR
+    candR_val = INF
+    if right_c == '>':
+        pos = bisect.bisect_left(sorted_A, threshR + 1)
+        if pos < N:
+            min_idx = st.query(1, 0, N - 1, pos, N - 1)
+            if min_idx < st.inf:
+                candR_val = sorted_A[min_idx]
+    else:  # '<'
+        min_idx = st.query(1, 0, N - 1, 0, N - 1)
+        if min_idx < st.inf and sorted_A[min_idx] < threshR:
+            candR_val = sorted_A[min_idx]
+    # chosen
+    candidates = []
+    if candL_val < INF:
+        candidates.append(candL_val)
+    if candR_val < INF:
+        candidates.append(candR_val)
+    if not candidates:
+        possible = False
+        continue
+    chosen_val = min(candidates)
+    chosen_idx = bisect.bisect_left(sorted_A, chosen_val)
+    # check can
+    canL = False
+    if left_c == '>' and chosen_val > threshL:
+        canL = True
+    elif left_c == '<' and chosen_val < threshL:
+        canL = True
+    canR = False
+    if right_c == '>' and chosen_val > threshR:
+        canR = True
+    elif right_c == '<' and chosen_val < threshR:
+        canR = True
+    if not canL and not canR:
+        possible = False
+        continue
+    # decide side
+    if not canL:
+        side = 'R'
+        newd = diff - chosen_val
+    elif not canR:
+        side = 'L'
+        newd = diff + chosen_val
+    else:
+        newdL = diff + chosen_val
+        newdR = diff - chosen_val
+        absL = abs(newdL)
+        absR = abs(newdR)
+        if absL <= absR:
+            side = 'L'
+            newd = newdL
+        else:
+            side = 'R'
+            newd = newdR
+    ans.append((chosen_val, side))
+    st.update(1, 0, N - 1, chosen_idx, st.inf)
+    diff = newd
+
+if len(ans) == N:
+    for w, c in ans:
+        print(w, c)
+else:
+    print(-1)
+```
+completed 66/165, Solved: False, number of success = 65/66, acc = 98.48
+completed 67/165, Solved: False, number of success = 65/67, acc = 97.01
+completed 68/165, Solved: False, number of success = 65/68, acc = 95.59
+completed 69/165, Solved: False, number of success = 65/69, acc = 94.2
+completed 70/165, Solved: False, number of success = 65/70, acc = 92.86
+completed 71/165, Solved: False, number of success = 65/71, acc = 91.55
+completed 72/165, Solved: False, number of success = 65/72, acc = 90.28
+completed 73/165, Solved: False, number of success = 65/73, acc = 89.04
+completed 74/165, Solved: False, number of success = 65/74, acc = 87.84
+completed 75/165, Solved: False, number of success = 65/75, acc = 86.67
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int N;
+    cin >> N;
+    vector<long long> A(N);
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+    
+    int left_len = 1;
+    for (int i = 1; i < N; i++) {
+        if (A[i] > A[i - 1]) {
+            left_len++;
+        } else {
+            break;
+        }
+    }
+    
+    int right_len = 1;
+    for (int i = N - 2; i >= 0; i--) {
+        if (A[i] > A[i + 1]) {
+            right_len++;
+        } else {
+            break;
+        }
+    }
+    
+    if ((left_len % 2 == 0) && (right_len % 2 == 0)) {
+        cout << "Bob" << endl;
+    } else {
+        cout << "Alice" << endl;
+    }
+    
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+N = int(data[index])
+index += 1
+A = [int(data[i]) for i in range(index, index + N)]
+
+left_len = 1
+for i in range(1, N):
+    if A[i] > A[i - 1]:
+        left_len += 1
+    else:
+        break
+
+right_len = 1
+for i in range(N - 2, -1, -1):
+    if A[i] > A[i + 1]:
+        right_len += 1
+    else:
+        break
+
+if (left_len % 2 == 0) and (right_len % 2 == 0):
+    print("Bob")
+else:
+    print("Alice")
+```
+completed 76/165, Solved: True, number of success = 66/76, acc = 86.84
+completed 77/165, Solved: True, number of success = 67/77, acc = 87.01
+completed 78/165, Solved: True, number of success = 68/78, acc = 87.18
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+
+ll gcd(ll a, ll b) {
+    while (b != 0) {
+        ll t = b;
+        b = a % b;
+        a = t;
+    }
+    return a;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int &x : a) cin >> x;
+        vector<int> cnt(30, 0);
+        for (int val : a) {
+            for (int b = 0; b < 30; ++b) {
+                if (val & (1 << b)) {
+                    ++cnt[b];
+                }
+            }
+        }
+        ll g = 0;
+        for (int b = 0; b < 30; ++b) {
+            g = gcd(g, (ll)cnt[b]);
+        }
+        if (g == 0) {
+            for (int k = 1; k <= n; ++k) {
+                if (k > 1) cout << " ";
+                cout << k;
+            }
+            cout << '\n';
+        } else {
+            vector<int> divs;
+            for (ll i = 1; i * i <= g; ++i) {
+                if (g % i == 0) {
+                    divs.push_back((int)i);
+                    if (i != g / i) {
+                        divs.push_back((int)(g / i));
+                    }
+                }
+            }
+            sort(divs.begin(), divs.end());
+            for (size_t j = 0; j < divs.size(); ++j) {
+                if (j > 0) cout << " ";
+                cout << divs[j];
+            }
+            cout << '\n';
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+from math import gcd
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    a = [int(data[index + j]) for j in range(n)]
+    index += n
+    
+    cnt = [0] * 30
+    for val in a:
+        for b in range(30):
+            if val & (1 << b):
+                cnt[b] += 1
+    
+    g = 0
+    for c in cnt:
+        g = gcd(g, c)
+    
+    if g == 0:
+        ans = list(range(1, n + 1))
+    else:
+        divs = []
+        i = 1
+        while i * i <= g:
+            if g % i == 0:
+                divs.append(i)
+                if i != g // i:
+                    divs.append(g // i)
+            i += 1
+        ans = sorted(divs)
+    
+    print(' '.join(map(str, ans)))
+```
+completed 79/165, Solved: True, number of success = 69/79, acc = 87.34
+completed 80/165, Solved: True, number of success = 70/80, acc = 87.5
+completed 81/165, Solved: True, number of success = 71/81, acc = 87.65
+completed 82/165, Solved: True, number of success = 72/82, acc = 87.8
+completed 83/165, Solved: True, number of success = 73/83, acc = 87.95
+completed 84/165, Solved: True, number of success = 74/84, acc = 88.1
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  int t;
+  cin >> t;
+  for (int tt = 0; tt < t; tt++) {
+    int n, k;
+    cin >> n >> k;
+    long long ans;
+    if (k == 1) {
+      ans = 1LL * n * (n + 1) / 2;
+    } else {
+      if (k > 40) {
+        ans = n;
+      } else {
+        long long p = 1LL << (k - 1);
+        long long fl = (long long) n / p;
+        long long ex = fl - 1;
+        ans = n + (ex > 0 ? ex : 0LL);
+      }
+    }
+    cout << ans << '\n';
+  }
+}
+```
+
+## Explanation
+
+The reasoning identifies that f(n, k) depends on whether k = 1 or k ≥ 2, and whether k is sufficiently large relative to n's binary structure.
+
+- For k = 1, the single segment [1, n] counts all pairs i ≤
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+idx = 1
+for _ in range(t):
+    n = int(data[idx])
+    k = int(data[idx + 1])
+    idx += 2
+    if k == 1:
+        ans = n * (n + 1) // 2
+    else:
+        if k > 40:
+            ans = n
+        else:
+            p = 1 << (k - 1)
+            fl = n // p
+            ex = fl - 1
+            ans = n + (ex if ex > 0 else 0)
+    print(ans)
+```
+completed 85/165, Solved: False, number of success = 74/85, acc = 87.06
+completed 86/165, Solved: False, number of success = 74/86, acc = 86.05
+completed 87/165, Solved: False, number of success = 74/87, acc = 85.06
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        int n;
+        cin >> n;
+        vector<long long> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+        long long cur = 0;
+        for (int i = 0; i < n; ++i) {
+            cur = max(cur + 1, a[i]);
+        }
+        long long ans = cur - n;
+        cout << ans << '\n';
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    a = []
+    for i in range(n):
+        a.append(int(data[index]))
+        index += 1
+    
+    cur = 0
+    for i in range(n):
+        cur = max(cur + 1, a[i])
+    
+    ans = cur - n
+    print(ans)
+```
+completed 88/165, Solved: True, number of success = 75/88, acc = 85.23
+completed 89/165, Solved: True, number of success = 76/89, acc = 85.39
+completed 90/165, Solved: True, number of success = 77/90, acc = 85.56
+completed 91/165, Solved: True, number of success = 78/91, acc = 85.71
+completed 92/165, Solved: True, number of success = 79/92, acc = 85.87
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  ios::sync_with_stdio(false);
+  cin.tie(0);
+  int t;
+  cin >> t;
+  const int INF = 1e9 + 10;
+  const int MAXN = 105;
+  const int MAXD = 205;
+  const int OFF = 100;
+  for(int tt = 0; tt < t; tt++) {
+   
+```python
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+
+idx = 0
+t = int(data[idx])
+idx += 1
+
+INF = 10**9
+OFF = 100
+SZ = 201
+
+for _ in range(t):
+    s = data[idx]
+    idx += 1
+    n = len(s)
+    orig = [0 if c == 'a' else 1 for c in s]
+    
+    dp = [[[INF for _ in range(2)] for _ in range(SZ)] for _ in range(n + 1)]
+    
+    # Initialize first character
+    for p in range(2):
+        cost = 0 if orig[0] == p else 1
+        dp[1][OFF][p] = cost
+    
+    # Fill DP
+    for i in range(1, n):
+        for j in range(SZ):
+            for p in range(2):
+                if dp[i][j][p] == INF:
+                    continue
+                for np in range(2):
+                    cost_add = 0 if orig[i] == np else 1
+                    delta = 0
+                    if p == 0 and np == 1:
+                        delta = 1
+                    elif p == 1 and np == 0:
+                        delta = -1
+                    nj = j + delta
+                    if 0 <= nj < SZ:
+                        dp[i + 1][nj][np] = min(dp[i + 1][nj][np], dp[i][j][p] + cost_add)
+    
+    # Find min cost at the end
+    min_cost = INF
+    best_p = -1
+    for p in range(2):
+        if dp[n][OFF][p] < min_cost:
+            min_cost = dp[n][OFF][p]
+            best_p = p
+    
+    # Reconstruct the string
+    chars = [None] * n
+    current_i = n
+    current_j = OFF
+    current_p = best_p
+    while current_i > 0:
+        chars[current_i - 1] = 'a' if current_p == 0 else 'b'
+        if current_i == 1:
+            break
+        # Backtrack to find previous
+        found = False
+        for prev_p in range(2):
+            delta = 0
+            if prev_p == 0 and current_p == 1:
+                delta = 1
+            elif prev_p == 1 and current_p == 0:
+                delta = -1
+            prev_j = current_j - delta
+            if 0 <= prev_j < SZ:
+                cost_add = 0 if orig[current_i - 1] == current_p else 1
+                if dp[current_i - 1][prev_j][prev_p] != INF and dp[current_i - 1][prev_j][prev_p] + cost_add == dp[current_i][current_j][current_p]:
+                    current_p = prev_p
+                    current_j = prev_j
+                    current_i -= 1
+                    found = True
+                    break
+        assert found
+    
+    print(''.join(chars))
+```
+completed 93/165, Solved: False, number of success = 79/93, acc = 84.95
+completed 94/165, Solved: False, number of success = 79/94, acc = 84.04
+completed 95/165, Solved: False, number of success = 79/95, acc = 83.16
+completed 96/165, Solved: False, number of success = 79/96, acc = 82.29
+completed 97/165, Solved: False, number of success = 79/97, acc = 81.44
+completed 98/165, Solved: False, number of success = 79/98, acc = 80.61
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    for (int test = 0; test
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    kb = data[index]
+    index += 1
+    s = data[index]
+    index += 1
+    
+    pos = [0] * 26
+    for i in range(26):
+        pos[ord(kb[i]) - ord('a')] = i
+    
+    n = len(s)
+    if n == 0:
+        print(0)
+        continue
+    
+    prev = pos[ord(s[0]) - ord('a')]
+    ans = 0
+    for i in range(1, n):
+        curr = pos[ord(s[i]) - ord('a')]
+        ans += abs(curr - prev)
+        prev = curr
+    
+    print(ans)
+```
+completed 99/165, Solved: True, number of success = 80/99, acc = 80.81
+completed 100/165, Solved: True, number of success = 81/100, acc = 81.0
+completed 101/165, Solved: True, number of success = 82/101, acc = 81.19
+completed 102/165, Solved: True, number of success = 83/102, acc = 81.37
+completed 103/165, Solved: True, number of success = 84/103, acc = 81.55
+completed 104/165, Solved: True, number of success = 85/104, acc = 81.73
+completed 105/165, Solved: True, number of success = 86/105, acc = 81.9
+completed 106/165, Solved: True, number of success = 87/106, acc = 82.08
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    const int MAXP = 110000;
+    vector<bool> is_prime(MAXP + 1, true);
+    is_prime[0] = is_prime[1] = false;
+    for (long long i = 2; i * i <= MAXP; ++i) {
+        if (is_prime[i]) {
+            for (long long j = i * i; j <= MAXP; j += i) {
+                is_prime[j] = false;
+            }
+        }
+    }
+    vector<long long> primes;
+    for (int i = 2; i <= MAXP; ++i) {
+        if (is_prime[i]) {
+            primes.push_back(i);
+        }
+    }
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        int n;
+        cin >> n;
+        if (n == 1) {
+            cout << 1 << '\n';
+        } else {
+            for (int i = 0; i < n; ++i) {
+                cout << primes[i];
+                if (i < n - 1) {
+                    cout << " ";
+                } else {
+                    cout << '\n';
+                }
+            }
+        }
+    }
+    return 0;
+}
+```
+
+## Explanation
+
+The provided code solves the problem by constructing a valid array for each test case using the first n prime numbers (starting from 2) for n ≥ 2, and the number 1 for n = 1. This approach ensures all required conditions are met:
+
+- **Strictly increasing sequence**: Prime numbers are listed in ascending order, so a1 < a2 < … < an.
+- **No divisibility**: For i ≥ 2, a_i (a prime) is greater than a_{i-1} (a smaller prime) and is only divisible by 1 and itself. Since a_{i-1} > 1 and a_{i-1} ≠ a_i, a_{i-1} does not divide a_i.
+- **Range constraints**: The first 1000 primes are all less than 10^9 (e.g., the 1000th prime is 7919).
+- **Edge case handling**: For n=1, outputting 1 satisfies the conditions as there are no divisibility checks.
+
+The code precomputes primes up to 110,000 using the Sieve of Eratosthenes, which is sufficient since the 10,000th prime (around 104,729) covers the maximum sum of n across test cases. For each test case, it outputs the appropriate sequence directly. This method is efficient given the constraints (t ≤ 100, sum n ≤ 10^4).
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+MAXP = 110000
+is_prime = [True] * (MAXP + 1)
+is_prime[0] = is_prime[1] = False
+for i in range(2, int(MAXP**0.5) + 1):
+    if is_prime[i]:
+        for j in range(i * i, MAXP + 1, i):
+            is_prime[j] = False
+primes = [i for i in range(2, MAXP + 1) if is_prime[i]]
+
+index = 0
+t = int(data[index])
+index += 1
+outputs = []
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    if n == 1:
+        outputs.append('1')
+    else:
+        outputs.append(' '.join(map(str, primes[:n])))
+print('\n'.join(outputs))
+```
+completed 107/165, Solved: False, number of success = 87/107, acc = 81.31
+completed 108/165, Solved: False, number of success = 87/108, acc = 80.56
+completed 109/165, Solved: False, number of success = 87/109, acc = 79.82
+completed 110/165, Solved: False, number of success = 87/110, acc = 79.09
+completed 111/165, Solved: False, number of success = 87/111, acc = 78.38
+completed 112/165, Solved: False, number of success = 87/112, acc = 77.68
+completed 113/165, Solved: False, number of success = 87/113, acc = 76.99
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin >> t;
+    for(int test = 0; test < t; test++) {
+        long long x1, p1, x2, p2;
+
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    x1 = int(data[index])
+    p1 = int(data[index + 1])
+    index += 2
+    x2 = int(data[index])
+    p2 = int(data[index + 1])
+    index += 2
+    
+    d1 = len(str(x1))
+    d2 = len(str(x2))
+    l1 = d1 + p1
+    l2 = d2 + p2
+    
+    if l1 > l2:
+        print('>')
+    elif l1 < l2:
+        print('<')
+    else:
+        k = p2 - p1
+        if k >= 0:
+            y = x2 * (10 ** k)
+            if x1 > y:
+                print('>')
+            elif x1 < y:
+                print('<')
+            else:
+                print('=')
+        else:
+            k = -k
+            y = x1 * (10 ** k)
+            if y > x2:
+                print('>')
+            elif y < x2:
+                print('<')
+            else:
+                print('=')
+```
+completed 114/165, Solved: True, number of success = 88/114, acc = 77.19
+completed 115/165, Solved: True, number of success = 89/115, acc = 77.39
+completed 116/165, Solved: True, number of success = 90/116, acc = 77.59
+completed 117/165, Solved: True, number of success = 91/117, acc = 77.78
+completed 118/165, Solved: True, number of success = 92/118, acc = 77.97
+completed 119/165, Solved: True, number of success = 93/119, acc = 78.15
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        int n;
+        cin >> n;
+        long long sum = 0;
+        for (int i = 0; i < n; ++i) {
+            long long a;
+            cin >> a;
+            sum += a;
+        }
+        if (sum % n == 0) {
+            cout << 0 << '\n';
+        } else {
+            cout << 1 << '\n';
+        }
+    }
+    return 0;
+}
+```
+
+## Explanation
+
+The reasoning starts by noting that each operation preserves the total sum of tower heights, S = ∑a_i, since blocks are only moved between towers. The ugliness is defined as the difference between the maximum and minimum heights after any number of operations.
+
+To minimize this difference, the heights must be distributed as evenly as possible given the fixed sum S. For n towers, the most even distribution assigns floor(S/n) blocks to some towers and ceil(S/n) to others. Let h = floor(S/n) and r = S % n. Then, r towers get height h+1, and n-r towers get height h.
+
+In this distribution:
+- If r == 0, all heights are h, so maximum = minimum = h, and ugliness = 0.
+- If r > 0, maximum = h+1 and minimum = h, so ugliness = 1.
+
+This distribution is achievable because operations allow transferring blocks freely between any two towers, and the initial sum S ≥ n (since each a_i ≥ 1) ensures h ≥ 1, avoiding negative heights.
+
+Thus, for each test case:
+1. Compute S, the sum of the heights.
+2. If S % n == 0, the minimum ugliness is 0.
+3. Otherwise, it is 1.
+
+This matches the examples:
+- First: S=30, n=3, 30%3=0 → 0.
+- Second: S=8, n=4, 8%4=0 → 0.
+- Third: S=12, n=5, 12%5=2 → 1.
+
+The code implements this by reading t test cases, computing S for each, and outputting 0 or 1 based on S % n.
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    total = 0
+    for i in range(n):
+        total += int(data[index])
+        index += 1
+    if total % n == 0:
+        print(0)
+    else:
+        print(1)
+```
+completed 120/165, Solved: True, number of success = 94/120, acc = 78.33
+completed 121/165, Solved: True, number of success = 95/121, acc = 78.51
+completed 122/165, Solved: True, number of success = 96/122, acc = 78.69
+completed 123/165, Solved: True, number of success = 97/123, acc = 78.86
+completed 124/165, Solved: True, number of success = 98/124, acc = 79.03
+completed 125/165, Solved: True, number of success = 99/125, acc = 79.2
+completed 126/165, Solved: True, number of success = 100/126, acc = 79.37
+completed 127/165, Solved: True, number of success = 101/127, acc = 79.53
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        string S, T;
+        cin >> S >> T;
+        vector<int> freq(26, 0);
+        for (char ch : S) {
+            freq[ch - 'a']++;
+        }
+        char X = T[0], Y = T[1], Z = T[2];
+        int state = 0;
+        string res = "";
+        int len = S.length();
+        for (int pos = 0; pos < len; ++pos) {
+            for (int i = 0; i < 26; ++i) {
+                if (freq[i] == 0) continue;
+                char ch = 'a' + i;
+                int new_state = state;
+                bool isX = (ch == X);
+                bool isY = (ch == Y);
+                bool isZ = (ch == Z);
+                if (isX) {
+                    if (state == 0) new_state = 1;
+                } else if (isY) {
+                    if (state == 1) new_state = 2;
+                } else if (isZ) {
+                    if (state == 2) new_state = 3;
+                }
+                int cur_rx = freq[X - 'a'];
+                int cur_ry = freq[Y - 'a'];
+                int cur_rz = freq[Z - 'a'];
+                int new_rx = cur_rx - (isX ? 1 : 0);
+                int new_ry = cur_ry - (isY ? 1 : 0);
+                int new_rz = cur_rz - (isZ ? 1 : 0);
+                bool possible = true;
+                if (new_state >= 3) possible = false;
+                else if (new_state == 2 && new_rz > 0) possible = false;
+                if (possible) {
+                    res += ch;
+                    freq[i]--;
+                    state = new_state;
+                    break;
+                }
+            }
+        }
+        cout << res << '\n';
+    }
+}
+```
+
+## Explanation
+
+The provided code constructs the lexicographically smallest permutation S' of S such that T is not a subsequence by greedily building S' position by position while respecting the constraint.
+
+T defines the forbidden subsequence with characters X = T[0], Y = T[1], Z = T[2]. A subsequence automaton tracks progress: state 0 (no X seen), state 1 (X seen, waiting for Y), state 2 (X then Y seen, waiting for Z), state 3 (full T seen, forbidden).
+
+At each position in S':
+- Iterate over possible characters from 'a' to 'z'.
+- For each candidate character ch with remaining count > 0:
+  - Compute new_state after placing ch:
+    - If ch == X and state == 0, new_state = 1.
+    - If ch == Y and state == 1, new_state = 2.
+    - If ch == Z and state == 2, new_state = 3.
+    - Otherwise, new_state remains state.
+  - Compute new remaining counts for X, Y, Z.
+  - Check feasibility: invalid if new_state >= 3 or (new_state == 2 and remaining Z > 0), as state 2 with Z remaining inevitably leads to state 3.
+- Select the smallest feasible ch, append to S', update frequency counts and state.
+
+This ensures the smallest possible character is chosen at each step without making it impossible to avoid T later, as the only blocking condition is entering state 2 with Z remaining. The approach works because arrangements always exist to avoid T unless in this specific state.
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    S = data[index]
+    index += 1
+    T = data[index]
+    index += 1
+    
+    freq = [0] * 26
+    for ch in S:
+        freq[ord(ch) - ord('a')] += 1
+    
+    X = T[0]
+    Y = T[1]
+    Z = T[2]
+    
+    state = 0
+    res = []
+    n = len(S)
+    
+    for pos in range(n):
+        for i in range(26):
+            if freq[i] == 0:
+                continue
+            ch = chr(ord('a') + i)
+            new_state = state
+            if ch == X and state == 0:
+                new_state = 1
+            elif ch == Y and state == 1:
+                new_state = 2
+            elif ch == Z and state == 2:
+                new_state = 3
+            
+            ix = ord(X) - ord('a')
+            iy = ord(Y) - ord('a')
+            iz = ord(Z) - ord('a')
+            cur_rx = freq[ix]
+            cur_ry = freq[iy]
+            cur_rz = freq[iz]
+            new_rx = cur_rx - (1 if ch == X else 0)
+            new_ry = cur_ry - (1 if ch == Y else 0)
+            new_rz = cur_rz - (1 if ch == Z else 0)
+            
+            possible = True
+            if new_state >= 3:
+                possible = False
+            elif new_state == 2 and new_rz > 0:
+                possible = False
+            
+            if possible:
+                res.append(ch)
+                freq[i] -= 1
+                state = new_state
+                break
+    
+    print(''.join(res))
+```
+completed 128/165, Solved: True, number of success = 102/128, acc = 79.69
+completed 129/165, Solved: True, number of success = 103/129, acc = 79.84
+completed 130/165, Solved: True, number of success = 104/130, acc = 80.0
+completed 131/165, Solved: True, number of success = 105/131, acc = 80.15
+completed 132/165, Solved: True, number of success = 106/132, acc = 80.3
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    int t;
+    cin >> t;
+    for (int test = 0; test < t; ++test) {
+        vector<long long> b(7);
+        for (auto& x : b) cin >> x;
+        bool found = false;
+        for (int i = 0; i < 7 && !found; ++i) {
+            for (int j = i + 1; j < 7 && !found; ++j) {
+                for (int k = j + 1; k < 7 && !found; ++k) {
+                    long long p = b[i], q = b[j], r = b[k];
+                    vector<long long> sums = {p, q, r, p + q, p + r, q + r, p + q + r};
+                    sort(sums.begin(), sums.end());
+                    if (sums == b) {
+                        cout << p << ' ' << q << ' ' << r << '\n';
+                        found = true;
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    b = [int(data[index + i]) for i in range(7)]
+    index += 7
+    
+    for i in range(7):
+        for j in range(i + 1, 7):
+            for k in range(j + 1, 7):
+                p = b[i]
+                q = b[j]
+                r = b[k]
+                sums = [p, q, r, p + q, p + r, q + r, p + q + r]
+                sums.sort()
+                if sums == b:
+                    print(p, q, r)
+                    break
+            else:
+                continue
+            break
+        else:
+            continue
+        break
+```
+completed 133/165, Solved: True, number of success = 107/133, acc = 80.45
+completed 134/165, Solved: True, number of success = 108/134, acc = 80.6
+completed 135/165, Solved: True, number of success = 109/135, acc = 80.74
+completed 136/165, Solved: True, number of success = 110/136, acc = 80.88
+completed 137/165, Solved: True, number of success = 111/137, acc = 81.02
+completed 138/165, Solved: True, number of success = 112/138, acc = 81.16
+completed 139/165, Solved: True, number of success = 113/139, acc = 81.29
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    for(int test = 0; test < t; test++) {
+        string s;
+        cin >> s;
+        int len = s.length();
+        if(len % 2 != 0) {
+            cout << "NO" << endl;
+            continue;
+        }
+        int m = len / 2;
+        string first = s.substr(0, m);
+        string second = s.substr(m, m);
+        if(first == second) {
+            cout << "YES" << endl;
+        } else {
+            cout << "NO" << endl;
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+
+for _ in range(t):
+    s = data[index]
+    index += 1
+    len_s = len(s)
+    if len_s % 2 != 0:
+        print("NO")
+        continue
+    m = len_s // 2
+    first = s[:m]
+    second = s[m:]
+    if first == second:
+        print("YES")
+    else:
+        print("NO")
+```
+completed 140/165, Solved: True, number of success = 114/140, acc = 81.43
+completed 141/165, Solved: True, number of success = 115/141, acc = 81.56
+completed 142/165, Solved: True, number of success = 116/142, acc = 81.69
+completed 143/165, Solved: True, number of success = 117/143, acc = 81.82
+completed 144/165, Solved: True, number of success = 118/144, acc = 81.94
+completed 145/165, Solved: True, number of success = 119/145, acc = 82.07
+completed 146/165, Solved: True, number of success = 120/146, acc = 82.19
+completed 147/165, Solved: True, number of success = 121/147, acc = 82.31
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    for(int test = 0; test < t; test++) {
+        string s;
+        cin >> s;
+        int cnt = 0;
+        for(char c : s) if(c == 'N') cnt++;
+        if(cnt == 1) {
+            cout << "NO" << endl;
+        } else {
+            cout << "YES" << endl;
+        }
+    }
+    return 0;
+}
+```
+
+## Explanation
+
+The problem requires determining if an array of positive integers can be arranged in a circle consistent with the given equality ('E') and inequality ('N') constraints between neighboring elements.
+
+The constraints form a circular structure. Positions connected by 'E's must share the same value, forming connected components. Each 'N' requires the adjacent positions to have different values.
+
+In a circle:
+- If there are 0 'N's, all positions are connected by 'E's into one component, which is consistent (all equal values).
+- If there is exactly 1 'N', the rest of the circle consists of 'E's, connecting the two sides of that 'N' into the same component. This forces the adjacent positions to be equal (via the 'E' path) but unequal (via 'N'), creating a contradiction.
+- If there are 2 or more 'N's, each 'N' separates distinct components. The complementary arc for any 'N' contains at least one other 'N', preventing a full 'E' path that would merge the sides. Thus, adjacent components across each 'N' are distinct and can be assigned different values (e.g., using distinct integers for each component).
+
+Therefore, the condition simplifies to: count the number of 'N's in the string. Output "NO" if exactly 1, otherwise "YES".
+
+The code reads t test cases, counts 'N's in each string s, and applies this rule.
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+index = 1
+for _ in range(t):
+    s = data[index]
+    index += 1
+    cnt = s.count('N')
+    if cnt == 1:
+        print("NO")
+    else:
+        print("YES")
+```
+completed 148/165, Solved: True, number of success = 122/148, acc = 82.43
+completed 149/165, Solved: True, number of success = 123/149, acc = 82.55
+completed 150/165, Solved: True, number of success = 124/150, acc = 82.67
+completed 151/165, Solved: True, number of success = 125/151, acc = 82.78
+completed 152/165, Solved: True, number of success = 126/152, acc = 82.89
+completed 153/165, Solved: True, number of success = 127/153, acc = 83.01
+completed 154/165, Solved: True, number of success = 128/154, acc = 83.12
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin >> t;
+    for(int i = 0; i < t; i++) {
+        long long a, b, c;
+        cin >> a >> b >> c;
+        bool ok1 = (b == c && a % 2 == 0) || (a == b + c);
+        bool ok2 = (a == c && b % 2 == 0) || (b == a + c);
+        bool ok3 = (a == b && c % 2 == 0) || (c == a + b);
+        if(ok1 || ok2 || ok3) {
+            cout << "YES\n";
+        } else {
+            cout << "NO\n";
+        }
+    }
+    return 0;
+}
+```
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+for _ in range(t):
+    a = int(data[index])
+    b = int(data[index + 1])
+    c = int(data[index + 2])
+    index += 3
+    
+    ok1 = (b == c and a % 2 == 0) or (a == b + c)
+    ok2 = (a == c and b % 2 == 0) or (b == a + c)
+    ok3 = (a == b and c % 2 == 0) or (c == a + b)
+    
+    if ok1 or ok2 or ok3:
+        print("YES")
+    else:
+        print("NO")
+```
+completed 155/165, Solved: True, number of success = 129/155, acc = 83.23
+completed 156/165, Solved: True, number of success = 130/156, acc = 83.33
+completed 157/165, Solved: True, number of success = 131/157, acc = 83.44
+completed 158/165, Solved: True, number of success = 132/158, acc = 83.54
+completed 159/165, Solved: True, number of success = 133/159, acc = 83.65
+completed 160/165, Solved: True, number of success = 134/160, acc = 83.75
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    int t;
+    cin >> t;
+    for(int test = 0; test < t; test++) {
+
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+def find_first(n, start, target):
+    if start == target:
+        return 0
+    pos = start
+    d = 1
+    time = 0
+    while True:
+        time += 1
+        if (pos == 1 and d == -1) or (pos == n and d == 1):
+            d = -d
+        pos += d
+        if pos == target:
+            return time
+
+for _ in range(t):
+    n = int(data[index])
+    m = int(data[index + 1])
+    rb = int(data[index + 2])
+    cb = int(data[index + 3])
+    rd = int(data[index + 4])
+    cd = int(data[index + 5])
+    index += 6
+    if rb == rd or cb == cd:
+        print(0)
+    else:
+        tr = find_first(n, rb, rd)
+        tc = find_first(m, cb, cd)
+        print(min(tr, tc))
+```
+completed 161/165, Solved: False, number of success = 134/161, acc = 83.23
+completed 162/165, Solved: False, number of success = 134/162, acc = 82.72
+completed 163/165, Solved: False, number of success = 134/163, acc = 82.21
+completed 164/165, Solved: False, number of success = 134/164, acc = 81.71
+completed 165/165, Solved: False, number of success = 134/165, acc = 81.21
+
+##################################################
+Experiment end results/CC/SelfPlanning/grok-4.1-fast/Python3-0-0.95-1/Run-1, Time: 2025-12-11 01:46:48.755246
+###################################################
+

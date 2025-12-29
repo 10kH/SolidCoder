@@ -1,0 +1,21 @@
+# python==3.11
+openai
+numpy
+pandas
+python-dotenv
+pyyaml
+tenacity
+tiktoken
+tqdm
+gensim
+jsonlines
+astunparse
+pyarrow
+requests
+google-generativeai
+accelerate
+groq
+matplotlib
+anthropic
+transformers
+# vllm  # uncomment for local model serving

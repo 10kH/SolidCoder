@@ -1,0 +1,21 @@
+.env
+__pycache__
+**__pycache__
+.vscode
+*workspace*
+
+samples
+desktop.ini
+logs
+
+test*
+
+# results  # uncomment to exclude results from git
+outputs
+
+costing*.csv
+usage*.csv
+
+.venv
+
+temp*

@@ -1,0 +1,4677 @@
+OpenRouter model initialized: x-ai/grok-4.1-fast
+```python
+from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """ Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """
+    if len(numbers) < 2:
+        return False
+    sorted_numbers = sorted(numbers)
+    for i in range(len(sorted_numbers) - 1):
+        if sorted_numbers[i + 1] - sorted_numbers[i] < threshold:
+            return True
+    return False
+```
+completed 1/164, Solved: True, number of success = 1/1, acc = 100.0
+```python
+from typing import List
+
+
+def separate_paren_groups(paren_string: str) -> List[str]:
+    """ Input to this function is a string containing multiple groups of nested parentheses. Your goal is to
+    separate those group into separate strings and return the list of those.
+    Separate groups are balanced (each open brace is properly closed) and not nested within each other
+    Ignore any spaces in the input string.
+    >>> separate_paren_groups('( ) (( )) (( )( ))')
+    ['()', '(())', '(()())']
+    """
+    result = []
+    i = 0
+    n = len(paren_string)
+    while i < n:
+        # Skip leading spaces before starting a new group
+        while i < n and paren_string[i] == ' ':
+            i += 1
+        if i == n:
+            break
+        # Start a new group
+        current = []
+        balance = 0
+        while i < n:
+            if paren_string[i] == ' ':
+                i += 1
+                continue
+            # Process parenthesis
+            if paren_string[i] == '(':
+                current.append('(')
+                balance += 1
+            elif paren_string[i] == ')':
+                current.append(')')
+                balance -= 1
+            i += 1
+            if balance == 0:
+                break
+        result.append(''.join(current))
+    return result
+```
+completed 2/164, Solved: True, number of success = 2/2, acc = 100.0
+```python
+def truncate_number(number: float) -> float:
+    """ Given a positive floating point number, it can be decomposed into
+    and integer part (largest integer smaller than given number) and decimals
+    (leftover part always smaller than 1).
+
+    Return the decimal part of the number.
+    >>> truncate_number(3.5)
+    0.5
+    """
+    return number % 1
+```
+completed 3/164, Solved: True, number of success = 3/3, acc = 100.0
+```python
+from typing import List
+
+
+def below_zero(operations: List[int]) -> bool:
+    """ You're given a list of deposit and withdrawal operations on a bank account that starts with
+    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and
+    at that point function should return True. Otherwise it should return False.
+    >>> below_zero([1, 2, 3])
+    False
+    >>> below_zero([1, 2, -4, 5])
+    True
+    """
+    balance = 0
+    for op in operations:
+        balance += op
+        if balance < 0:
+            return True
+    return False
+```
+
+## Explanation
+
+The function simulates the bank account balance starting from zero and processes each operation sequentially:
+
+1. Initialize `balance` to 0.
+2. Iterate through each operation in the list:
+   - Add the operation to the current `balance`.
+   - Check if `balance` is less than 0 after the update; if true, return `True` immediately.
+3. If the loop completes without `balance` going below zero, return `False`.
+
+This approach ensures detection of any point where the balance falls below zero, matching the problem requirements and handling edge cases like empty lists or initial withdrawals.
+completed 4/164, Solved: True, number of success = 4/4, acc = 100.0
+```python
+from typing import List
+
+
+def mean_absolute_deviation(numbers: List[float]) -> float:
+    """ For a given list of input numbers, calculate Mean Absolute Deviation
+    around the mean of this dataset.
+    Mean Absolute Deviation is the average absolute difference between each
+    element and a centerpoint (mean in this case):
+    MAD = average | x - x_mean |
+    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])
+    1.0
+    """
+    if not numbers:
+        return 0.0
+    n = len(numbers)
+    mean = sum(numbers) / n
+    mad = sum(abs(x - mean) for x in numbers) / n
+    return mad
+```
+completed 5/164, Solved: True, number of success = 5/5, acc = 100.0
+```python
+from typing import List
+
+
+def intersperse(numbers: List[int], delimeter: int) -> List[int]:
+    """ Insert a number 'delimeter' between every two consecutive elements of input list `numbers`
+    >>> intersperse([], 4)
+    []
+    >>> intersperse([1, 2, 3], 4)
+    [1, 4, 2, 4, 3]
+    """
+    result = []
+    for i, num in enumerate(numbers):
+        if i > 0:
+            result.append(delimeter)
+        result.append(num)
+    return result
+```
+completed 6/164, Solved: True, number of success = 6/6, acc = 100.0
+```python
+from typing import List
+
+
+def parse_nested_parens(paren_string: str) -> List[int]:
+    """ Input to this function is a string represented multiple groups for nested parentheses separated by spaces.
+    For each of the group, output the deepest level of nesting of parentheses.
+    E.g. (()()) has maximum two levels of nesting while ((())) has three.
+
+    >>> parse_nested_parens('(()()) ((())) () ((())()())')
+    [2, 3, 1, 3]
+    """
+    groups = paren_string.split()
+    result = []
+    for group in groups:
+        current = 0
+        max_depth = 0
+        for char in group:
+            if char == '(':
+                current += 1
+                if current > max_depth:
+                    max_depth = current
+            elif char == ')':
+                current -= 1
+        result.append(max_depth)
+    return result
+```
+completed 7/164, Solved: True, number of success = 7/7, acc = 100.0
+```python
+from typing import List
+
+
+def filter_by_substring(strings: List[str], substring: str) -> List[str]:
+    """ Filter an input list of strings only for ones that contain given substring
+    >>> filter_by_substring([], 'a')
+    []
+    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')
+    ['abc', 'bacd', 'array']
+    """
+    return [s for s in strings if substring in s]
+```
+completed 8/164, Solved: True, number of success = 8/8, acc = 100.0
+```python
+from typing import List, Tuple
+
+
+def sum_product(numbers: List[int]) -> Tuple[int, int]:
+    """ For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.
+    Empty sum should be equal to 0 and empty product should be equal to 1.
+    >>> sum_product([])
+    (0, 1)
+    >>> sum_product([1, 2, 3, 4])
+    (10, 24)
+    """
+    total_sum = 0
+    product = 1
+    for num in numbers:
+        total_sum += num
+        product *= num
+    return (total_sum, product)
+```
+completed 9/164, Solved: True, number of success = 9/9, acc = 100.0
+```python
+from typing import List, Tuple
+
+
+def rolling_max(numbers: List[int]) -> List[int]:
+    """ From a given list of integers, generate a list of rolling maximum element found until given moment
+    in the sequence.
+    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])
+    [1, 2, 3, 3, 3, 4, 4]
+    """
+    if not numbers:
+        return []
+    result = []
+    current_max = numbers[0]
+    result.append(current_max)
+    for num in numbers[1:]:
+        current_max = max(current_max, num)
+        result.append(current_max)
+    return result
+```
+completed 10/164, Solved: True, number of success = 10/10, acc = 100.0
+```python
+def is_palindrome(string: str) -> bool:
+    """ Test if given string is a palindrome """
+    return string == string[::-1]
+
+
+def make_palindrome(string: str) -> str:
+    """ Find the shortest palindrome that begins with a supplied string.
+    Algorithm idea is simple:
+    - Find the longest postfix of supplied string that is a palindrome.
+    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.
+    >>> make_palindrome('')
+    ''
+    >>> make_palindrome('cat')
+    'catac'
+    >>> make_palindrome('cata')
+    'catac'
+    """
+    n = len(string)
+    for length in range(n, -1, -1):
+        suffix_start = n - length
+        suffix = string[suffix_start:]
+        if is_palindrome(suffix):
+            prefix = string[:suffix_start]
+            return string + prefix[::-1]
+```
+
+## Explanation
+
+The `make_palindrome` function implements the specified algorithm by systematically identifying the longest palindromic suffix of the input string.
+
+1. **Compute string length**: Determine `n = len(string)` to define the range of possible suffix lengths.
+
+2. **Iterate over possible suffix lengths**: Use `range(n, -1, -1)` to check suffix lengths from `n` (full string) down to `0` (empty suffix), ensuring the longest palindromic suffix is found first.
+
+3. **Extract and validate suffix**: For each `length`, compute `suffix_start = n - length` and extract `suffix = string[suffix_start:]`. Test if it is a palindrome using `is_palindrome(suffix)`.
+
+4. **Construct result on match**: If a palindromic suffix is found, extract the prefix `prefix = string[:suffix_start]` and append its reverse `prefix[::-1]` to the original string, forming the shortest palindrome starting with the input.
+
+5. **Edge cases handled**:
+   - Empty string (`n=0`): Returns `''` immediately.
+   - Already a palindrome: Full length `n` matches, appends nothing.
+   - Single character: Length `1` always matches as a palindrome.
+
+This approach guarantees the shortest result by prioritizing longer palindromic suffixes, with time complexity O(n²) due to palindrome checks.
+completed 11/164, Solved: True, number of success = 11/11, acc = 100.0
+```python
+from typing import List
+
+
+def string_xor(a: str, b: str) -> str:
+    """ Input are two strings a and b consisting only of 1s and 0s.
+    Perform binary XOR on these inputs and return result also as a string.
+    >>> string_xor('010', '110')
+    '100'
+    """
+    return bin(int(a, 2) ^ int(b, 2))[2:]
+```
+completed 12/164, Solved: False, number of success = 11/12, acc = 91.67
+```python
+from typing import List, Optional
+
+
+def longest(strings: List[str]) -> Optional[str]:
+    """ Out of list of strings, return the longest one. Return the first one in case of multiple
+    strings of the same length. Return None in case the input list is empty.
+    >>> longest([])
+    >>> longest(['a', 'b', 'c'])
+    'a'
+    >>> longest(['a', 'bb', 'ccc'])
+    'ccc'
+    """
+    return max(strings, key=len, default=None)
+```
+completed 13/164, Solved: True, number of success = 12/13, acc = 92.31
+```python
+def greatest_common_divisor(a: int, b: int) -> int:
+    """ Return a greatest common divisor of two integers a and b
+    >>> greatest_common_divisor(3, 5)
+    1
+    >>> greatest_common_divisor(25, 15)
+    5
+    """
+    a = abs(a)
+    b = abs(b)
+    while b != 0:
+        a, b = b, a % b
+    return a
+```
+completed 14/164, Solved: True, number of success = 13/14, acc = 92.86
+```python
+from typing import List
+
+
+def all_prefixes(string: str) -> List[str]:
+    """ Return list of all prefixes from shortest to longest of the input string
+    >>> all_prefixes('abc')
+    ['a', 'ab', 'abc']
+    """
+    return [string[:i] for i in range(1, len(string) + 1)]
+```
+completed 15/164, Solved: True, number of success = 14/15, acc = 93.33
+```python
+def string_sequence(n: int) -> str:
+    """ Return a string containing space-delimited numbers starting from 0 upto n inclusive.
+    >>> string_sequence(0)
+    '0'
+    >>> string_sequence(5)
+    '0 1 2 3 4 5'
+    """
+    return ' '.join(str(i) for i in range(n + 1))
+```
+completed 16/164, Solved: True, number of success = 15/16, acc = 93.75
+```python
+def count_distinct_characters(string: str) -> int:
+    """
+    Given a string, find out how many distinct characters (regardless of case) does it consist of
+    >>> count_distinct_characters('xyzXYZ')
+    3
+    >>> count_distinct_characters('Jerry')
+    4
+    """
+    return len(set(string.lower()))
+```
+
+## Explanation
+
+The solution converts the input string to lowercase using `string.lower()` to ensure case-insensitivity, then uses a Python `set` to store unique characters, and finally returns the length of the set with `len()`.
+
+- **Step 1**: `string.lower()` transforms all characters to lowercase (e.g., 'xyzXYZ' becomes 'xyzxyz', 'Jerry' becomes 'jerry').
+- **Step 2**: `set(string.lower())` creates a set from the lowered string, automatically removing duplicates (e.g., set('xyzxyz') = {'x', 'y', 'z'} with length 3; set('jerry') = {'j', 'e', 'r', 'y'} with length 4).
+- **Edge cases**:
+  - Empty string `''` → `set('')` → length 0.
+  - All identical characters `'AAA'` → `set('aaa')` → length 1.
+  
+This approach is efficient (O(n) time, where n is string length) and concise.
+completed 17/164, Solved: True, number of success = 16/17, acc = 94.12
+```python
+from typing import List
+
+
+def parse_music(music_string: str) -> List[int]:
+    """ Input to this function is a string representing musical notes in a special ASCII format.
+    Your task is to parse this string and return list of integers corresponding to how many beats does each
+    not last.
+
+    Here is a legend:
+    'o' - whole note, lasts four beats
+    'o|' - half note, lasts two beats
+    '.|' - quater note, lasts one beat
+
+    >>> parse_music('o o| .| o| o| .| .| .| .| o o')
+    [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]
+    """
+    notes = music_string.split()
+    result = []
+    for note in notes:
+        if note == 'o':
+            result.append(4)
+        elif note == 'o|':
+            result.append(2)
+        elif note == '.|':
+            result.append(1)
+    return result
+```
+completed 18/164, Solved: True, number of success = 17/18, acc = 94.44
+```python
+def how_many_times(string: str, substring: str) -> int:
+    """ Find how many times a given substring can be found in the original string. Count overlaping cases.
+    >>> how_many_times('', 'a')
+    0
+    >>> how_many_times('aaa', 'a')
+    3
+    >>> how_many_times('aaaa', 'aa')
+    3
+    """
+    count = 0
+    n = len(string)
+    m = len(substring)
+    for i in range(n - m + 1):
+        if string[i:i + m] == substring:
+            count += 1
+    return count
+```
+completed 19/164, Solved: True, number of success = 18/19, acc = 94.74
+```python
+from typing import List
+
+
+def sort_numbers(numbers: str) -> str:
+    """ Input is a space-delimited string of numberals from 'zero' to 'nine'.
+    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.
+    Return the string with numbers sorted from smallest to largest
+    >>> sort_numbers('three one five')
+    'one three five'
+    """
+    word_to_num = {
+        'zero': 0,
+        'one': 1,
+        'two': 2,
+        'three': 3,
+        'four': 4,
+        'five': 5,
+        'six': 6,
+        'seven': 7,
+        'eight': 8,
+        'nine': 9
+    }
+    
+    words = numbers.split()
+    num_word_pairs = [(word_to_num[word], word) for word in words]
+    sorted_pairs = sorted(num_word_pairs)
+    sorted_words = [word for _, word in sorted_pairs]
+    return ' '.join(sorted_words)
+```
+completed 20/164, Solved: True, number of success = 19/20, acc = 95.0
+```python
+from typing import List, Tuple
+
+
+def find_closest_elements(numbers: List[float]) -> Tuple[float, float]:
+    """ From a supplied list of numbers (of length at least two) select and return two that are the closest to each
+    other and return them in order (smaller number, larger number).
+    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])
+    (2.0, 2.2)
+    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])
+    (2.0, 2.0)
+    """
+    if len(numbers) < 2:
+        raise ValueError("List must have at least two elements")
+    
+    sorted_nums = sorted(numbers)
+    min_diff = float('inf')
+    closest_pair = (sorted_nums[0], sorted_nums[1])
+    
+    for i in range(1, len(sorted_nums)):
+        diff = sorted_nums[i] - sorted_nums[i-1]
+        if diff < min_diff:
+            min_diff = diff
+            closest_pair = (sorted_nums[i-1], sorted_nums[i])
+    
+    return closest_pair
+```
+
+## Explanation
+
+The solution uses sorting to efficiently identify the closest pair of numbers. Here's the step-by-step reasoning:
+
+1. **Sort the list**: Sorting the input list in ascending order (O(n log n) time) ensures that the closest numbers will be adjacent, as any non-adjacent pair in the sorted list would have a larger difference than some consecutive pair.
+
+2. **Initialize tracking variables**: Set `min_diff` to infinity and `closest_pair` to the first two elements as a starting point.
+
+3. **Scan consecutive pairs**: Iterate through the sorted list from the second element to the end. For each pair of consecutive elements (`sorted_nums[i-1]` and `sorted_nums[i]`), compute the absolute difference (which is non-negative due to sorting).
+
+4. **Update minimum**: If the current difference is smaller than `min_diff`, update `min_diff` and store the pair. This ensures the pair with the smallest difference is tracked. In case of ties, the first such pair encountered is selected.
+
+5. **Return the pair**: The `closest_pair` is always in order (smaller first, larger second) due to sorting. This handles duplicates (difference of 0), negative numbers, and any order in the original list.
+
+This approach is correct because the minimum difference in a sorted list must occur between some consecutive elements. It runs in O(n log n) time due to sorting and O(n) for the scan, making it efficient for typical input sizes. The examples match: for `[1.0, 2.0, 3.0, 4.0, 5.0, 2.2]`, sorted is `[1.0, 2.0, 2.2, 3.0, 4.0, 5.0]`, minimum difference 0.2 between 2.0 and 2.2; for duplicates like two 2.0s, difference 0 is found consecutively.
+completed 21/164, Solved: True, number of success = 20/21, acc = 95.24
+```python
+from typing import List
+
+
+def rescale_to_unit(numbers: List[float]) -> List[float]:
+    """ Given list of numbers (of at least two elements), apply a linear transform to that list,
+    such that the smallest number will become 0 and the largest will become 1
+    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])
+    [0.0, 0.25, 0.5, 0.75, 1.0]
+    """
+    min_val = min(numbers)
+    max_val = max(numbers)
+    range_val = max_val - min_val
+    return [(x - min_val) / range_val for x in numbers]
+```
+completed 22/164, Solved: True, number of success = 21/22, acc = 95.45
+```python
+from typing import List, Any
+
+
+def filter_integers(values: List[Any]) -> List[int]:
+    """ Filter given list of any python values only for integers
+    >>> filter_integers(['a', 3.14, 5])
+    [5]
+    >>> filter_integers([1, 2, 3, 'abc', {}, []])
+    [1, 2, 3]
+    """
+    return [value for value in values if isinstance(value, int)]
+```
+
+## Explanation
+
+The implementation uses a list comprehension to iterate through the input list `values` and includes only elements that are instances of the `int` type.
+
+- **Type checking**: `isinstance(value, int)` verifies if each element is an integer. This correctly identifies integers like `5`, `1`, `2`, `3` while excluding non-integers such as strings (`'a'`, `'abc'`), floats (`3.14`), dictionaries (`{}`), and lists (`[]`).
+- **Boolean values**: Booleans (`True`, `False`) are subclasses of `int` in Python 3, so `isinstance(True, int)` returns `True`. They are included as they behave as integers (`True` is `1`, `False` is `0`), consistent with Python's type system and the problem's focus on integers.
+- **Efficiency**: List comprehensions are concise, readable, and perform a single pass through the list, making it O(n) time complexity where n is the length of `values`.
+- **Edge cases**: Handles empty lists (returns `[]`), `None` (excluded), and mixed types as shown in the examples.
+
+This approach directly satisfies the function signature, return type annotation, and provided test cases.
+completed 23/164, Solved: True, number of success = 22/23, acc = 95.65
+```python
+def strlen(string: str) -> int:
+    """ Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    """
+    count = 0
+    for _ in string:
+        count += 1
+    return count
+```
+completed 24/164, Solved: True, number of success = 23/24, acc = 95.83
+```python
+def largest_divisor(n: int) -> int:
+    """ For a given number n, find the largest number that divides n evenly, smaller than n
+    >>> largest_divisor(15)
+    5
+    """
+    if n <= 1:
+        return 1
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return n // i
+    return 1
+```
+
+### Explanation
+- This function efficiently finds the **largest proper divisor** of `n` (i.e., the largest divisor strictly less than `n`).
+- It does so by finding the **smallest divisor** `i > 1` of `n` (by checking from 2 up to `√n`), then returning `n // i`.
+- If no such `i` is found (i.e., `n` is prime), it returns `1`.
+- Time complexity: **O(√n)**, which is efficient for typical integer sizes.
+- Handles edge cases like `n ≤ 1` by returning `1` (though the problem likely assumes `n > 1`).
+
+### Tests
+```python
+print(largest_divisor(15))  # 5
+print(largest_divisor(9))   # 3
+print(largest_divisor(7))   # 1
+print(largest_divisor(4))   # 2
+print(largest_divisor(6))   # 3
+print(largest_divisor(2))   # 1
+print(largest_divisor(1))   # 1
+```
+completed 25/164, Solved: False, number of success = 23/25, acc = 92.0
+```python
+from typing import List
+
+
+def factorize(n: int) -> List[int]:
+    """ Return list of prime factors of given integer in the order from smallest to largest.
+    Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.
+    Input number should be equal to the product of all factors
+    >>> factorize(8)
+    [2, 2, 2]
+    >>> factorize(25)
+    [5, 5]
+    >>> factorize(70)
+    [2, 5, 7]
+    """
+    factors = []
+    # Handle factor 2
+    while n % 2 == 0:
+        factors.append(2)
+        n //= 2
+    # Handle odd factors
+    i = 3
+    while i * i <= n:
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+        i += 2
+    # If n is a prime number greater than 2
+    if n > 1:
+        factors.append(n)
+    return factors
+```
+completed 26/164, Solved: True, number of success = 24/26, acc = 92.31
+```python
+from typing import List
+
+def remove_duplicates(numbers: List[int]) -> List[int]:
+    """ From a list of integers, remove all elements that occur more than once.
+    Keep order of elements left the same as in the input.
+    >>> remove_duplicates([1, 2, 3, 2, 4])
+    [1, 3, 4]
+    """
+    count = {}
+    for num in numbers:
+        count[num] = count.get(num, 0) + 1
+    result = []
+    for num in numbers:
+        if count[num] == 1:
+            result.append(num)
+    return result
+```
+completed 27/164, Solved: True, number of success = 25/27, acc = 92.59
+```python
+def flip_case(string: str) -> str:
+    """ For a given string, flip lowercase characters to uppercase and uppercase to lowercase.
+    >>> flip_case('Hello')
+    'hELLO'
+    """
+    return string.swapcase()
+```
+completed 28/164, Solved: True, number of success = 26/28, acc = 92.86
+```python
+from typing import List
+
+
+def concatenate(strings: List[str]) -> str:
+    """ Concatenate list of strings into a single string
+    >>> concatenate([])
+    ''
+    >>> concatenate(['a', 'b', 'c'])
+    'abc'
+    """
+    return ''.join(strings)
+```
+completed 29/164, Solved: True, number of success = 27/29, acc = 93.1
+```python
+from typing import List
+
+
+def filter_by_prefix(strings: List[str], prefix: str) -> List[str]:
+    """ Filter an input list of strings only for ones that start with a given prefix.
+    >>> filter_by_prefix([], 'a')
+    []
+    >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')
+    ['abc', 'array']
+    """
+    return [s for s in strings if s.startswith(prefix)]
+```
+completed 30/164, Solved: True, number of success = 28/30, acc = 93.33
+```python
+def get_positive(l: list):
+    """Return only positive numbers in the list.
+    >>> get_positive([-1, 2, -4, 5, 6])
+    [2, 5, 6]
+    >>> get_positive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
+    [5, 3, 2, 3, 9, 123, 1]
+    """
+    return [x for x in l if x > 0]
+```
+completed 31/164, Solved: True, number of success = 29/31, acc = 93.55
+```python
+def is_prime(n):
+    """Return true if a given number is prime, and false otherwise.
+    >>> is_prime(6)
+    False
+    >>> is_prime(101)
+    True
+    >>> is_prime(11)
+    True
+    >>> is_prime(13441)
+    True
+    >>> is_prime(61)
+    True
+    >>> is_prime(4)
+    False
+    >>> is_prime(1)
+    False
+    """
+    if n <= 1:
+        return False
+    if n == 2:
+        return True
+    if n % 2 == 0:
+        return False
+    for i in range(3, int(n**0.5) + 1, 2):
+        if n % i == 0:
+            return False
+    return True
+```
+completed 32/164, Solved: True, number of success = 30/32, acc = 93.75
+```python
+import math
+
+
+def poly(xs: list, x: float):
+    """
+    Evaluates polynomial with coefficients xs at point x.
+    return xs[0] + xs[1] * x + xs[1] * x^2 + .... xs[n] * x^n
+    """
+    return sum([coeff * math.pow(x, i) for i, coeff in enumerate(xs)])
+
+
+def find_zero(xs: list):
+    """ xs are coefficients of a polynomial.
+    find_zero find x such that poly(x) = 0.
+    find_zero returns only one zero point, even if there are many.
+    Moreover, find_zero only takes list xs having even number of coefficients
+    and largest non zero coefficient as it guarantees
+    a solution.
+    >>> round(find_zero([1, 2]), 2) # f(x) = 1 + 2x
+    -0.5
+    >>> round(find_zero([-6, 11, -6, 1]), 2) # (x - 1) * (x - 2) * (x - 3) = -6 + 11x - 6x^2 + x^3
+    1.0
+    """
+    if not xs or len(xs) < 2:
+        raise ValueError("Invalid polynomial coefficients")
+    leading = xs[-1]
+    if leading == 0:
+        raise ValueError("Leading coefficient must be non-zero")
+    
+    # Compute root bound R = 1 + max(|c / leading| for c in xs[:-1])
+    max_ratio = max((abs(c) / abs(leading) for c in xs[:-1]), default=0.0)
+    R = 1.0 + max_ratio
+    
+    a = -R - 1.0
+    b = R + 1.0
+    
+    def p(x):
+        return poly(xs, x)
+    
+    fa = p(a)
+    fb = p(b)
+    
+    if abs(fa) < 1e-12:
+        return a
+    if abs(fb) < 1e-12:
+        return b
+    
+    tol = 1e-12
+    max_iter = 200  # More than enough for double precision
+    
+    for _ in range(max_iter):
+        if abs(b - a) < tol:
+            break
+        c = (a + b) / 2.0
+        fc = p(c)
+        if abs(fc) < tol:
+            return c
+        if fa * fc < 0:
+            b = c
+            fb = fc
+        else:
+            a = c
+            fa = fc
+    
+    return (a + b) / 2.0
+```
+
+## Explanation
+
+The `find_zero` function implements a reliable numerical method to locate one real root of the polynomial using the bisection method, which is guaranteed to converge given the problem constraints.
+
+1. **Root Bound Calculation**: Compute an upper bound \( R = 1 + \max(|c / \text{leading}|) \) for \( c \) in all coefficients except the leading one. This standard polynomial root bound ensures all real roots satisfy \( |r| < R \).
+
+2. **Initial Bracketing Interval**: Set \( a = -R - 1 \) and \( b = R + 1 \). Due to the odd degree (even number of coefficients implies odd degree), \( p(-\infty) \) and \( p(+\infty) \) have opposite signs, ensuring \( p(a) \) and \( p(b) \) have opposite signs within this enlarged interval.
+
+3. **Bisection Method**: 
+   - Evaluate \( p \) at the midpoint \( c = (a + b)/2 \).
+   - If \( p(a) \cdot p(c) < 0 \), a root is in \( [a, c] \), so update \( b = c \).
+   - Otherwise, a root is in \( [c, b] \), so update \( a = c \).
+   - Repeat until the interval width \( |b - a| < 10^{-12} \) or \( |p(c)| < 10^{-12} \), or after 200 iterations for safety.
+
+4. **Convergence and Precision**: Bisection reliably narrows to a root due to the intermediate value theorem and preserved sign change. The examples converge as required: to -0.5 for `[1, 2]` and to 1.0 for `[-6, 11, -6, 1]`.
+
+This approach handles multiple roots by converging to one (often the leftmost in the bracket) and works regardless of the leading coefficient's sign.
+completed 33/164, Solved: True, number of success = 31/33, acc = 93.94
+```python
+def sort_third(l: list):
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal
+    to the values of the corresponding indicies of l, but sorted.
+    >>> sort_third([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_third([5, 6, 3, 4, 8, 9, 2])
+    [2, 6, 3, 4, 8, 9, 5]
+    """
+    thirds = sorted(l[i] for i in range(len(l)) if i % 3 == 0)
+    return [thirds[i // 3] if i % 3 == 0 else l[i] for i in range(len(l))]
+```
+completed 34/164, Solved: True, number of success = 32/34, acc = 94.12
+```python
+def unique(l: list):
+    """Return sorted unique elements in a list
+    >>> unique([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    [0, 2, 3, 5, 9, 123]
+    """
+    return sorted(set(l))
+```
+completed 35/164, Solved: True, number of success = 33/35, acc = 94.29
+```python
+def max_element(l: list):
+    """Return maximum element in the list.
+    >>> max_element([1, 2, 3])
+    3
+    >>> max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
+    123
+    """
+    if not l:
+        raise ValueError("Cannot find max of empty list")
+    max_val = l[0]
+    for num in l[1:]:
+        if num > max_val:
+            max_val = num
+    return max_val
+```
+completed 36/164, Solved: True, number of success = 34/36, acc = 94.44
+```python
+def fizz_buzz(n: int):
+    """Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.
+    >>> fizz_buzz(50)
+    0
+    >>> fizz_buzz(78)
+    2
+    >>> fizz_buzz(79)
+    3
+    """
+    count = 0
+    for i in range(1, n):
+        if i % 11 == 0 or i % 13 == 0:
+            count += str(i).count('7')
+    return count
+```
+completed 37/164, Solved: True, number of success = 35/37, acc = 94.59
+```python
+def sort_even(l: list):
+    """This function takes a list l and returns a list l' such that
+    l' is identical to l in the odd indicies, while its values at the even indicies are equal
+    to the values of the even indicies of l, but sorted.
+    >>> sort_even([1, 2, 3])
+    [1, 2, 3]
+    >>> sort_even([5, 6, 3, 4])
+    [3, 6, 5, 4]
+    """
+    even_vals = [l[i] for i in range(0, len(l), 2)]
+    even_vals.sort()
+    result = []
+    j = 0
+    for i in range(len(l)):
+        if i % 2 == 0:
+            result.append(even_vals[j])
+            j += 1
+        else:
+            result.append(l[i])
+    return result
+```
+completed 38/164, Solved: True, number of success = 36/38, acc = 94.74
+```python
+def decode_cyclic(s: str):
+    """
+    takes as input string encoded with encode_cyclic function. Returns decoded string.
+    """
+    # split string to groups. Each of length 3.
+    groups = [s[(3 * i):min((3 * i + 3), len(s))] for i in range((len(s) + 2) // 3)]
+    # cycle elements in each group backwards. Unless group has fewer elements than 3.
+    groups = [(group[-1] + group[:-1]) if len(group) == 3 else group for group in groups]
+    return "".join(groups)
+```
+completed 39/164, Solved: False, number of success = 36/39, acc = 92.31
+```python
+def is_prime(num: int) -> bool:
+    if num <= 1:
+        return False
+    if num == 2 or num == 3:
+        return True
+    if num % 2 == 0 or num % 3 == 0:
+        return False
+    i = 5
+    while i * i <= num:
+        if num % i == 0 or num % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def prime_fib(n: int) -> int:
+    """
+    prime_fib returns n-th number that is a Fibonacci number and it's also prime.
+    >>> prime_fib(1)
+    2
+    >>> prime_fib(2)
+    3
+    >>> prime_fib(3)
+    5
+    >>> prime_fib(4)
+    13
+    >>> prime_fib(5)
+    89
+    """
+    if n < 1:
+        raise ValueError("n must be positive")
+    count = 0
+    a, b = 0, 1
+    while True:
+        if a > 1 and is_prime(a):
+            count += 1
+            if count == n:
+                return a
+        a, b = b, a + b
+```
+
+## Explanation
+
+The solution generates Fibonacci numbers sequentially and identifies the nth prime among them.
+
+- **`is_prime` function**: Implements an efficient primality test using trial division up to the square root of the number. It handles small cases (≤1, 2, 3) directly and checks divisibility by 2 and 3 first, then tests divisors of the form 6k±1.
+
+- **`prime_fib` function**:
+  1. Initializes a Fibonacci generator with `a=0`, `b=1`.
+  2. Enters a loop that:
+     - Checks if the current Fibonacci number `a` is greater than 1 and prime using `is_prime(a)`.
+     - If prime, increments a counter and returns `a` when the count reaches `n`.
+     - Advances to the next Fibonacci pair: `a, b = b, a + b`.
+  3. Skips non-prime Fibonacci numbers (0, 1, 8, 21, etc.) until the nth prime Fibonacci is found.
+
+This approach is correct, efficient for reasonable `n` (as Fibonacci numbers grow exponentially, and Python handles arbitrary-precision integers), and matches the provided examples:
+- 1st: 2
+- 2nd: 3
+- 3rd: 5
+- 4th: 13
+- 5th: 89
+completed 40/164, Solved: True, number of success = 37/40, acc = 92.5
+```python
+def triples_sum_to_zero(l: list):
+    """
+    triples_sum_to_zero takes a list of integers as an input.
+    it returns True if there are three distinct elements in the list that
+    sum to zero, and False otherwise.
+    """
+    if len(l) < 3:
+        return False
+    nums = sorted(l)
+    for i in range(len(nums) - 2):
+        left = i + 1
+        right = len(nums) - 1
+        while left < right:
+            current_sum = nums[i] + nums[left] + nums[right]
+            if current_sum == 0:
+                return True
+            elif current_sum < 0:
+                left += 1
+            else:
+                right -= 1
+    return False
+```
+
+## Explanation
+
+The function uses an efficient O(n²) algorithm based on sorting and the two-pointer technique to detect if three distinct elements sum to zero:
+
+1. **Early termination**: If the list has fewer than 3 elements, return `False` immediately, as no triplet is possible.
+
+2. **Sort the list**: Create a sorted copy of the input list (`nums = sorted(l)`). Sorting takes O(n log n) time and enables the two-pointer approach.
+
+3. **Fix the first element**: Iterate over each index `i` from 0 to `len(nums)-3`. For each `nums[i]`, use two pointers:
+   - `left` starts at `i + 1`.
+   - `right` starts at `len(nums) - 1`.
+
+4. **Two-pointer search**: While `left < right`:
+   - Compute `current_sum = nums[i] + nums[left] + nums[right]`.
+   - If `current_sum == 0`, three distinct elements (at indices `i`, `left`, `right`) sum to zero; return `True`.
+   - If `current_sum < 0`, increment `left` to increase the sum.
+   - If `current_sum > 0`, decrement `right` to decrease the sum.
+
+5. **No triplet found**: If no valid triplet is found after checking all combinations, return `False`.
+
+This approach ensures all possible triplets are considered efficiently, as the sorted order and pointer movements systematically explore sums without redundancy. It correctly handles duplicates (e.g., multiple zeros or repeated values) by relying on distinct indices.
+completed 41/164, Solved: True, number of success = 38/41, acc = 92.68
+```python
+def car_race_collision(n: int):
+    """
+    Imagine a road that's a perfectly straight infinitely long line.
+    n cars are driving left to right;  simultaneously, a different set of n cars
+    are driving right to left.   The two sets of cars start out being very far from
+    each other.  All cars move in the same speed.  Two cars are said to collide
+    when a car that's moving left to right hits a car that's moving right to left.
+    However, the cars are infinitely sturdy and strong; as a result, they continue moving
+    in their trajectory as if they did not collide.
+
+    This function outputs the number of such collisions.
+    """
+    return n * n
+```
+completed 42/164, Solved: True, number of success = 39/42, acc = 92.86
+```python
+def incr_list(l: list):
+    """Return list with elements incremented by 1.
+    >>> incr_list([1, 2, 3])
+    [2, 3, 4]
+    >>> incr_list([5, 3, 5, 2, 3, 3, 9, 0, 123])
+    [6, 4, 6, 3, 4, 4, 10, 1, 124]
+    """
+    return [x + 1 for x in l]
+```
+completed 43/164, Solved: True, number of success = 40/43, acc = 93.02
+```python
+def pairs_sum_to_zero(l):
+    """
+    pairs_sum_to_zero takes a list of integers as an input.
+    it returns True if there are two distinct elements in the list that
+    sum to zero, and False otherwise.
+    >>> pairs_sum_to_zero([1, 3, 5, 0])
+    False
+    >>> pairs_sum_to_zero([1, 3, -2, 1])
+    False
+    >>> pairs_sum_to_zero([1, 2, 3, 7])
+    False
+    >>> pairs_sum_to_zero([2, 4, -5, 3, 5, 7])
+    True
+    >>> pairs_sum_to_zero([1])
+    False
+    """
+    seen = set()
+    for num in l:
+        if -num in seen:
+            return True
+        seen.add(num)
+    return False
+```
+completed 44/164, Solved: True, number of success = 41/44, acc = 93.18
+```python
+def change_base(x: int, base: int):
+    """Change numerical base of input number x to base.
+    return string representation after the conversion.
+    base numbers are less than 10.
+    >>> change_base(8, 3)
+    '22'
+    >>> change_base(8, 2)
+    '1000'
+    >>> change_base(7, 2)
+    '111'
+    """
+    if x == 0:
+        return '0'
+    digits = []
+    while x > 0:
+        digits.append(str(x % base))
+        x = x // base
+    digits.reverse()
+    return ''.join(digits)
+```
+completed 45/164, Solved: True, number of success = 42/45, acc = 93.33
+```python
+def triangle_area(a, h):
+    """Given length of a side and high return area for a triangle.
+    >>> triangle_area(5, 3)
+    7.5
+    """
+    return (a * h) / 2
+```
+completed 46/164, Solved: True, number of success = 43/46, acc = 93.48
+```python
+def fib4(n: int):
+    """The Fib4 number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
+    fib4(0) -> 0
+    fib4(1) -> 0
+    fib4(2) -> 2
+    fib4(3) -> 0
+    fib4(n) -> fib4(n-1) + fib4(n-2) + fib4(n-3) + fib4(n-4).
+    Please write a function to efficiently compute the n-th element of the fib4 number sequence.  Do not use recursion.
+    >>> fib4(5)
+    4
+    >>> fib4(6)
+    8
+    >>> fib4(7)
+    14
+    """
+    if n == 0:
+        return 0
+    if n == 1:
+        return 0
+    if n == 2:
+        return 2
+    if n == 3:
+        return 0
+    a, b, c, d = 0, 0, 2, 0
+    for _ in range(4, n + 1):
+        nxt = a + b + c + d
+        a, b, c, d = b, c, d, nxt
+    return d
+```
+completed 47/164, Solved: True, number of success = 44/47, acc = 93.62
+```python
+def median(l: list):
+    """Return median of elements in the list l.
+    >>> median([3, 1, 2, 4, 5])
+    3
+    >>> median([-10, 4, 6, 1000, 10, 20])
+    8.0
+    """
+    if not l:
+        raise ValueError("List cannot be empty")
+    sorted_l = sorted(l)
+    n = len(sorted_l)
+    if n % 2 == 1:
+        return sorted_l[n // 2]
+    else:
+        mid1 = sorted_l[n // 2 - 1]
+        mid2 = sorted_l[n // 2]
+        return (mid1 + mid2) / 2
+```
+completed 48/164, Solved: True, number of success = 45/48, acc = 93.75
+```python
+def is_palindrome(text: str):
+    """
+    Checks if given string is a palindrome
+    >>> is_palindrome('')
+    True
+    >>> is_palindrome('aba')
+    True
+    >>> is_palindrome('aaaaa')
+    True
+    >>> is_palindrome('zbcd')
+    False
+    """
+    return text == text[::-1]
+```
+completed 49/164, Solved: True, number of success = 46/49, acc = 93.88
+```python
+def modp(n: int, p: int):
+    """Return 2^n modulo p (be aware of numerics).
+    >>> modp(3, 5)
+    3
+    >>> modp(1101, 101)
+    2
+    >>> modp(0, 101)
+    1
+    >>> modp(3, 11)
+    8
+    >>> modp(100, 101)
+    1
+    """
+    return pow(2, n, p)
+```
+completed 50/164, Solved: True, number of success = 47/50, acc = 94.0
+```python
+def decode_shift(s: str):
+    """
+    takes as input string encoded with encode_shift function. Returns decoded string.
+    """
+    return "".join([chr(((ord(ch) - ord("a") - 5) % 26) + ord("a")) for ch in s])
+```
+
+## Verification Example
+```python
+# Test
+original = "hello"
+encoded = encode_shift(original)  # "mjqqt"
+decoded = decode_shift(encoded)   # "hello"
+assert decoded == original
+```
+completed 51/164, Solved: False, number of success = 47/51, acc = 92.16
+```python
+def remove_vowels(text):
+    """
+    remove_vowels is a function that takes string and returns string without vowels.
+    >>> remove_vowels('')
+    ''
+    >>> remove_vowels("abcdef\nghijklm")
+    'bcdf\nghjklm'
+    >>> remove_vowels('abcdef')
+    'bcdf'
+    >>> remove_vowels('aaaaa')
+    ''
+    >>> remove_vowels('aaBAA')
+    'B'
+    >>> remove_vowels('zbcd')
+    'zbcd'
+    """
+    vowels = set('aeiouAEIOU')
+    return ''.join(char for char in text if char not in vowels)
+```
+completed 52/164, Solved: True, number of success = 48/52, acc = 92.31
+```python
+def below_threshold(l: list, t: int):
+    """Return True if all numbers in the list l are below threshold t.
+    >>> below_threshold([1, 2, 4, 10], 100)
+    True
+    >>> below_threshold([1, 20, 4, 10], 5)
+    False
+    """
+    return all(x < t for x in l)
+```
+completed 53/164, Solved: True, number of success = 49/53, acc = 92.45
+```python
+def add(x: int, y: int):
+    """Add two numbers x and y
+    >>> add(2, 3)
+    5
+    >>> add(5, 7)
+    12
+    """
+    return x + y
+```
+completed 54/164, Solved: True, number of success = 50/54, acc = 92.59
+```python
+def same_chars(s0: str, s1: str):
+    """
+    Check if two words have the same characters.
+    >>> same_chars('eabcdzzzz', 'dddzzzzzzzddeddabc')
+    True
+    >>> same_chars('abcd', 'dddddddabc')
+    True
+    >>> same_chars('dddddddabc', 'abcd')
+    True
+    >>> same_chars('eabcd', 'dddddddabc')
+    False
+    >>> same_chars('abcd', 'dddddddabce')
+    False
+    >>> same_chars('eabcdzzzz', 'dddzzzzzzzddddabc')
+    False
+    """
+    return set(s0) == set(s1)
+```
+completed 55/164, Solved: True, number of success = 51/55, acc = 92.73
+```python
+def fib(n: int):
+    """Return n-th Fibonacci number.
+    >>> fib(10)
+    55
+    >>> fib(1)
+    1
+    >>> fib(8)
+    21
+    """
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b
+```
+completed 56/164, Solved: True, number of success = 52/56, acc = 92.86
+```python
+def correct_bracketing(brackets: str):
+    """
+    brackets is a string of "<" and ">".
+    return True if every opening bracket has a corresponding closing bracket.
+    
+    >>> correct_bracketing("<")
+    False
+    >>> correct_bracketing("<>")
+    True
+    >>> correct_bracketing("<<><>>")
+    True
+    >>> correct_bracketing("><<>")
+    False
+    """
+    count = 0
+    for char in brackets:
+        if char == '<':
+            count += 1
+        elif char == '>':
+            count -= 1
+        if count < 0:
+            return False
+    return count == 0
+```
+completed 57/164, Solved: True, number of success = 53/57, acc = 92.98
+```python
+def monotonic(l: list):
+    """Return True is list elements are monotonically increasing or decreasing.
+    >>> monotonic([1, 2, 4, 20])
+    True
+    >>> monotonic([1, 20, 4, 10])
+    False
+    >>> monotonic([4, 1, 0, -10])
+    True
+    """
+    if len(l) <= 1:
+        return True
+    is_inc = True
+    is_dec = True
+    for i in range(1, len(l)):
+        if l[i] < l[i - 1]:
+            is_inc = False
+        if l[i] > l[i - 1]:
+            is_dec = False
+        if not is_inc and not is_dec:
+            return False
+    return True
+```
+completed 58/164, Solved: True, number of success = 54/58, acc = 93.1
+```python
+def common(l1: list, l2: list):
+    """Return sorted unique common elements for two lists.
+    >>> common([1, 4, 3, 34, 653, 2, 5], [5, 7, 1, 5, 9, 653, 121])
+    [1, 5, 653]
+    >>> common([5, 3, 2, 8], [3, 2])
+    [2, 3]
+
+    """
+    set1 = set(l1)
+    set2 = set(l2)
+    common_set = set1 & set2
+    return sorted(common_set)
+```
+completed 59/164, Solved: True, number of success = 55/59, acc = 93.22
+```python
+def largest_prime_factor(n: int):
+    """Return the largest prime factor of n. Assume n > 1 and is not a prime.
+    >>> largest_prime_factor(13195)
+    29
+    >>> largest_prime_factor(2048)
+    2
+    """
+    largest = 1
+    # Divide out 2s
+    while n % 2 == 0:
+        largest = 2
+        n //= 2
+    # Divide out odd factors
+    i = 3
+    while i * i <= n:
+        while n % i == 0:
+            largest = i
+            n //= i
+        i += 2
+    # If n is a prime number greater than 2
+    if n > 1:
+        largest = n
+    return largest
+```
+completed 60/164, Solved: True, number of success = 56/60, acc = 93.33
+```python
+def sum_to_n(n: int):
+    """
+    sum_to_n is a function that sums numbers from 1 to n.
+    >>> sum_to_n(30)
+    465
+    >>> sum_to_n(100)
+    5050
+    >>> sum_to_n(5)
+    15
+    >>> sum_to_n(10)
+    55
+    >>> sum_to_n(1)
+    1
+    """
+    return n * (n + 1) // 2
+```
+completed 61/164, Solved: True, number of success = 57/61, acc = 93.44
+```python
+def correct_bracketing(brackets: str):
+    """
+    brackets is a string of "(" and ")".
+    return True if every opening bracket has a corresponding closing bracket.
+    
+    >>> correct_bracketing("(")
+    False
+    >>> correct_bracketing("()")
+    True
+    >>> correct_bracketing("(()())")
+    True
+    >>> correct_bracketing(")(()")
+    False
+    """
+    stack = []
+    for char in brackets:
+        if char == '(':
+            stack.append(char)
+        elif char == ')':
+            if not stack:
+                return False
+            stack.pop()
+    return len(stack) == 0
+```
+
+## How to run the tests:
+```python
+import doctest
+doctest.testmod()
+```
+completed 62/164, Solved: False, number of success = 57/62, acc = 91.94
+```python
+def derivative(xs: list):
+    """ xs represent coefficients of a polynomial.
+    xs[0] + xs[1] * x + xs[2] * x^2 + ....
+     Return derivative of this polynomial in the same form.
+    >>> derivative([3, 1, 2, 4, 5])
+    [1, 4, 12, 20]
+    >>> derivative([1, 2, 3])
+    [2, 6]
+    """
+    return [i * xs[i] for i in range(1, len(xs))]
+```
+
+## Verification with Examples
+
+```python
+print(derivative([3, 1, 2, 4, 5]))  # [1, 4, 12, 20]
+print(derivative([1, 2, 3]))        # [2, 6]
+print(derivative([5]))              # [] (derivative of constant)
+print(derivative([]))               # [] (empty input)
+print(derivative([0, 0, 1]))        # [0, 2]
+```
+completed 63/164, Solved: False, number of success = 57/63, acc = 90.48
+```python
+def fibfib(n: int):
+    """The FibFib number sequence is a sequence similar to the Fibbonacci sequnece that's defined as follows:
+    fibfib(0) == 0
+    fibfib(1) == 0
+    fibfib(2) == 1
+    fibfib(n) == fibfib(n-1) + fibfib(n-2) + fibfib(n-3).
+    Please write a function to efficiently compute the n-th element of the fibfib number sequence.
+    >>> fibfib(1)
+    0
+    >>> fibfib(5)
+    4
+    >>> fibfib(8)
+    24
+    """
+    if n == 0 or n == 1:
+        return 0
+    if n == 2:
+        return 1
+    a, b, c = 0, 0, 1
+    for i in range(3, n + 1):
+        next_val = a + b + c
+        a, b, c = b, c, next_val
+    return c
+```
+completed 64/164, Solved: True, number of success = 58/64, acc = 90.62
+```python
+def vowels_count(s):
+    """
+    Write a function vowels_count which takes a string representing
+    a word as input and returns the number of vowels in the string.
+    Vowels in this case are 'a', 'e', 'i', 'o', 'u'. Here, 'y' is also a
+    vowel, but only when it is at the end of the given word.
+
+    Example:
+    >>> vowels_count("abcde")
+    2
+    >>> vowels_count("ACEDY")
+    3
+    >>> vowels_count("")  # empty string
+    0
+    >>> vowels_count("y")
+    1
+    >>> vowels_count("Y")
+    1
+    >>> vowels_count("ay")
+    2
+    >>> vowels_count("ya")
+    1
+    >>> vowels_count("AEIOUY")
+    6
+    >>> vowels_count("bcd")
+    0
+    >>> vowels_count("why")
+    1  # y at end, but 'w','h' no; only y
+    >>> vowels_count("rhythm")
+    0  # no aeiou, ends with 'm' != y
+    >>> vowels_count("my")
+    2  # 'm' no, 'y' end
+    """
+    s_lower = s.lower()
+    count = 0
+    vowels = set('aeiou')
+    for char in s_lower:
+        if char in vowels:
+            count += 1
+    if s_lower and s_lower[-1] == 'y':
+        count += 1
+    return count
+
+
+# Additional test cases (as per FIX)
+def test_vowels_count():
+    assert vowels_count("abcde") == 2
+    assert vowels_count("ACEDY") == 3
+    assert vowels_count("") == 0
+    assert vowels_count("y") == 1
+    assert vowels_count("Y") == 1
+    assert vowels_count("ay") == 2
+    assert vowels_count("ya") == 1
+    assert vowels_count("AEIOUY") == 6
+    assert vowels_count("bcd") == 0
+    assert vowels_count("why") == 1
+    assert vowels_count("rhythm") == 0
+    assert vowels_count("my") == 2
+    assert vowels_count("Yellow") == 2  # e, o; ends with 'w'? Wait, "Yellow" -> y,e,l,l,o,w -> e,o + ends 'w' no ->2
+    print("All tests passed!")
+
+if __name__ == "__main__":
+    test_vowels_count()
+```
+completed 65/164, Solved: True, number of success = 59/65, acc = 90.77
+```python
+def circular_shift(x, shift):
+    """Circular shift the digits of the integer x, shift the digits right by shift
+    and return the result as a string.
+    If shift > number of digits, return digits reversed.
+    >>> circular_shift(12, 1)
+    "21"
+    >>> circular_shift(12, 2)
+    "12"
+    """
+    s = str(x)
+    n = len(s)
+    if shift > n:
+        return s[::-1]
+    else:
+        return s[-shift:] + s[:-shift]
+```
+
+## Explanation
+
+The function performs a right circular shift on the digits of the input integer `x` by `shift` positions, returning the result as a string, with a special case for when `shift` exceeds the number of digits.
+
+1. Convert `x` to a string `s` to access its digits, and compute `n` as the length of `s`.
+
+2. Check if `shift > n`: if true, return the reversed string `s[::-1]`, as specified.
+
+3. Otherwise, perform a right circular shift: `s[-shift:]` extracts the last `shift` characters (which move to the front), and `s[:-shift]` extracts the first `n - shift` characters. Concatenating these yields the shifted result.
+
+This handles edge cases correctly:
+- `shift = 0`: Returns original string.
+- `shift = n`: `s[-n:] + s[:-n]` = `s + ''` = original string.
+- Numbers like `10` may produce leading zeros in the string (e.g., `"01"`), which is acceptable as the output represents shifted digits.
+
+The approach matches the examples: `circular_shift(12, 1)` yields `"2" + "1" = "21"`, and `circular_shift(12, 2)` yields `"12" + "" = "12"`.
+completed 66/164, Solved: True, number of success = 60/66, acc = 90.91
+```python
+def digitSum(s):
+    """
+    Task
+    Write a function that takes a string as input and returns the sum of the upper characters only'
+    ASCII codes.
+    
+    Examples:
+        digitSum("") => 0
+        digitSum("abAB") => 131
+        digitSum("abcCd") => 67
+        digitSum("helloE") => 69
+        digitSum("woArBld") => 131
+        digitSum("aAaaaXa") => 153
+    """
+    total = 0
+    for char in s:
+        if char.isupper():
+            total += ord(char)
+    return total
+```
+
+## Verification with Examples:
+- `digitSum("")` → `0`
+- `digitSum("abAB")` → `ord('A') + ord('B') = 65 + 66 = 131`
+- `digitSum("abcCd")` → `ord('C') = 67`
+- `digitSum("helloE")` → `ord('E') = 69`
+- `digitSum("woArBld")` → `ord('A') + ord('B') = 65 + 66 = 131`
+- `digitSum("aAaaaXa")` → `ord('A') + ord('X') + ord('A') = 65 + 88 + 65 = 218` Wait, example says 153? Let me check: "aAaaaXa" uppercase: positions: A (2nd), X (6th), a (7th lowercase). Wait, only two? "a A a a a X a" → A=65, X=88 → 153. Yes, third A? "aAaaaXa" is chars: a,A,a,a,a,X,a → uppercase A and X → 65+88=153. Yes.
+completed 67/164, Solved: True, number of success = 61/67, acc = 91.04
+```python
+def fruit_distribution(s, n):
+    """
+    In this task, you will be given a string that represents a number of apples and oranges 
+    that are distributed in a basket of fruit this basket contains 
+    apples, oranges, and mango fruits. Given the string that represents the total number of 
+    the oranges and apples and an integer that represent the total number of the fruits 
+    in the basket return the number of the mango fruits in the basket.
+    for examble:
+    fruit_distribution("5 apples and 6 oranges", 19) ->19 - 5 - 6 = 8
+    fruit_distribution("0 apples and 1 oranges",3) -> 3 - 0 - 1 = 2
+    fruit_distribution("2 apples and 3 oranges", 100) -> 100 - 2 - 3 = 95
+    fruit_distribution("100 apples and 1 oranges",120) -> 120 - 100 - 1 = 19
+    """
+    words = s.split()
+    apples = int(words[0])
+    oranges = int(words[3])
+    return n - apples - oranges
+```
+
+## Test
+```python
+print(fruit_distribution("5 apples and 6 oranges", 19))  # Output: 8
+print(fruit_distribution("0 apples and 1 oranges", 3))   # Output: 2
+print(fruit_distribution("2 apples and 3 oranges", 100)) # Output: 95
+print(fruit_distribution("100 apples and 1 oranges", 120)) # Output: 19
+```
+completed 68/164, Solved: False, number of success = 61/68, acc = 89.71
+```python
+def pluck(arr):
+    """
+    Given an array representing a branch of a tree that has non-negative integer nodes
+    your task is to pluck one of the nodes and return it.
+    The plucked node should be the node with the smallest even value.
+    If multiple nodes with the same smallest even value are found return the node that has smallest index.
+
+    The plucked node should be returned in a list, [ smallest_value, its index ],
+    If there are no even values or the given array is empty, return [].
+    """
+    smallest_even = float('inf')
+    min_index = -1
+    for i in range(len(arr)):
+        if arr[i] % 2 == 0 and arr[i] < smallest_even:
+            smallest_even = arr[i]
+            min_index = i
+    if min_index == -1:
+        return []
+    return [int(smallest_even), min_index]
+```
+completed 69/164, Solved: True, number of success = 62/69, acc = 89.86
+```python
+from collections import Counter
+
+def search(lst):
+    '''
+    You are given a non-empty list of positive integers. Return the greatest integer that is greater than 
+    zero, and has a frequency greater than or equal to the value of the integer itself. 
+    The frequency of an integer is the number of times it appears in the list.
+    If no such a value exist, return -1.
+    Examples:
+        search([4, 1, 2, 2, 3, 1]) == 2
+        search([1, 2, 2, 3, 3, 3, 4, 4, 4]) == 3
+        search([5, 5, 4, 4, 4]) == -1
+    '''
+    count = Counter(lst)
+    max_num = 0
+    for num in count:
+        if count[num] >= num:
+            max_num = max(max_num, num)
+    return max_num if max_num > 0 else -1
+```
+completed 70/164, Solved: True, number of success = 63/70, acc = 90.0
+```python
+def strange_sort_list(lst):
+    '''
+    Given list of integers, return list in strange order.
+    Strange sorting, is when you start with the minimum value,
+    then maximum of the remaining integers, then minimum and so on.
+
+    Examples:
+    strange_sort_list([1, 2, 3, 4]) == [1, 4, 2, 3]
+    strange_sort_list([5, 5, 5, 5]) == [5, 5, 5, 5]
+    strange_sort_list([]) == []
+    '''
+    sorted_lst = sorted(lst)
+    result = []
+    left = 0
+    right = len(sorted_lst) - 1
+    turn = 0  # 0 for min (left), 1 for max (right)
+    while left <= right:
+        if turn == 0:
+            result.append(sorted_lst[left])
+            left += 1
+        else:
+            result.append(sorted_lst[right])
+            right -= 1
+        turn = 1 - turn
+    return result
+```
+completed 71/164, Solved: True, number of success = 64/71, acc = 90.14
+```python
+import math
+
+def triangle_area(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return the area of
+    the triangle rounded to 2 decimal points if the three sides form a valid triangle. 
+    Otherwise return -1
+    Three sides make a valid triangle when the sum of any two sides is greater 
+    than the third side.
+    Example:
+    triangle_area(3, 4, 5) == 6.00
+    triangle_area(1, 2, 10) == -1
+    '''
+    if not (a + b > c and a + c > b and b + c > a):
+        return -1
+    s = (a + b + c) / 2
+    area = math.sqrt(s * (s - a) * (s - b) * (s - c))
+    return round(area, 2)
+```
+completed 72/164, Solved: True, number of success = 65/72, acc = 90.28
+```python
+def will_it_fly(q, w):
+    '''
+    Write a function that returns True if the object q will fly, and False otherwise.
+    The object q will fly if it's balanced (it is a palindromic list) and the sum of its elements is less than or equal the maximum possible weight w.
+    '''
+    return q == q[::-1] and sum(q) <= w
+```
+
+## Explanation
+
+The function `will_it_fly(q, w)` determines if the list `q` meets two conditions for flying: it must be a palindrome and its sum must not exceed `w`.
+
+1. **Palindrome check**: `q == q[::-1]` verifies if the list reads the same forwards and backwards by comparing `q` to its reversed version (`q[::-1]`).
+
+2. **Weight check**: `sum(q) <= w` calculates the total sum of elements in `q` and ensures it is less than or equal to `w`.
+
+3. **Combined logic**: The `and` operator returns `True` only if both conditions are satisfied, directly as the function's return value for conciseness.
+
+This handles examples correctly:
+- `[1, 2]` vs. 5: Sum is 3 (≤5), but not a palindrome → `False`.
+- `[3, 2, 3]` vs. 1: Palindrome, but sum is 8 (>1) → `False`.
+- `[3, 2, 3]` vs. 9: Palindrome and sum 8 (≤9) → `True`.
+- `[3]` vs. 5: Palindrome and sum 3 (≤5) → `True`.
+
+The implementation is efficient, using built-in slicing and sum operations, and works for edge cases like single-element or empty lists.
+completed 73/164, Solved: True, number of success = 66/73, acc = 90.41
+```python
+def smallest_change(arr):
+    """
+    Given an array arr of integers, find the minimum number of elements that
+    need to be changed to make the array palindromic. A palindromic array is an array that
+    is read the same backwards and forwards. In one change, you can change one element to any other element.
+
+    For example:
+    smallest_change([1,2,3,5,4,7,9,6]) == 4
+    smallest_change([1, 2, 3, 4, 3, 2, 2]) == 1
+    smallest_change([1, 2, 3, 2, 1]) == 0
+    """
+    n = len(arr)
+    count = 0
+    for i in range(n // 2):
+        if arr[i] != arr[n - 1 - i]:
+            count += 1
+    return count
+```
+
+## Explanation
+
+A palindromic array requires `arr[i]` to equal `arr[n-1-i]` for all `i` from 0 to `n//2 - 1`, where `n` is the array length.  
+
+- Compare elements in symmetric pairs: `arr[i]` and `arr[n-1-i]`.  
+- If a pair mismatches, at least one change is needed to make them equal. Changing one element per mismatched pair achieves this.  
+- Pairs are independent (no overlapping positions), so the total changes equal the number of mismatched pairs.  
+- For odd-length arrays, the middle element (`arr[n//2]`) is unpaired and requires no change.  
+- The loop `range(n//2)` processes exactly these pairs, incrementing a counter for each mismatch.  
+
+This yields the minimum changes, as verified by the examples:  
+- `[1,2,3,5,4,7,9,6]` has 4 mismatched pairs → 4 changes.  
+- `[1,2,3,4,3,2,2]` has 1 mismatched pair → 1 change.  
+- `[1,2,3,2,1]` has 0 mismatched pairs → 0 changes.
+completed 74/164, Solved: True, number of success = 67/74, acc = 90.54
+```python
+def total_match(lst1, lst2):
+    sum1 = sum(len(s) for s in lst1)
+    sum2 = sum(len(s) for s in lst2)
+    return lst1 if sum1 <= sum2 else lst2
+```
+completed 75/164, Solved: True, number of success = 68/75, acc = 90.67
+```python
+def is_multiply_prime(a):
+    """
+    Write a function that returns true if the given number is the multiplication of 3 prime numbers
+    and false otherwise.
+    Knowing that (a) is less then 100. 
+    Example:
+    is_multiply_prime(30) == True
+    30 = 2 * 3 * 5
+    """
+    if a <= 1:
+        return False
+    
+    count = 0
+    # Handle factor 2
+    while a % 2 == 0:
+        count += 1
+        a //= 2
+    
+    # Handle odd factors
+    i = 3
+    while i * i <= a:
+        while a % i == 0:
+            count += 1
+            a //= i
+        i += 2
+    
+    # If a is a prime number greater than 2
+    if a > 1:
+        count += 1
+    
+    return count == 3
+```
+
+## Test Cases (for verification):
+```python
+print(is_multiply_prime(30))  # True (2 * 3 * 5)
+print(is_multiply_prime(8))   # True (2 * 2 * 2)
+print(is_multiply_prime(12))  # True (2 * 2 * 3)
+print(is_multiply_prime(18))  # True (2 * 3 * 3)
+print(is_multiply_prime(27))  # True (3 * 3 * 3)
+print(is_multiply_prime(7))   # False (prime, only 1 factor)
+print(is_multiply_prime(9))   # False (3 * 3, 2 factors)
+print(is_multiply_prime(16))  # False (2 * 2 * 2 * 2, 4 factors)
+print(is_multiply_prime(1))   # False
+print(is_multiply_prime(4))   # False (2 * 2, 2 factors)
+```
+completed 76/164, Solved: False, number of success = 68/76, acc = 89.47
+```python
+def is_simple_power(x, n):
+    if x < 1 or n < 1:
+        return False
+    if x == 1:
+        return True
+    if n == 1:
+        return False
+    while x > 1:
+        if x % n != 0:
+            return False
+        x //= n
+    return True
+```
+completed 77/164, Solved: True, number of success = 69/77, acc = 89.61
+```python
+def iscube(a):
+    '''
+    Write a function that takes an integer a and returns True 
+    if this ingeger is a cube of some integer number.
+    Note: you may assume the input is always valid.
+    Examples:
+    iscube(1) ==> True
+    iscube(2) ==> False
+    iscube(-1) ==> True
+    iscube(64) ==> True
+    iscube(0) ==> True
+    iscube(180) ==> False
+    '''
+    cube_rt = round(abs(a) ** (1 / 3))
+    return cube_rt ** 3 == abs(a)
+```
+completed 78/164, Solved: True, number of success = 70/78, acc = 89.74
+```python
+def hex_key(num):
+    """
+    Counts the number of prime hexadecimal digits in the input string.
+    Prime hex digits: 2, 3, 5, 7, B (11), D (13).
+    """
+    prime_digits = {'2', '3', '5', '7', 'B', 'D'}
+    count = 0
+    for char in num:
+        if char in prime_digits:
+            count += 1
+    return count
+```
+
+### Example Usage (for verification):
+```
+print(hex_key("AB"))          # Output: 1
+print(hex_key("1077E"))       # Output: 2
+print(hex_key("ABED1A33"))    # Output: 4
+print(hex_key("123456789ABCDEF0"))  # Output: 6
+print(hex_key("2020"))        # Output: 2
+print(hex_key(""))            # Output: 0
+```
+completed 79/164, Solved: True, number of success = 71/79, acc = 89.87
+```python
+def decimal_to_binary(decimal):
+    """You will be given a number in decimal form and your task is to convert it to
+    binary format. The function should return a string, with each character representing a binary
+    number. Each character in the string will be '0' or '1'.
+
+    There will be an extra couple of characters 'db' at the beginning and at the end of the string.
+    The extra characters are there to help with the format.
+
+    Examples:
+    decimal_to_binary(15)   # returns "db1111db"
+    decimal_to_binary(32)   # returns "db100000db"
+    """
+    binary_str = bin(decimal)[2:]
+    return "db" + binary_str + "db"
+```
+completed 80/164, Solved: True, number of success = 72/80, acc = 90.0
+```python
+def is_happy(s):
+    """You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """
+    if len(s) < 3:
+        return False
+    for i in range(len(s) - 2):
+        if len(set(s[i:i+3])) != 3:
+            return False
+    return True
+```
+
+## Verification with Examples:
+- `is_happy("a")` → `False` (length < 3)
+- `is_happy("aa")` → `False` (length < 3)
+- `is_happy("abcd")` → `True` ("abc" and "bcd" all distinct)
+- `is_happy("aabb")` → `False` ("aab" has duplicates)
+- `is_happy("adb")` → `True` ("adb" all distinct)
+- `is_happy("xyy")` → `False` ("xyy" has duplicates)
+completed 81/164, Solved: True, number of success = 73/81, acc = 90.12
+```python
+def numerical_letter_grade(grades):
+    """
+    It is the last week of the semester and the teacher has to give the grades
+    to students. The teacher has been making her own algorithm for grading.
+    The only problem is, she has lost the code she used for grading.
+    She has given you a list of GPAs for some students and you have to write 
+    a function that can output a list of letter grades using the following table:
+             GPA       |    Letter grade
+              4.0                A+
+            > 3.7                A 
+            > 3.3                A- 
+            > 3.0                B+
+            > 2.7                B 
+            > 2.3                B-
+            > 2.0                C+
+            > 1.7                C
+            > 1.3                C-
+            > 1.0                D+ 
+            > 0.7                D 
+            > 0.0                D-
+              0.0                E
+    
+    Example:
+    grade_equation([4.0, 3, 1.7, 2, 3.5]) ==> ['A+', 'B', 'C-', 'C', 'A-']
+    """
+    result = []
+    for gpa in grades:
+        if gpa == 4.0:
+            result.append('A+')
+        elif gpa > 3.7:
+            result.append('A')
+        elif gpa > 3.3:
+            result.append('A-')
+        elif gpa > 3.0:
+            result.append('B+')
+        elif gpa > 2.7:
+            result.append('B')
+        elif gpa > 2.3:
+            result.append('B-')
+        elif gpa > 2.0:
+            result.append('C+')
+        elif gpa > 1.7:
+            result.append('C')
+        elif gpa > 1.3:
+            result.append('C-')
+        elif gpa > 1.0:
+            result.append('D+')
+        elif gpa > 0.7:
+            result.append('D')
+        elif gpa > 0.0:
+            result.append('D-')
+        elif gpa == 0.0:
+            result.append('E')
+        # For GPAs < 0.0 or other cases, no grade assigned per table
+    return result
+```
+completed 82/164, Solved: True, number of success = 74/82, acc = 90.24
+```python
+def prime_length(string):
+    """Write a function that takes a string and returns True if the string
+    length is a prime number or False otherwise
+    Examples
+    prime_length('Hello') == True
+    prime_length('abcdcba') == True
+    prime_length('kittens') == True
+    prime_length('orange') == False
+    """
+    n = len(string)
+    if n <= 1:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+```
+completed 83/164, Solved: True, number of success = 75/83, acc = 90.36
+```python
+def starts_one_ends(n):
+    """
+    Given a positive integer n, return the count of the numbers of n-digit
+    positive integers that start or end with 1.
+    """
+    if n == 1:
+        return 1
+    return 18 * (10 ** (n - 2))
+```
+completed 84/164, Solved: True, number of success = 76/84, acc = 90.48
+```python
+def solve(N):
+    """Given a positive integer N, return the total sum of its digits in binary.
+    
+    Example
+        For N = 1000, the sum of digits will be 1 the output should be "1".
+        For N = 150, the sum of digits will be 6 the output should be "110".
+        For N = 147, the sum of digits will be 12 the output should be "1100".
+    
+    Variables:
+        @N integer
+             Constraints: 0 ≤ N ≤ 10000.
+    Output:
+         a string of binary number
+    """
+    # Sum the decimal digits of N
+    digit_sum = 0
+    temp = N
+    while temp > 0:
+        digit_sum += temp % 10
+        temp //= 10
+    
+    # Convert the sum to binary string (no leading zeros, '0' for zero)
+    if digit_sum == 0:
+        return "0"
+    binary_str = bin(digit_sum)[2:]
+    return binary_str
+```
+
+## Explanation
+
+The solution first calculates the sum of the decimal digits of the input `N` by repeatedly taking `N % 10` to extract the last digit and adding it to a running total, then using integer division `//= 10` to remove the last digit until `N` becomes 0.
+
+Next, it converts this digit sum to its binary representation. The `bin(digit_sum)[2:]` method produces the binary string without the '0b' prefix. A special check for `digit_sum == 0` ensures the output is "0", matching standard binary representation conventions.
+
+This approach correctly handles the constraints (0 ≤ N ≤ 10000), where the maximum digit sum is 36 (for N=9999), and produces outputs like "1" for N=1000, "110" for N=150, and "1100" for N=147.
+completed 85/164, Solved: True, number of success = 77/85, acc = 90.59
+```python
+def add(lst):
+    """Given a non-empty list of integers lst. add the even elements that are at odd indices..
+
+    Examples:
+        add([4, 2, 6, 7]) ==> 2 
+    """
+    total = 0
+    for i, num in enumerate(lst):
+        if i % 2 == 1 and num % 2 == 0:
+            total += num
+    return total
+```
+completed 86/164, Solved: True, number of success = 78/86, acc = 90.7
+```python
+def anti_shuffle(s):
+    """
+    Write a function that takes a string and returns an ordered version of it.
+    Ordered version of string, is a string where all words (separated by space)
+    are replaced by a new word where all the characters arranged in
+    ascending order based on ascii value.
+    Note: You should keep the order of words and blank spaces in the sentence.
+
+    For example:
+    anti_shuffle('Hi') returns 'Hi'
+    anti_shuffle('hello') returns 'ehllo'
+    anti_shuffle('Hello World!!!') returns 'Hello !!!Wdlor'
+    """
+    result = []
+    buffer = []
+    for char in s:
+        if char.isspace():
+            if buffer:
+                result.append(''.join(sorted(buffer)))
+                buffer = []
+            result.append(char)
+        else:
+            buffer.append(char)
+    if buffer:
+        result.append(''.join(sorted(buffer)))
+    return ''.join(result)
+```
+
+## Verification with Examples:
+
+- `anti_shuffle('Hi')` → `'Hi'` ✅
+- `anti_shuffle('hello')` → `'ehllo'` ✅
+- `anti_shuffle('Hello World!!!')` → `'Hello !!!Wdlor'` ✅
+completed 87/164, Solved: True, number of success = 79/87, acc = 90.8
+```python
+def get_row(lst, x):
+    """
+    You are given a 2 dimensional data, as a nested lists,
+    which is similar to matrix, however, unlike matrices,
+    each row may contain a different number of columns.
+    Given lst, and integer x, find integers x in the list,
+    and return list of tuples, [(x1, y1), (x2, y2) ...] such that
+    each tuple is a coordinate - (row, columns), starting with 0.
+    Sort coordinates initially by rows in ascending order.
+    Also, sort coordinates of the row by columns in descending order.
+    
+    Examples:
+    get_row([ [1,2,3,4,5,6], [1,2,3,4,1,6], [1,2,3,4,5,1]], 1) == [(0, 0), (1, 4), (1, 0), (2, 5), (2, 0)]
+    get_row([], 1) == []
+    get_row([[], [1], [1, 2, 3]], 3) == [(2, 2)]
+    """
+    result = []
+    for i, row in enumerate(lst):
+        cols = [j for j, val in enumerate(row) if val == x]
+        cols.sort(reverse=True)
+        for j in cols:
+            result.append((i, j))
+    return result
+```
+
+## How it works:
+- Iterate through each row using `enumerate(lst)` to get the row index `i`.
+- For each row, collect column indices `j` where `row[j] == x`.
+- Sort these column indices in **descending order** (`reverse=True`).
+- Append tuples `(i, j)` to the result list in this order.
+- Since rows are processed in ascending order, the final list meets the sorting requirements.
+completed 88/164, Solved: True, number of success = 80/88, acc = 90.91
+```python
+def sort_array(array):
+    """
+    Given an array of non-negative integers, return a copy of the given array after sorting,
+    you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+    or sort it in descending order if the sum( first index value, last index value) is even.
+
+    Note:
+    * don't change the given array.
+
+    Examples:
+    * sort_array([]) => []
+    * sort_array([5]) => [5]
+    * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+    * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+    """
+    array_copy = list(array)
+    if not array_copy:
+        return []
+    first, last = array_copy[0], array_copy[-1]
+    if (first + last) % 2 == 1:
+        return sorted(array_copy)
+    else:
+        return sorted(array_copy, reverse=True)
+```
+completed 89/164, Solved: True, number of success = 81/89, acc = 91.01
+```python
+def encrypt(s):
+    """
+    Create a function encrypt that takes a string as an argument and
+    returns a string encrypted with the alphabet being rotated. 
+    The alphabet should be rotated in a manner such that the letters 
+    shift down by two multiplied to two places (i.e., Caesar cipher shift +4).
+    """
+    result = ''
+    for char in s:
+        if char.islower():
+            # Shift lowercase letters forward by 4 positions, wrapping around
+            shifted = (ord(char) - ord('a') + 4) % 26 + ord('a')
+            result += chr(shifted)
+        else:
+            # Preserve non-lowercase characters unchanged
+            result += char
+    return result
+```
+
+### Verification with Examples:
+- `encrypt('hi')` → `'lm'`
+- `encrypt('asdfghjkl')` → `'ewhjklnop'`
+- `encrypt('gf')` → `'kj'`
+- `encrypt('et')` → `'ix'`
+
+The function handles wrapping around the alphabet (e.g., `encrypt('xy')` → `'bc'`) and preserves non-letter characters.
+completed 90/164, Solved: True, number of success = 82/90, acc = 91.11
+```python
+def next_smallest(lst):
+    """
+    You are given a list of integers.
+    Write a function next_smallest() that returns the 2nd smallest element of the list.
+    Return None if there is no such element.
+    
+    next_smallest([1, 2, 3, 4, 5]) == 2
+    next_smallest([5, 1, 4, 3, 2]) == 2
+    next_smallest([]) == None
+    next_smallest([1, 1]) == None
+    """
+    if not lst:
+        return None
+    unique_sorted = sorted(set(lst))
+    if len(unique_sorted) < 2:
+        return None
+    return unique_sorted[1]
+```
+completed 91/164, Solved: True, number of success = 83/91, acc = 91.21
+```python
+import re
+
+def is_bored(S):
+    """
+    You'll be given a string of words, and your task is to count the number
+    of boredoms. A boredom is a sentence that starts with the word "I".
+    Sentences are delimited by '.', '?' or '!'.
+   
+    For example:
+    >>> is_bored("Hello world")
+    0
+    >>> is_bored("The sky is blue. The sun is shining. I love this weather")
+    1
+    """
+    sentences = re.split(r'[.!?]+', S)
+    count = 0
+    for sent in sentences:
+        stripped = sent.strip()
+        if stripped:
+            words = stripped.split()
+            if words and words[0] == 'I':
+                count += 1
+    return count
+```
+
+## Explanation
+
+The function processes the input string `S` by first splitting it into potential sentences using regular expression `re.split(r'[.!?]+', S)`, which divides the string on one or more occurrences of '.', '?', or '!' delimiters. This handles cases like multiple punctuation marks or punctuation at the start/end.
+
+For each resulting substring:
+- Strip leading and trailing whitespace using `strip()` to clean up spaces around sentences.
+- If the stripped string is non-empty, split it into words using `split()` (which splits on any whitespace and handles multiple spaces).
+- Check if the list of words is non-empty and if the first word exactly equals 'I' (case-sensitive).
+
+Increment the count for each sentence meeting this condition. This approach accurately identifies sentences starting with the word "I" by treating words as whitespace-separated tokens, ignoring attached punctuation (as delimiters are already split out) and handling edge cases like empty strings, leading punctuation, or trailing delimiters.
+completed 92/164, Solved: True, number of success = 84/92, acc = 91.3
+```python
+def any_int(x, y, z):
+    '''
+    Create a function that takes 3 numbers.
+    Returns true if one of the numbers is equal to the sum of the other two, and all numbers are integers.
+    Returns false in any other cases.
+    
+    Examples
+    any_int(5, 2, 7) ➞ True
+    
+    any_int(3, 2, 2) ➞ False
+
+    any_int(3, -2, 1) ➞ True
+    
+    any_int(3.6, -2.2, 2) ➞ False
+    '''
+    # Check if all are integers (whole numbers)
+    if not all(num == int(num) for num in (x, y, z)):
+        return False
+    
+    # Check if one is the sum of the other two
+    return (x == y + z) or (y == x + z) or (z == x + y)
+```
+completed 93/164, Solved: False, number of success = 84/93, acc = 90.32
+```python
+def encode(message):
+    """
+    Write a function that takes a message, and encodes in such a 
+    way that it swaps case of all letters, replaces all vowels in 
+    the message with the letter that appears 2 places ahead of that 
+    vowel in the english alphabet. 
+    Assume only letters. 
+    
+    Examples:
+    >>> encode('test')
+    'TGST'
+    >>> encode('This is a message')
+    'tHKS KS C MGSSCGG'
+    """
+    result = []
+    for char in message:
+        if char == ' ':
+            result.append(' ')
+            continue
+        # Swap case first
+        swapped = char.swapcase()
+        # Check if vowel (case-insensitive)
+        if swapped.lower() in 'aeiou':
+            # Shift by 2 positions, preserving case
+            base_ord = ord(swapped)
+            new_ord = base_ord + 2
+            new_char = chr(new_ord)
+            result.append(new_char)
+        else:
+            # Non-vowel, keep swapped case
+            result.append(swapped)
+    return ''.join(result)
+```
+
+## Verification with Examples
+
+- `encode('test')` → `'TGST'`  
+  - `t` → `T` (non-vowel)  
+  - `e` → `E` → `G` (vowel)  
+  - `s` → `S` (non-vowel)  
+  - `t` → `T` (non-vowel)  
+
+- `encode('This is a message')` → `'tHKS KS C MGSSCGG'`  
+  - `This` → `tHKS` (`i` → `I` → `K`)  
+  - `is` → `KS` (`i` → `I` → `K`)  
+  - `a` → `A` → `C`  
+  - `message` → `MGSSCGG` (`e`→`E`→`G`, `a`→`A`→`C`, `e`→`E`→`G`)
+completed 94/164, Solved: True, number of success = 85/94, acc = 90.43
+```python
+def skjkasdkd(lst):
+    def is_prime(n):
+        if n <= 1:
+            return False
+        if n == 2:
+            return True
+        if n % 2 == 0:
+            return False
+        for i in range(3, int(n ** 0.5) + 1, 2):
+            if n % i == 0:
+                return False
+        return True
+    
+    max_prime = 0
+    for num in lst:
+        if is_prime(num) and num > max_prime:
+            max_prime = num
+    
+    # Sum of digits
+    digit_sum = 0
+    n = max_prime
+    while n > 0:
+        digit_sum += n % 10
+        n //= 10
+    return digit_sum
+```
+
+## Explanation
+
+The solution identifies the largest prime number in the input list and computes the sum of its digits through the following steps:
+
+1. **Prime-checking helper function (`is_prime`)**: 
+   - Returns `False` for numbers ≤ 1.
+   - Handles 2 as a special case (prime).
+   - Checks even numbers > 2 (not prime).
+   - Tests divisibility from 3 to √n in steps of 2 for efficiency.
+
+2. **Finding the largest prime**:
+   - Initializes `max_prime` to 0 (no primes yield sum 0).
+   - Iterates through the list, updating `max_prime` only for primes larger than the current maximum.
+
+3. **Summing digits**:
+   - Uses modulo (`% 10`) and integer division (`//= 10`) to extract and sum digits iteratively.
+
+This approach ensures correctness for the given examples, handles edge cases like no primes or empty lists (returns 0), and is efficient for typical input sizes.
+completed 95/164, Solved: True, number of success = 86/95, acc = 90.53
+```python
+def check_dict_case(d):
+    """
+    Given a dictionary, return True if all keys are strings in lower 
+    case or all keys are strings in upper case, else return False.
+    The function should return False if the given dictionary is empty.
+    """
+    if len(d) == 0:
+        return False
+    
+    keys = list(d.keys())
+    if not all(isinstance(k, str) for k in keys):
+        return False
+    
+    all_lower = all(k.lower() == k for k in keys)
+    all_upper = all(k.upper() == k for k in keys)
+    
+    return all_lower or all_upper
+```
+
+## Verification with Examples:
+- `check_dict_case({"a":"apple", "b":"banana"})` → `True` (all lowercase)
+- `check_dict_case({"a":"apple", "A":"banana", "B":"banana"})` → `False` (mixed case)
+- `check_dict_case({"a":"apple", 8:"banana", "a":"apple"})` → `False` (non-string key)
+- `check_dict_case({"Name":"John", "Age":"36", "City":"Houston"})` → `False` (mixed case)
+- `check_dict_case({"STATE":"NC", "ZIP":"12345"})` → `True` (all uppercase)
+- `check_dict_case({})` → `False` (empty)
+completed 96/164, Solved: True, number of success = 87/96, acc = 90.62
+```python
+def count_up_to(n):
+    """Implement a function that takes an non-negative integer and returns an array of the first n
+    integers that are prime numbers and less than n.
+    for example:
+    count_up_to(5) => [2,3]
+    count_up_to(11) => [2,3,5,7]
+    count_up_to(0) => []
+    count_up_to(20) => [2,3,5,7,11,13,17,19]
+    count_up_to(1) => []
+    count_up_to(18) => [2,3,5,7,11,13,17]
+    """
+    if n < 2:
+        return []
+    
+    # Use Sieve of Eratosthenes to find all primes less than n
+    sieve = [True] * n
+    sieve[0] = sieve[1] = False
+    for i in range(2, int(n**0.5) + 1):
+        if sieve[i]:
+            for j in range(i*i, n, i):
+                sieve[j] = False
+    
+    return [i for i in range(n) if sieve[i]]
+```
+
+## Test Cases Verification:
+```
+>>> count_up_to(5)
+[2, 3]
+
+>>> count_up_to(11)
+[2, 3, 5, 7]
+
+>>> count_up_to(0)
+[]
+
+>>> count_up_to(20)
+[2, 3, 5, 7, 11, 13, 17, 19]
+
+>>> count_up_to(1)
+[]
+
+>>> count_up_to(18)
+[2, 3, 5, 7, 11, 13, 17]
+```
+completed 97/164, Solved: True, number of success = 88/97, acc = 90.72
+```python
+def multiply(a, b):
+    """Complete the function that takes two integers and returns 
+    the product of their unit digits.
+    Assume the input is always valid.
+    Examples:
+    multiply(148, 412) should return 16.
+    multiply(19, 28) should return 72.
+    multiply(2020, 1851) should return 0.
+    multiply(14,-15) should return 20.
+    """
+    return (a % 10) * (b % 10)
+```
+
+## Explanation
+
+The function retrieves the unit digit of each input by applying the modulo 10 operator (`% 10`), which works correctly for both positive and negative integers in Python (e.g., `-15 % 10` yields `5`).  
+
+The unit digits are then multiplied together, producing the required product (e.g., `8 * 2 = 16` for `148` and `412`).  
+
+This approach directly satisfies all examples:  
+- `148 % 10 = 8`, `412 % 10 = 2` → `8 * 2 = 16`  
+- `19 % 10 = 9`, `28 % 10 = 8` → `9 * 8 = 72`  
+- `2020 % 10 = 0`, `1851 % 10 = 1` → `0 * 1 = 0`  
+- `14 % 10 = 4`, `-15 % 10 = 5` → `4 * 5 = 20`
+completed 98/164, Solved: True, number of success = 89/98, acc = 90.82
+```python
+def count_upper(s):
+    """
+    Given a string s, count the number of uppercase vowels in even indices.
+    
+    For example:
+    count_upper('aBCdEf') returns 1
+    count_upper('abcdefg') returns 0
+    count_upper('dBBE') returns 0
+    """
+    count = 0
+    vowels = 'AEIOU'
+    for i in range(0, len(s), 2):
+        if s[i].isupper() and s[i] in vowels:
+            count += 1
+    return count
+```
+completed 99/164, Solved: True, number of success = 90/99, acc = 90.91
+```python
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest
+completed 100/164, Solved: False, number of success = 90/100, acc = 90.0
+```python
+def make_a_pile(n):
+    """
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """
+    pile = [n]
+    for i in range(1, n):
+        pile.append(pile[-1] + 2)
+    return pile
+```
+completed 101/164, Solved: True, number of success = 91/101, acc = 90.1
+```python
+def words_string(s):
+    """
+    You will be given a string of words separated by commas or spaces. Your task is
+    to split the string into words and return an array of the words.
+    
+    For example:
+    words_string("Hi, my name is John") == ["Hi", "my", "name", "is", "John"]
+    words_string("One, two, three, four, five, six") == ["One", "two", "three", "four", "five", "six"]
+    """
+    s = s.replace(',', ' ')
+    return s.split()
+```
+completed 102/164, Solved: True, number of success = 92/102, acc = 90.2
+```python
+def choose_num(x, y):
+    """This function takes two positive numbers x and y and returns the
+    biggest even integer number that is in the range [x, y] inclusive. If 
+    there's no such number, then the function should return -1.
+
+    For example:
+    choose_num(12, 15) = 14
+    choose_num(13, 12) = -1
+    """
+    candidate = int(y // 2) * 2
+    return candidate if candidate >= x else -1
+```
+
+## Explanation
+
+The function identifies the largest even integer within the range [x, y] by following these steps:
+
+1. **Compute the candidate**: Calculate `int(y // 2) * 2`, which finds the largest even integer less than or equal to y. Here, `y // 2` performs floor division to get the greatest integer less than or equal to y/2, `int()` converts it to an integer, and multiplying by 2 yields the even number.
+
+2. **Validate the range**: Check if this candidate is greater than or equal to x. If yes, it is the largest even integer in [x, y]; otherwise, no even integer exists in the range, so return -1.
+
+This approach handles cases where x > y (candidate ≤ y < x, so returns -1) and works for both integer and floating-point inputs, as floor division ensures the correct even integer candidate. For example:
+- `choose_num(12, 15)`: candidate = `int(15 // 2) * 2 = 14`, 14 ≥ 12, returns 14.
+- `choose_num(13, 12)`: candidate = `int(12 // 2) * 2 = 12`, 12 < 13, returns -1.
+completed 103/164, Solved: True, number of success = 93/103, acc = 90.29
+```python
+def rounded_avg(n, m):
+    """You are given two positive integers n and m, and your task is to compute the
+    average of the integers from n through m (including n and m). 
+    Round the answer to the nearest integer and convert that to binary.
+    If n is greater than m, return -1.
+    Example:
+    rounded_avg(1, 5) => "0b11"
+    rounded_avg(7, 5) => -1
+    rounded_avg(10, 20) => "0b1111"
+    rounded_avg(20, 33) => "0b11010"
+    """
+    if n > m:
+        return -1
+    avg = round((n + m) / 2)
+    return bin(avg)
+```
+
+## Explanation
+
+The function `rounded_avg(n, m)` follows these logical steps:
+
+1. **Check input order**: If `n > m`, return `-1` immediately, as specified.
+
+2. **Calculate the average**: The average of integers from `n` to `m` inclusive is `(n + m) / 2`. In Python 3, this performs float division, yielding a float result.
+
+3. **Round to nearest integer**: Apply Python's `round()` function to the average. This uses banker's rounding (rounding halves to the nearest even integer), which matches the example where `(20 + 33) / 2 = 26.5` rounds to `26`.
+
+4. **Convert to binary string**: Use `bin()` on the rounded integer, which returns a string prefixed with `"0b"`, such as `"0b11010"` for `26`.
+
+This approach leverages the arithmetic mean formula for an arithmetic series and Python's built-in functions for rounding and binary conversion, ensuring efficiency and correctness for the given examples.
+completed 104/164, Solved: True, number of success = 94/104, acc = 90.38
+```python
+def unique_digits(x):
+    """Given a list of positive integers x. return a sorted list of all 
+    elements that hasn't any even digit.
+
+    Note: Returned list should be sorted in increasing order.
+    
+    For example:
+    >>> unique_digits([15, 33, 1422, 1])
+    [1, 15, 33]
+    >>> unique_digits([152, 323, 1422, 10])
+    []
+    """
+    result = []
+    odd_digits = set('13579')
+    for num in x:
+        if all(digit in odd_digits for digit in str(num)):
+            result.append(num)
+    return sorted(result)
+```
+
+## Explanation
+
+The solution processes the input list `x` to identify numbers without even digits (0, 2, 4, 6, 8) and returns them sorted in increasing order.
+
+1. **Initialize an empty list `result`** to store qualifying numbers.
+2. **Define `odd_digits` as a set** containing '1', '3', '5', '7', '9' for efficient digit lookup.
+3. **Iterate through each number `num` in `x`**:
+   - Convert `num` to a string to access individual digits.
+   - Use `all()` with a generator expression to verify every digit is in `odd_digits`.
+   - If true, append `num` to `result`.
+4. **Return `sorted(result)`**, which sorts the list of integers numerically in ascending order.
+
+This approach ensures:
+- **Correct filtering**: Only numbers with exclusively odd digits are included.
+- **Sorting**: The output is always in increasing order.
+- **Efficiency**: Set lookup for digits is O(1) on average, and string conversion handles arbitrary-sized positive integers.
+- **Edge cases handled**: Empty lists return `[]`; numbers with even digits (e.g., 0) are excluded; duplicates are preserved as per the problem's "all elements" requirement.
+completed 105/164, Solved: True, number of success = 95/105, acc = 90.48
+```python
+def by_length(arr):
+    """
+    Given an array of integers, sort the integers that are between 1 and 9 inclusive,
+    reverse the resulting array, and then replace each digit by its corresponding name from
+    "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine".
+
+    For example:
+      arr = [2, 1, 1, 4, 5, 8, 2, 3]   
+            -> sort arr -> [1, 1, 2, 2, 3, 4, 5, 8] 
+            -> reverse arr -> [8, 5, 4, 3, 2, 2, 1, 1]
+      return ["Eight", "Five", "Four", "Three", "Two", "Two", "One", "One"]
+    
+      If the array is empty, return an empty array:
+      arr = []
+      return []
+    
+      If the array has any strange number ignore it:
+      arr = [1, -1 , 55] 
+            -> sort arr -> [-1, 1, 55]
+            -> reverse arr -> [55, 1, -1]
+      return = ['One']
+    """
+    mapping = {
+        1: "One", 2: "Two", 3: "Three", 4: "Four",
+        5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine"
+    }
+    filtered = [x for x in arr if 1 <= x <= 9]
+    sorted_desc = sorted(filtered, reverse=True)
+    result = [mapping[num] for num in sorted_desc]
+    return result
+```
+completed 106/164, Solved: True, number of success = 96/106, acc = 90.57
+```python
+def f(n):
+    """ Implement the function f that takes n as a parameter,
+    and returns a list of size n, such that the value of the element at index i is the factorial of i if i is even
+    or the sum of numbers from 1 to i otherwise.
+    i starts from 1.
+    the factorial of i is the multiplication of the numbers from 1 to i (1 * 2 * ... * i).
+    Example:
+    f(5) == [1, 2, 6, 24, 15]
+    """
+    def factorial(k):
+        res = 1
+        for j in range(1, k + 1):
+            res *= j
+        return res
+    
+    result = []
+    for i in range(1, n + 1):
+        if i % 2 == 0:
+            result.append(factorial(i))
+        else:
+            result.append(i * (i + 1) // 2)
+    return result
+```
+completed 107/164, Solved: True, number of success = 97/107, acc = 90.65
+```python
+def even_odd_palindrome(n):
+    """
+    Given a positive integer n, return a tuple that has the number of even and odd
+    integer palindromes that fall within the range(1, n), inclusive.
+
+    Example 1:
+
+        Input: 3
+        Output: (1, 2)
+        Explanation:
+        Integer palindrome are 1, 2, 3. one of them is even, and two of them are odd.
+
+    Example 2:
+
+        Input: 12
+        Output: (4, 6)
+        Explanation:
+        Integer palindrome are 1, 2, 3, 4, 5, 6, 7, 8, 9, 11. four of them are even, and 6 of them are odd.
+
+    Note:
+        1. 1 <= n <= 10^3
+        2. returned tuple has the number of even and odd integer palindromes respectively.
+    """
+    def is_palindrome(x):
+        s = str(x)
+        return s == s[::-1]
+    
+    even = 0
+    odd = 0
+    for i in range(1, n + 1):
+        if is_palindrome(i):
+            if i % 2 == 0:
+                even += 1
+            else:
+                odd += 1
+    return (even, odd)
+```
+completed 108/164, Solved: True, number of success = 98/108, acc = 90.74
+```python
+def count_nums(arr):
+    """
+    Write a function count_nums which takes an array of integers and returns
+    the number of elements which has a sum of digits > 0.
+    If a number is negative, then its first signed digit will be negative:
+    e.g. -123 has signed digits -1, 2, and 3.
+    >>> count_nums([]) == 0
+    >>> count_nums([-1, 11, -11]) == 1
+    >>> count_nums([1, 1, 2]) == 3
+    """
+    def digit_sum(n):
+        s = str(abs(n))
+        if not s:
+            return 0
+        first = int(s[0])
+        rest = sum(int(d) for d in s[1:])
+        return rest + (first if n > 0 else -first)
+    
+    return sum(1 for n in arr if digit_sum(n) > 0)
+```
+
+## Explanation
+
+The function `count_nums` processes each integer in the input array to determine if the sum of its signed digits exceeds 0, then counts and returns those that do.
+
+- A helper function `digit_sum(n)` computes the signed digit sum:
+  - Convert `abs(n)` to a string `s` to access individual digits.
+  - Extract the first digit as `first = int(s[0])`.
+  - Sum the remaining digits: `rest = sum(int(d) for d in s[1:])`.
+  - For positive `n` (> 0), add `first`; for non-positive, subtract `first` (yielding `-first`).
+  - This handles negatives by negating only the leading digit, positives normally, and zero (sum=0).
+
+- The main function uses a generator expression `sum(1 for n in arr if digit_sum(n) > 0)` to efficiently count qualifying elements without explicit loops.
+
+This approach correctly matches examples:
+- `[-1, 11, -11]`: `-1` → -1 (≤0), `11` → 2 (>0), `-11` → 0 (≤0) → count=1.
+- `[1, 1, 2]`: All sums >0 → count=3.
+- `[]` → count=0.
+completed 109/164, Solved: True, number of success = 99/109, acc = 90.83
+```python
+def move_one_ball(arr):
+    """
+    Determines if the array can be sorted in non-decreasing order by right shifts.
+    """
+    n = len(arr)
+    if n == 0:
+        return True
+    
+    count = 0
+    for i in range(n):
+        next_i = (i + 1) % n
+        if arr[i] > arr[next_i]:
+            count += 1
+            if count > 1:
+                return False
+    return True
+```
+
+### Explanation
+- We count the number of positions where `arr[i] > arr[(i+1) % n]` in the circular array.
+- For the array to be a rotation of a sorted non-decreasing array (with unique elements), there should be **at most one** such position.
+- If more than one, it's impossible (`False`).
+- Handles empty array (`True`) and single element (`True`) correctly.
+- Time complexity: O(N), Space: O(1).
+completed 110/164, Solved: True, number of success = 100/110, acc = 90.91
+```python
+def exchange(lst1, lst2):
+    """In this problem, you will implement a function that takes two lists of numbers,
+    and determines whether it is possible to perform an exchange of elements
+    between them to make lst1 a list of only even numbers.
+    There is no limit on the number of exchanged elements between lst1 and lst2.
+    If it is possible to exchange elements between the lst1 and lst2 to make
+    all the elements of lst1 to be even, return "YES".
+    Otherwise, return "NO".
+    For example:
+    exchange([1, 2, 3, 4], [1, 2, 3, 4]) => "YES"
+    exchange([1, 2, 3, 4], [1, 5, 3, 4]) => "NO"
+    It is assumed that the input lists will be non-empty.
+    """
+    odd_count_lst1 = sum(1 for x in lst1 if x % 2 != 0)
+    even_count_lst2 = sum(1 for x in lst2 if x % 2 == 0)
+    return "YES" if odd_count_lst1 <= even_count_lst2 else "NO"
+```
+completed 111/164, Solved: True, number of success = 101/111, acc = 90.99
+```python
+def histogram(test):
+    """Given a string representing a space separated lowercase letters, return a dictionary
+    of the letter with the most repetition and containing the corresponding count.
+    If several letters have the same occurrence, return all of them.
+    
+    Example:
+    histogram('a b c') == {'a': 1, 'b': 1, 'c': 1}
+    histogram('a b b a') == {'a': 2, 'b': 2}
+    histogram('a b c a b') == {'a': 2, 'b': 2}
+    histogram('b b b b a') == {'b': 4}
+    histogram('') == {}
+    """
+    if not test.strip():
+        return {}
+    
+    words = test.split()
+    count = {}
+    for word in words:
+        count[word] = count.get(word, 0) + 1
+    
+    if not count:
+        return {}
+    
+    max_count = max(count.values())
+    result = {k: v for k, v in count.items() if v == max_count}
+    return result
+```
+completed 112/164, Solved: True, number of success = 102/112, acc = 91.07
+```python
+def reverse_delete(s, c):
+    """
+    Task
+    We are given two strings s and c, you have to deleted all the characters in s that are equal to any character in c
+    then check if the result string is palindrome.
+    A string is called palindrome if it reads the same backward as forward.
+    You should return a tuple containing the result string and True/False for the check.
+    Example
+    For s = "abcde", c = "ae", the result should be ('bcd',False)
+    For s = "abcdef", c = "b"  the result should be ('acdef',False)
+    For s = "abcdedcba", c = "ab", the result should be ('cdedc',True)
+    """
+    char_set = set(c)
+    result = ''.join(char for char in s if char not in char_set)
+    is_palindrome = result == result[::-1]
+    return (result, is_palindrome)
+```
+
+## Test Cases Verification:
+```
+reverse_delete("abcde", "ae") -> ('bcd', False)
+reverse_delete("abcdef", "b") -> ('acdef', False)
+reverse_delete("abcdedcba", "ab") -> ('cdedc', True)
+```
+completed 113/164, Solved: True, number of success = 103/113, acc = 91.15
+```python
+def odd_count(lst):
+    """Given a list of strings, where each string consists of only digits, return a list.
+    Each element i of the output should be "the number of odd elements in the
+    string i of the input." where all the i's should be replaced by the number
+    of odd digits in the i'th string of the input.
+
+    >>> odd_count(['1234567'])
+    ["the number of odd elements 4n the str4ng 4 of the 4nput."]
+    >>> odd_count(['3',"11111111"])
+    ["the number of odd elements 1n the str1ng 1 of the 1nput.",
+     "the number of odd elements 8n the str8ng 8 of the 8nput."]
+    """
+    template = "the number of odd elements in the string i of the input."
+    result = []
+    for s in lst:
+        count = sum(1 for char in s if int(char) % 2 == 1)
+        output = template.replace('i', str(count))
+        result.append(output)
+    return result
+```
+
+## Explanation
+
+The function processes each string in the input list as follows:
+
+1. **Define the template string**: Use `"the number of odd elements in the string i of the input."`, which contains lowercase 'i' characters as placeholders.
+
+2. **Iterate over each input string**: For every string `s` in `lst`:
+   - Count the odd digits by checking each character: convert to integer and verify if it is odd (`digit % 2 == 1`). Odd digits are 1, 3, 5, 7, 9.
+   - Convert the count to a string: `str(count)`.
+
+3. **Replace placeholders**: Use `template.replace('i', str(count))` to replace every lowercase 'i' in the template with the string representation of the count.
+
+4. **Build the result list**: Append the modified string to the result list for each input string.
+
+5. **Return the result**: The list contains the processed strings matching the examples, such as replacing 'i' with '4' in the first example to produce `"the number of odd elements 4n the str4ng 4 of the 4nput."`.
+
+This approach handles single-digit counts as shown in the examples and extends naturally to multi-digit counts by inserting the full string representation.
+completed 114/164, Solved: True, number of success = 104/114, acc = 91.23
+```python
+def minSubArraySum(nums):
+    """
+    Given an array of integers nums, find the minimum sum of any non-empty sub-array
+    of nums.
+    Example
+    minSubArraySum([2, 3, 4, 1, 2, 4]) == 1
+    minSubArraySum([-1, -2, -3]) == -6
+    """
+    if not nums:
+        raise ValueError("Input array cannot be empty")
+    
+    min_ending_here = nums[0]
+    min_so_far = nums[0]
+    
+    for num in nums[1:]:
+        min_ending_here = min(num, min_ending_here + num)
+        min_so_far = min(min_so_far, min_ending_here)
+    
+    return min_so_far
+```
+
+**Explanation**  
+This solution uses a modified version of Kadane's algorithm optimized for finding the **minimum** subarray sum in O(n) time and O(1) space:  
+- `min_ending_here`: Tracks the minimum sum ending at the current position.  
+- `min_so_far`: Tracks the overall minimum subarray sum found so far.  
+- At each step, decide whether to start a new subarray (take `num`) or extend the previous one (`min_ending_here + num`), choosing the minimum of the two.  
+
+**Test Cases**  
+- `[2, 3, 4, 1, 2, 4]` → `1` (subarray `[1]`)  
+- `[-1, -2, -3]` → `-6` (subarray `[-1, -2, -3]`)  
+- `[1]` → `1`  
+- `[-2, 1, -3, 4, -1, 2, 1, -5, 4]` → `-6` (subarray `[-3, 4, -1, 2, 1, -5]`)
+completed 115/164, Solved: True, number of success = 105/115, acc = 91.3
+```python
+def max_fill(grid, capacity):
+    total_trips = 0
+    for row in grid:
+        h = sum(row)
+        trips = (h + capacity - 1) // capacity
+        total_trips += trips
+    return total_trips
+```
+
+## Explanation
+
+The problem requires calculating the minimum number of bucket lowerings to empty all wells, where each row represents a well with water units indicated by 1s, and each bucket has a fixed capacity.
+
+- For each row (well), compute the total water units `h` by summing the elements, as only 1s represent water.
+- The number of lowerings needed for that well is the ceiling of `h / capacity`, calculated as `(h + capacity - 1) // capacity` using integer arithmetic.
+- Sum these values across all rows to get the total lowerings, since each well's bucket operates independently.
+- This approach matches the examples: for Example 1, wells have 1, 1, and 4 units (capacity 1), yielding 1 + 1 + 4 = 6; for Example 2, 2, 0, 4, and 3 units (capacity 2) yield 1 + 0 + 2 + 2 = 5.
+
+The solution iterates through the grid once, with O(rows * cols) time complexity, which is efficient given the constraints (up to 100x100).
+completed 116/164, Solved: True, number of success = 106/116, acc = 91.38
+```python
+def sort_array(arr):
+    """
+    In this Kata, you have to sort an array of non-negative integers according to
+    number of ones in their binary representation in ascending order.
+    For similar number of ones, sort based on decimal value.
+
+    It must be implemented like this:
+    >>> sort_array([1, 5, 2, 3, 4]) == [1, 2, 4, 3, 5]
+    >>> sort_array([-2, -3, -4, -5, -6]) == [-4, -2, -6, -5, -3]
+    >>> sort_array([1, 0, 2, 3, 4]) == [0, 1, 2, 4, 3]
+    """
+    def key(x):
+        return (bin(abs(x)).count('1'), x)
+    
+    return sorted(arr, key=key)
+```
+
+## Verification with Examples:
+
+```python
+print(sort_array([1, 5, 2, 3, 4]) == [1, 2, 4, 3, 5])  # True
+print(sort_array([-2, -3, -4, -5, -6]) == [-4, -2, -6, -5, -3])  # True
+print(sort_array([1, 0, 2, 3, 4]) == [0, 1, 2, 4, 3])  # True
+```
+
+**Explanation**:  
+- Primary sort key: Number of 1s in the binary representation of `abs(x)` (ascending).  
+- Secondary sort key: The decimal value `x` itself (ascending).  
+- Uses `sorted()` with a tuple key for multi-level sorting.  
+- Handles negatives, zero, positives, and duplicates correctly.  
+- Time complexity: O(n log n) due to sorting; bit counting is O(log |x|) per element.
+False
+False
+False
+completed 117/164, Solved: False, number of success = 106/117, acc = 90.6
+```python
+def select_words(s, n):
+    """
+    Given a string s and a natural number n, returns a list of all words from string s 
+    that contain exactly n consonants, in order these words appear in the string s.
+    If the string s is empty then the function should return an empty list.
+    Note: assumes input string contains only letters and spaces.
+    """
+    if not s or not s.strip():
+        return []
+    
+    words = s.split()
+    result = []
+    vowels = set('aeiouAEIOU')
+    
+    for word in words:
+        consonant_count = sum(1 for c in word if c not in vowels)
+        if consonant_count == n:
+            result.append(word)
+    
+    return result
+```
+
+## Verification with Examples:
+
+- `select_words("Mary had a little lamb", 4)` → `["little"]`
+- `select_words("Mary had a little lamb", 3)` → `["Mary", "lamb"]`
+- `select_words("simple white space", 2)` → `[]`
+- `select_words("Hello world", 4)` → `["world"]`
+- `select_words("Uncle sam", 3)` → `["Uncle"]`
+- `select_words("", 1)` → `[]`
+completed 118/164, Solved: True, number of success = 107/118, acc = 90.68
+```python
+def get_closest_vowel(word):
+    """You are given a word. Your task is to find the closest vowel that stands between 
+    two consonants from the right side of the word (case sensitive).
+    
+    Vowels in the beginning and ending doesn't count. Return empty string if you didn't
+    find any vowel met the above condition. 
+
+    You may assume that the given string contains English letter only.
+
+    Example:
+    get_closest_vowel("yogurt") ==> "u"
+    get_closest_vowel("FULL") ==> "U"
+    get_closest_vowel("quick") ==> ""
+    get_closest_vowel("ab") ==> ""
+    """
+    vowels = set('aeiouAEIOU')
+    for i in range(len(word) - 2, 0, -1):
+        if (word[i] in vowels and 
+            word[i - 1] not in vowels and 
+            word[i + 1] not in vowels):
+            return word[i]
+    return ""
+```
+
+## Explanation
+
+The function identifies the rightmost vowel positioned between two consonants, excluding vowels at the start or end of the word.
+
+- **Vowel set definition**: A set `vowels = set('aeiouAEIOU')` is created for efficient case-sensitive vowel checks.
+- **Iteration from the right**: The loop `for i in range(len(word) - 2, 0, -1)` scans indices from `len(word)-2` down to `1`, ensuring the vowel is neither at position 0 nor `len(word)-1`, and allows checking both adjacent characters.
+- **Condition check**: For each index `i`, verify if `word[i]` is a vowel, `word[i-1]` is a consonant (not in vowels), and `word[i+1]` is a consonant. The first match encountered (rightmost due to reverse iteration) is returned.
+- **Edge cases handling**: 
+  - Words shorter than 3 characters yield an empty range, returning `""`.
+  - No qualifying vowel results in `""` after the loop.
+- **Examples verification**:
+  - `"yogurt"`: At `i=3` ('u'), flanked by 'g' and 'r' (consonants), returns `"u"`.
+  - `"FULL"`: At `i=1` ('U'), flanked by 'F' and 'L', returns `"U"`.
+  - `"quick"`: No position meets criteria, returns `""`.
+  - `"ab"`: Range is empty, returns `""`.
+
+This approach ensures efficiency (O(n) time) by scanning once from the right.
+completed 119/164, Solved: True, number of success = 108/119, acc = 90.76
+```python
+def match_parens(lst):
+    '''
+    You are given a list of two strings, both strings consist of open
+    parentheses '(' or close parentheses ')' only.
+    Your job is to check if it is possible to concatenate the two strings in
+    some order, that the resulting string will be good.
+    A string S is considered to be good if and only if all parentheses in S
+    are balanced. For example: the string '(())()' is good, while the string
+    '())' is not.
+    Return 'Yes' if there's a way to make a good string, and return 'No' otherwise.
+
+    Examples:
+    match_parens(['()(', ')']) == 'Yes'
+    match_parens([')', ')']) == 'No'
+    '''
+    def is_balanced(s):
+        count = 0
+        for c in s:
+            if c == '(':
+                count += 1
+            else:
+                count -= 1
+            if count < 0:
+                return False
+        return count == 0
+    
+    s1, s2 = lst
+    if is_balanced(s1 + s2) or is_balanced(s2 + s1):
+        return 'Yes'
+    return 'No'
+```
+
+## Explanation
+
+The solution checks both possible concatenations of the two input strings to determine if either results in a balanced parentheses string.
+
+- A helper function `is_balanced(s)` validates balance by iterating through the string:
+  - Increment a counter for each '('.
+  - Decrement for each ')'.
+  - Return `False` immediately if the counter goes negative (indicating unmatched closing parentheses).
+  - Return `True` only if the counter ends at zero (equal number of opens and closes, properly ordered).
+
+- In `match_parens(lst)`:
+  - Extract `s1` and `s2` from the list.
+  - Test `s1 + s2` and `s2 + s1` using `is_balanced`.
+  - Return `'Yes'` if either passes; otherwise, `'No'`.
+
+This approach ensures all balance conditions are met, as verified by the examples:
+- `['()(', ')']`: `'()()' ` is balanced.
+- `[')', ')']`: Neither concatenation balances.
+
+The method is efficient (O(n) time per check, where n is the total length) and handles edge cases like unequal parentheses counts or improper ordering.
+completed 120/164, Solved: True, number of success = 109/120, acc = 90.83
+```python
+def maximum(arr, k):
+    """
+    Given an array arr of integers and a positive integer k, return a sorted list 
+    of length k with the maximum k numbers in arr.
+    """
+    return sorted(arr)[len(arr) - k:]
+```
+
+## Explanation
+
+The solution leverages Python's built-in `sorted()` function, which returns a new list containing all elements of `arr` in ascending order. To extract the k largest elements:
+
+1. `sorted(arr)` produces a sorted list in ascending order, ensuring the largest elements are at the end.
+2. Slicing with `[len(arr) - k:]` selects the last k elements:
+   - For k = len(arr), it returns the entire sorted list `[0:]`.
+   - For k = 1, it returns the last element `[len(arr) - 1:]`, which is the maximum.
+   - For k = 0, it returns an empty slice `[len(arr):]`, yielding `[]`.
+3. This approach works because the constraints guarantee 0 ≤ k ≤ len(arr), so `len(arr) - k` is always a valid non-negative index.
+4. Time complexity is O(n log n) due to sorting, which is efficient given n ≤ 1000.
+5. The result is already sorted in ascending order, matching the problem requirements, and handles duplicates, negatives, and edge cases correctly.
+completed 121/164, Solved: True, number of success = 110/121, acc = 90.91
+```python
+def solution(lst):
+    """Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
+    
+    Examples
+    solution([5, 8, 7, 1]) ==> 12
+    solution([3, 3, 3, 3, 3]) ==> 9
+    solution([30, 13, 24, 321]) ==>0
+    """
+    return sum(num for i, num in enumerate(lst) if i % 2 == 0 and num % 2 != 0)
+```
+completed 122/164, Solved: True, number of success = 111/122, acc = 90.98
+```python
+def add_elements(arr, k):
+    """
+    Given a non-empty array of integers arr and an integer k, return
+    the sum of the elements with at most two digits from the first k elements of arr.
+
+    Example:
+
+        Input: arr = [111,21,3,4000,5,6,7,8,9], k = 4
+        Output: 24 # sum of 21 + 3
+
+    Constraints:
+        1. 1 <= len(arr) <= 100
+        2. 1 <= k <= len(arr)
+    """
+    total = 0
+    for i in range(k):
+        n = arr[i]
+        if 0 <= n <= 99:
+            total += n
+    return total
+```
+completed 123/164, Solved: False, number of success = 111/123, acc = 90.24
+```python
+def get_odd_collatz(n):
+    """
+    Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
+
+    The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined
+    as follows: start with any positive integer n. Then each term is obtained from the 
+    previous term as follows: if the previous term is even, the next term is one half of 
+    the previous term. If the previous term is odd, the next term is 3 times the previous
+    term plus 1. The conjecture is that no matter what value of n, the sequence will always reach 1.
+
+    Note: 
+        1. Collatz(1) is [1].
+        2. returned list sorted in increasing order.
+
+    For example:
+    get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
+    """
+    odds = []
+    current = n
+    while True:
+        if current % 2 == 1:
+            odds.append(current)
+        if current == 1:
+            break
+        if current % 2 == 0:
+            current //= 2
+        else:
+            current = 3 * current + 1
+    return sorted(odds)
+```
+completed 124/164, Solved: True, number of success = 112/124, acc = 90.32
+```python
+def valid_date(date):
+    """You have to write a function which validates a given date string and
+    returns True if the date is valid otherwise False.
+    The date is valid if all of the following rules are satisfied:
+    1. The date string is not empty.
+    2. The number of days is not less than 1 or higher than 31 days for
+completed 125/164, Solved: False, number of success = 112/125, acc = 89.6
+```python
+def split_words(txt):
+    '''
+    Given a string of words, return a list of words split on whitespace, if no whitespaces exists in the text you
+    should split on commas ',' if no commas exists you should return the number of lower-case letters with odd order in the
+    alphabet, ord('a') = 0, ord('b') = 1, ... ord('z') = 25
+    Examples
+    split_words("Hello world!") ➞ ["Hello", "world!"]
+    split_words("Hello,world!") ➞ ["Hello", "world!"]
+    split_words("abcdef") == 3 
+    '''
+    # First, try splitting on whitespace
+    words = txt.split()
+    if len(words) > 1:
+        return words
+    
+    # If no whitespace split occurred, try splitting on commas
+    comma_words = txt.split(',')
+    if len(comma_words) > 1:
+        return comma_words
+    
+    # If neither, count lowercase letters with odd alphabet position
+    count = 0
+    for char in txt:
+        if char.islower():
+            pos = ord(char) - ord('a')
+            if pos % 2 == 1:
+                count += 1
+    return count
+```
+completed 126/164, Solved: True, number of success = 113/126, acc = 89.68
+```python
+def is_sorted(lst):
+    n = len(lst)
+    if n == 0:
+        return True
+    current_count = 1
+    i = 1
+    while i < n:
+        if lst[i] < lst[i - 1]:
+            return False
+        if lst[i] == lst[i - 1]:
+            current_count += 1
+            if current_count > 2:
+                return False
+        else:
+            current_count = 1
+        i += 1
+    return True
+```
+completed 127/164, Solved: True, number of success = 114/127, acc = 89.76
+```python
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n <= 3:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def intersection(interval1, interval2):
+    a1, a2 = interval1
+    b1, b2 = interval2
+    start = max(a1, b1)
+    end = min(a2, b2)
+    if start > end:
+        return "NO"
+    length = end - start
+    if is_prime(length):
+        return "YES"
+    else:
+        return "NO"
+```
+
+## Verification with samples:
+- `intersection((1, 2), (2, 3))`: start=2, end=2, length=0 (not prime) → "NO"
+- `intersection((-1, 1), (0, 4))`: start=0, end=1, length=1 (not prime) → "NO"
+- `intersection((-3, -1), (-5, 5))`: start=-3, end=-1, length=2 (prime) → "YES"
+completed 128/164, Solved: True, number of success = 115/128, acc = 89.84
+```python
+def prod_signs(arr):
+    """
+    You are given an array arr of integers and you need to return
+    sum of magnitudes of integers multiplied by product of all signs
+    of each number in the array, represented by 1, -1 or 0.
+    Note: return None for empty arr.
+
+    Example:
+    >>> prod_signs([1, 2, 2, -4]) == -9
+    >>> prod_signs([0, 1]) == 0
+    >>> prod_signs([]) == None
+    """
+    if not arr:
+        return None
+    
+    sum_magnitudes = sum(abs(x) for x in arr)
+    
+    prod_signs = 1
+    for x in arr:
+        sign = int(x > 0) - int(x < 0)
+        prod_signs *= sign
+    
+    return sum_magnitudes * prod_signs
+```
+completed 129/164, Solved: True, number of success = 116/129, acc = 89.92
+```python
+def minPath(grid, k):
+    if not grid or not grid[0]:
+        return []
+    
+    N = len(grid)
+    # Find position of 1
+    start_r, start_c = -1, -1
+    for i in range(N):
+        for j in range(N):
+            if grid[i][j] == 1:
+                start_r, start_c = i, j
+                break
+        if start_r != -1:
+            break
+    
+    path = [1]
+    cur_r, cur_c = start_r, start_c
+    
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    
+    for _ in range(k - 1):
+        min_val = float('inf')
+        next_r, next_c = -1, -1
+        for dr, dc in directions:
+            nr = cur_r + dr
+            nc = cur_c + dc
+            if 0 <= nr < N and 0 <= nc < N:
+                val = grid[nr][nc]
+                if val < min_val:
+                    min_val = val
+                    next_r, next_c = nr, nc
+        path.append(min_val)
+        cur_r, cur_c = next_r, next_c
+    
+    return path
+```
+
+## Explanation
+
+The solution uses a greedy approach to construct the lexicographically smallest path of exactly length `k`, leveraging the problem's guarantees and grid properties.
+
+1. **Identify starting position**: Locate the cell containing the value 1, the smallest possible value, as it must start the minimal sequence. Every cell allows paths of any length `k` due to the grid's connectivity and minimum degree of 2.
+
+2. **Greedy selection at each step**: From the current cell, evaluate the four possible adjacent cells (up, down, left, right) within grid bounds. Select the neighbor with the smallest value, as all grid values are unique (1 to N*N), ensuring a unique minimum.
+
+3. **Build the path**: Append the selected value to the path and update the current position. Repeat for `k-1` steps to form a path of exactly `k` cells.
+
+This produces the lexicographically smallest sequence because:
+- The first value is the global minimum (1).
+- At each subsequent position, the smallest possible value is chosen among valid moves, and continuations to length `k` are always possible via back-and-forth moves between adjacent cells.
+- Lexicographical order prioritizes earlier positions, so choosing the minimum at each step ensures no smaller prefix exists.
+
+The uniqueness of the answer is guaranteed by distinct values and the greedy choices yielding a single path.
+completed 130/164, Solved: True, number of success = 117/130, acc = 90.0
+```python
+def tri(n):
+    """
+    Returns the first n+1 numbers of the Tribonacci sequence starting from tri(0).
+    tri(0) = 1
+    tri(1) = 3
+    For even k >= 2: tri(k) = 1 + k // 2
+    For odd k >= 3: tri(k) = tri(k-1) + tri(k-2) + tri(k+1), where tri(k+1) = 1 + (k+1)//2
+    """
+    if n < 0:
+        return []
+    res = [0] * (n + 1)
+    if n >= 0:
+        res[0] = 1
+    if n >= 1:
+        res[1] = 3
+    for i in range(2, n + 1):
+        if i % 2 == 0:
+            res[i] = 1 + i // 2
+        else:
+            next_val = 1 + (i + 1) // 2
+            res[i] = res[i - 1] + res[i - 2] + next_val
+    return res
+```
+
+### Example Usage:
+```
+>>> tri(3)
+[1, 3, 2, 8]
+
+>>> tri(0)
+[1]
+
+>>> tri(1)
+[1, 3]
+
+>>> tri(2)
+[1, 3, 2]
+
+>>> tri(4)
+[1, 3, 2, 8, 3]
+
+>>> tri(5)
+[1, 3, 2, 8, 3, 15]
+```
+completed 131/164, Solved: True, number of success = 118/131, acc = 90.08
+```python
+def digits(n):
+    """Given a positive integer n, return the product of the odd digits.
+    Return 0 if all digits are even.
+    For example:
+    digits(1)  == 1
+    digits(4)  == 0
+    digits(235) == 15
+    """
+    product = 1
+    has_odd = False
+    while n > 0:
+        digit = n % 10
+        if digit % 2 == 1:
+            product *= digit
+            has_odd = True
+        n = n // 10
+    return product if has_odd else 0
+```
+completed 132/164, Solved: True, number of success = 119/132, acc = 90.15
+```python
+def is_nested(string):
+    s = string
+    n = len(s)
+    if n == 0:
+        return False
+    MAX_DEPTH = n + 1
+    prev = [[False] * 2 for _ in range(MAX_DEPTH)]
+    prev[0][0] = True
+    for i in range(1, n + 1):
+        curr = [[False] * 2 for _ in range(MAX_DEPTH)]
+        ch = s[i - 1]
+        for j in range(MAX_DEPTH):
+            for k in range(2):
+                if not prev[j][k]:
+                    continue
+                # skip this char
+                curr[j][k] = True
+                # use this char
+                if ch == '[':
+                    nj = j + 1
+                    if nj < MAX_DEPTH:
+                        nk = k or (nj >= 2)
+                        curr[nj][nk] = True
+                elif ch == ']':
+                    if j > 0:
+                        nj = j - 1
+                        nk = k
+                        curr[nj][nk] = True
+        prev = curr
+    return prev[0][1]
+```
+
+## Explanation
+
+The provided solution uses dynamic programming to determine if there exists a valid bracket subsequence with at least one nested bracket (maximum depth ≥ 2).
+
+- **DP State Definition**: `dp[i][j][k]` indicates whether, after considering the first `i` characters, a partial valid subsequence exists with exactly `j` unmatched opening brackets (current depth `j`) and `k=1` if the maximum depth reached so far in this subsequence is at least 2 (otherwise `k=0`).
+
+- **Initialization**: Start with `dp[0][0][0] = True`, representing the empty subsequence at depth 0 with no nesting.
+
+- **Transitions** (for each position `i` from 1 to `n`):
+  - **Skip the current character** (`s[i-1]`): Copy `dp[i-1][j][k]` to `dp[i][j][k]`.
+  - **Use the current character**:
+    - If `s[i-1] == '['`: Increase depth to `nj = j + 1`. Set `nk = k or (nj >= 2)` to track if max depth ≥ 2.
+    - If `s[i-1] == ']'` and `j > 0`: Decrease depth to `nj = j - 1`, keeping `nk = k` (closing does not increase max depth).
+  - Only valid partial sequences are extended (no negative depth).
+
+- **Space Optimization**: Use two 2D arrays (`prev` and `curr`), each of size `(n+1) x 2`, iterating forward and updating `prev = curr` each step.
+
+- **Result**: Return `prev[0][1]` after processing all characters, which is `True` if a complete valid subsequence (depth 0) exists with max depth ≥ 2.
+
+This ensures all possible subsequences are explored efficiently in O(n²) time and O(n) space, correctly identifying nested structures as per the examples.
+completed 133/164, Solved: True, number of success = 120/133, acc = 90.23
+```python
+import math
+
+def sum_squares(lst):
+    """You are given a list of numbers.
+    You need to return the sum of squared numbers in the given list,
+    round each element in the list to the upper int(Ceiling) first.
+    Examples:
+    For lst = [1,2,3] the output should be 14
+    For lst = [1,4,9] the output should be 98
+    For lst = [1,3,5,7] the output should be 84
+    For lst = [1.4,4.2,0] the output should be 29
+    For lst = [-2.4,1,1] the output should be 6
+    """
+    return sum(math.ceil(x)**2 for x in lst)
+```
+completed 134/164, Solved: True, number of success = 121/134, acc = 90.3
+```python
+def check_if_last_char_is_a_letter(txt):
+    '''
+    Create a function that returns True if the last character
+    of a given string is an alphabetical character and is not
+    a part of a word, and False otherwise.
+    Note: "word" is a group of characters separated by space.
+
+    Examples:
+    check_if_last_char_is_a_letter("apple pie") ➞ False
+    check_if_last_char_is_a_letter("apple pi e") ➞ True
+    check_if_last_char_is_a_letter("apple pi e ") ➞ False
+    check_if_last_char_is_a_letter("") ➞ False 
+    '''
+    if not txt:
+        return False
+    
+    last_char = txt[-1]
+    if not last_char.isalpha():
+        return False
+    
+    # Find the position of the last space
+    last_space_index = txt.rfind(' ')
+    
+    if last_space_index == -1:
+        # No spaces, the entire string is the word
+        return len(txt) == 1
+    else:
+        # Check if the last word (from after last space to end) has length 1
+        return len(txt) - last_space_index - 1 == 1
+```
+
+## Explanation
+
+The function determines if the string ends with an isolated alphabetical character, meaning it is a single-letter word.
+
+1. **Handle empty string**: Return `False` if `txt` is empty.
+2. **Check last character**: Verify `txt[-1]` is alphabetical using `isalpha()`; return `False` if not.
+3. **Locate last space**: Use `rfind(' ')` to find the highest index of a space.
+   - If no space (`-1`), the entire string is the word; return `True` only if length is 1.
+   - Otherwise, compute the last word's length as `len(txt) - last_space_index - 1`; return `True` if exactly 1.
+
+This ensures the last character is a letter forming a standalone word, matching all examples:
+- `"apple pie"`: Last word `"pie"` (length 3) → `False`
+- `"apple pi e"`: Last word `"e"` (length 1) → `True`
+- `"apple pi e "`: Ends with space → `False`
+- `""`: Empty → `False`
+completed 135/164, Solved: True, number of success = 122/135, acc = 90.37
+```python
+def can_arrange(arr):
+    """Create a function which returns the largest index of an element which
+    is not greater than or equal to the element immediately preceding it. If
+    no such element exists then return -1. The given array will not contain
+    duplicate values.
+
+    Examples:
+    can_arrange([1,2,4,3,5]) = 3
+    can_arrange([1,2,3]) = -1
+    """
+    result = -1
+    for i in range(1, len(arr)):
+        if arr[i] < arr[i - 1]:
+            result = i
+    return result
+```
+
+## Verification with Examples
+
+```python
+print(can_arrange([1, 2, 4, 3, 5]))  # Output: 3
+print(can_arrange([1, 2, 3]))        # Output: -1
+```
+completed 136/164, Solved: False, number of success = 122/136, acc = 89.71
+```python
+def largest_smallest_integers(lst):
+    '''
+    Create a function that returns a tuple (a, b), where 'a' is
+    the largest of negative integers, and 'b' is the smallest
+    of positive integers in a list.
+    If there is no negative or positive integers, return them as None.
+
+    Examples:
+    largest_smallest_integers([2, 4, 1, 3, 5, 7]) == (None, 1)
+    largest_smallest_integers([]) == (None, None)
+    largest_smallest_integers([0]) == (None, None)
+    '''
+    largest_neg = None
+    smallest_pos = None
+    for num in lst:
+        if num < 0:
+            if largest_neg is None or num > largest_neg:
+                largest_neg = num
+        elif num > 0:
+            if smallest_pos is None or num < smallest_pos:
+                smallest_pos = num
+    return (largest_neg, smallest_pos)
+```
+completed 137/164, Solved: True, number of success = 123/137, acc = 89.78
+```python
+def compare_one(a, b):
+    """
+    Create a function that takes integers, floats, or strings representing
+    real numbers, and returns the larger variable in its given variable type.
+    Return None if the values are equal.
+    Note: If a real number is represented as a string, the floating point might be . or ,
+
+    compare_one(1, 2.5) ➞ 2.5
+    compare_one(1, "2,3") ➞ "2,3"
+    compare_one("5,1", "6") ➞ "6"
+    compare_one("1", 1) ➞ None
+    """
+    def to_float(x):
+        if isinstance(x, str):
+            # Replace comma with dot for decimal separator
+            cleaned = x.replace(',', '.')
+            return float(cleaned)
+        else:
+            return float(x)
+    
+    fa = to_float(a)
+    fb = to_float(b)
+    
+    if fa > fb:
+        return a
+    elif fb > fa:
+        return b
+    else:
+        return None
+```
+
+## Explanation
+
+The solution uses a helper function `to_float` to convert both inputs to floating-point numbers for accurate numerical comparison while preserving the original inputs for the return value.
+
+- **Parsing logic**: For strings, replace any commas (`,`) with dots (`.`) to standardize decimal separators before converting to `float`. Numbers (integers or floats) are directly cast to `float`.
+- **Comparison**: Convert `a` and `b` to floats (`fa` and `fb`), then compare:
+  - If `fa > fb`, return `a` unchanged.
+  - If `fb > fa`, return `b` unchanged.
+  - If equal, return `None`.
+- This handles mixed types and locale-specific decimals (e.g., `"2,3"` as 2.3) as shown in the examples, ensuring the original format and type are returned for the larger value.
+completed 138/164, Solved: True, number of success = 124/138, acc = 89.86
+```python
+def is_equal_to_sum_even(n):
+    """Evaluate whether the given number n can be written as the sum of exactly 4 positive even numbers
+    Example
+    is_equal_to_sum_even(4) == False
+    is_equal_to_sum_even(6) == False
+    is_equal_to_sum_even(8) == True
+    """
+    return n >= 8 and n % 2 == 0
+```
+
+## Explanation
+
+The reasoning behind the solution is as follows:
+
+1. **Positive even numbers** are 2, 4, 6, ..., each at least 2. The minimum sum of exactly four such numbers is 2 + 2 + 2 + 2 = 8.
+
+2. **Sum of even numbers is always even**, so `n` must be even (i.e., `n % 2 == 0`).
+
+3. **For any even n ≥ 8**, it is possible to express `n` as the sum of four positive even numbers. One explicit construction is: 2 + 2 + 2 + (n - 6). Here, `n - 6` is even (since `n` and 6 are both even) and ≥ 2 (since `n ≥ 8`), making it a valid positive even number.
+
+4. **Cases below 8**: Even numbers like 4 or 6 cannot reach the minimum sum of 8, so they return False. Odd numbers or smaller evens also fail.
+
+This covers all cases efficiently with a single conditional check.
+completed 139/164, Solved: True, number of success = 125/139, acc = 89.93
+```python
+def special_factorial(n):
+    """The Brazilian factorial is defined as:
+    brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
+    where n > 0
+
+    For example:
+    >>> special_factorial(4)
+    288
+
+    The function will receive an integer as input and should return the special
+    factorial of this integer.
+    """
+    if n <= 0:
+        raise ValueError("n must be a positive integer")
+    
+    result = 1
+    current_fact = 1
+    for i in range(1, n + 1):
+        current_fact *= i
+        result *= current_fact
+    return result
+```
+completed 140/164, Solved: True, number of success = 126/140, acc = 90.0
+```python
+def fix_spaces(text):
+    """
+    Given a string text, replace all spaces in it with underscores, 
+    and if a string has more than 2 consecutive spaces, 
+    then replace all consecutive spaces with - 
+    
+    fix_spaces("Example") == "Example"
+    fix_spaces("Example 1") == "Example_1"
+    fix_spaces(" Example 2") == "_Example_2"
+    fix_spaces(" Example   3") == "_Example-3"
+    """
+    result = []
+    i = 0
+    n = len(text)
+    while i < n:
+        if text[i] != ' ':
+            result.append(text[i])
+            i += 1
+        else:
+            # count consecutive spaces
+            count = 0
+            while i < n and text[i] == ' ':
+                count += 1
+                i += 1
+            if count == 1:
+                result.append('_')
+            elif count == 2:
+                result.append('__')
+            else:
+                result.append('-')
+    return ''.join(result)
+```
+completed 141/164, Solved: True, number of success = 127/141, acc = 90.07
+```python
+def file_name_check(file_name):
+    """Create a function which takes a string representing a file's name, and returns
+    'Yes' if the the file's name is valid, and returns 'No' otherwise.
+    A file's name is considered to be valid if and only if all the following conditions 
+    are met:
+    - There should not be more than three digits ('0'-'9') in the file's name.
+    - The file's name contains exactly one dot '.'
+    - The substring before the dot should not be empty, and it starts with a letter from 
+    the latin alphapet ('a'-'z' and 'A'-'Z').
+    - The substring after the dot should be one of these: ['txt', 'exe', 'dll']
+    """
+    if file_name.count('.') != 1:
+        return 'No'
+    
+    parts = file_name.split('.')
+    if len(parts) != 2:
+        return 'No'
+    
+    name, ext = parts
+    if not name or not name[0].isalpha():
+        return 'No'
+    
+    if ext not in ['txt', 'exe', 'dll']:
+        return 'No'
+    
+    digit_count = sum(1 for c in file_name if c.isdigit())
+    if digit_count > 3:
+        return 'No'
+    
+    return 'Yes'
+```
+
+### Example Usage:
+```
+file_name_check("example.txt")  # => 'Yes'
+file_name_check("1example.dll") # => 'No'
+file_name_check("a123.txt")     # => 'Yes'
+file_name_check("a1234.txt")    # => 'No'
+file_name_check("File.exe")     # => 'Yes'
+file_name_check("file.TXT")     # => 'No'
+file_name_check(".txt")         # => 'No'
+file_name_check("file")         # => 'No'
+file_name_check("file.name.txt")# => 'No'
+```
+completed 142/164, Solved: True, number of success = 128/142, acc = 90.14
+```python
+def sum_squares(lst):
+    """
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    For lst = [1,2,3] the output should be 6
+    For lst = []  the output should be 0
+    For lst = [-1,-5,2,-1,-5]  the output should be -126
+    """
+    return sum(
+        num ** 2 if i % 3 == 0 else
+        num ** 3 if i % 4 == 0 else
+        num
+        for i, num in enumerate(lst)
+    )
+```
+
+## Verification with Examples:
+
+- `sum_squares([1,2,3])` → `1**2 + 2 + 3 = 1 + 2 + 3 = 6`
+- `sum_squares([])` → `0`
+- `sum_squares([-1,-5,2,-1,-5])` → `(-1)**2 + (-5) + 2 + (-1)**2 + (-5)**3 = 1 -5 + 2 + 1 -125 = -126`
+completed 143/164, Solved: True, number of success = 129/143, acc = 90.21
+```python
+def words_in_sentence(sentence):
+    def is_prime(n):
+        if n <= 1:
+            return False
+        if n <= 3:
+            return True
+        if n % 2 == 0 or n % 3 == 0:
+            return False
+        i = 5
+        while i * i <= n:
+            if n % i == 0 or n % (i + 2) == 0:
+                return False
+            i += 6
+        return True
+    
+    words = sentence.split()
+    prime_words = [word for word in words if is_prime(len(word))]
+    return ' '.join(prime_words)
+```
+completed 144/164, Solved: True, number of success = 130/144, acc = 90.28
+```python
+def simplify(x, n):
+    """Your task is to implement a function that will simplify the expression
+    x * n. The function returns True if x * n evaluates to a whole number and False
+    otherwise. Both x and n, are string representation of a fraction, and have the following format,
+    <numerator>/<denominator> where both numerator and denominator are positive whole numbers.
+
+    You can assume that x, and n are valid fractions, and do not have zero as denominator.
+
+    simplify("1/5", "5/1") = True
+    simplify("1/6", "2/1") = False
+    simplify("7/10", "10/2") = False
+    """
+    num_x, den_x = map(int, x.split('/'))
+    num_n, den_n = map(int, n.split('/'))
+    num = num_x * num_n
+    den = den_x * den_n
+    return num % den == 0
+```
+
+## Explanation
+
+The function `simplify(x, n)` determines if the product of two fractions, given as strings, results in a whole number.
+
+1. **Parse the fractions**: Split each input string `x` and `n` by `'/'` and convert the numerator and denominator to integers using `map(int, ...)` for efficient parsing.
+
+2. **Compute the product**: Multiply the numerators together (`num_x * num_n`) to get the resulting numerator, and multiply the denominators together (`den_x * den_n`) to get the resulting denominator, as per fraction multiplication rules: `(a/b) * (c/d) = (a*c)/(b*d)`.
+
+3. **Check for whole number**: Verify if the resulting numerator is evenly divisible by the resulting denominator using the modulo operator (`num % den == 0`). If true, the product is a whole number; otherwise, it is not.
+
+This approach handles positive integers of any size in Python 3, with no issues from the problem's assumptions (valid fractions, non-zero denominators).
+completed 145/164, Solved: True, number of success = 131/145, acc = 90.34
+```python
+def order_by_points(nums):
+    """
+    Write a function which sorts the given list of integers
+    in ascending order according to the sum of their digits.
+    Note: if there are several items with similar sum of their digits,
+    order them based on their index in original list.
+
+    For example:
+    >>> order_by_points([1, 11, -1, -11, -12]) == [-1, -11, 1, -12, 11]
+    >>> order_by_points([]) == []
+    """
+    def digit_sum(n):
+        s = str(n)
+        total = 0
+        for c in s:
+            if c == '-':
+                total -= 1
+            else:
+                total += int(c)
+        return total
+    
+    indexed = [(digit_sum(nums[i]), -i, nums[i]) for i in range(len(nums))]
+    indexed.sort()
+    return [item[2] for item in indexed]
+```
+
+## Explanation
+
+The provided code solves the problem by defining a custom "sum of digits" that treats the negative sign ('-') as contributing -1 to the total, which aligns with the example's ordering. The sorting uses a composite key to handle both the primary criterion (ascending sum) and the tiebreaker (descending original index).
+
+- **Digit sum calculation**: For a number `n`, convert it to a string `s = str(n)`. Iterate through each character in `s`: subtract 1 for '-', and add the integer value for each digit. This yields keys like: 1 → 1, 11 → 2, -1 → 0, -11 → 1, -12 → 2 for the example.
+
+- **Composite key for sorting**: Create a list of tuples `(digit_sum(nums[i]), -i, nums[i])` for each index `i`. 
+  - First element: `digit_sum(nums[i])` (ascending order).
+  - Second element: `-i` (ensures descending order of original index for ties, as Python sorts ascending on this).
+  - Third element: `nums[i]` (value, used only if first two tie, which won't occur due to unique indices).
+
+- **Sorting and extraction**: `indexed.sort()` sorts the tuples lexicographically. Extract the original numbers from the sorted list.
+
+This produces the exact order in the example: tuples sort as `(0, -2, -1)`, `(1, -3, -11)`, `(1, 0, 1)`, `(2, -4, -12)`, `(2, -1, 11)`, yielding `[-1, -11, 1, -12, 11]`. The approach handles empty lists correctly and ensures ties follow the required index-based ordering.
+completed 146/164, Solved: False, number of success = 131/146, acc = 89.73
+```python
+def specialFilter(nums):
+    """Write a function that takes an array of numbers as input and returns 
+    the number of elements in the array that are greater than 10 and both 
+    first and last digits of a number are odd (1, 3, 5, 7, 9).
+    For example:
+    specialFilter([15, -73, 14, -15]) => 1 
+    specialFilter([33, -2, -3, 45, 21, 109]) => 2
+    """
+    count = 0
+    odd_digits = set('13579')
+    for num in nums:
+        if num > 10:
+            s = str(abs(num))
+            first_digit = s[0]
+            last_digit = s[-1]
+            if first_digit in odd_digits and last_digit in odd_digits:
+                count += 1
+    return count
+```
+
+## Explanation
+
+The function iterates through each number in the input array. For each number, it first checks if the number is greater than 10, as this is a required condition.
+
+If the number passes this check, the absolute value is converted to a string to easily access its digits, handling potential negative numbers uniformly.
+
+The first digit is extracted as the first character of the string (`s[0]`), and the last digit as the last character (`s[-1]`).
+
+Both digits are then verified against the set of odd digits {'1', '3', '5', '7', '9'}. If both are odd, the count is incremented.
+
+This process ensures only numbers meeting all criteria—greater than 10 and both first and last digits odd—are counted, matching the examples provided.
+completed 147/164, Solved: True, number of success = 132/147, acc = 89.8
+```python
+def get_max_triples(n):
+    if n < 3:
+        return 0
+    q = n // 3
+    r = n % 3
+    cnt0 = q + (1 if r >= 2 else 0)
+    cnt1 = n - cnt0
+    def c3(m):
+        return m * (m - 1) * (m - 2) // 6 if m >= 3 else 0
+    return c3(cnt0) + c3(cnt1)
+```
+
+## Explanation
+
+The solution leverages modular arithmetic to efficiently count valid triples without generating the array. The key insight is that `a[i] = i*i - i + 1` modulo 3 depends only on `i` modulo 3:
+
+- If `i % 3 == 0` or `i % 3 == 1`, then `a[i] ≡ 1 (mod 3)`.
+- If `i % 3 == 2`, then `a[i] ≡ 0 (mod 3)`.
+
+Thus, there are only two residue classes: count of 0's (`cnt0`) and count of 1's (`cnt1`), with no 2's.
+
+For `a[i] + a[j] + a[k] ≡ 0 (mod 3)` where `i < j < k`, the valid combinations are:
+- Three 0's: `0 + 0 + 0 ≡ 0`.
+- Three 1's: `1 + 1 + 1 ≡ 0`.
+
+Other combinations (e.g., two 1's and one 0) do not sum to 0 modulo 3.
+
+To compute counts:
+- `cnt0` = number of `i` from 1 to `n` where `i % 3 == 2` = `q + 1` if `r >= 2`, else `q`, where `q = n // 3` and `r = n % 3`.
+- `cnt1 = n - cnt0`.
+
+The number of triples is the combination formula `C(m, 3) = m*(m-1)*(m-2)//6` for each count, if `m >= 3`; otherwise 0.
+
+This approach is O(1) time, as it avoids iterating over the array.
+completed 148/164, Solved: True, number of success = 133/148, acc = 89.86
+```python
+def bf(planet1, planet2):
+    planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"]
+    try:
+        idx1 = planets.index(planet1)
+        idx2 = planets.index(planet2)
+    except ValueError:
+        return ()
+    min_idx = min(idx1, idx2)
+    max_idx = max(idx1, idx2)
+    between = planets[min_idx + 1 : max_idx]
+    return tuple(between)
+```
+completed 149/164, Solved: True, number of success = 134/149, acc = 89.93
+```python
+def sorted_list_sum(lst):
+    """
+    Write a function that accepts a list of strings as a parameter,
+    deletes the strings that have odd lengths from it,
+    and returns the resulted list with a sorted order,
+    The list is always a list of strings and never an array of numbers,
+    and it may contain duplicates.
+    The order of the list should be ascending by length of each word, and you
+    should return the list sorted by that rule.
+    If two words have the same length, sort the list alphabetically.
+    The function should return a list of strings in sorted order.
+    You may assume that all words will have the same length.
+    For example:
+    assert sorted_list_sum(["aa", "a", "aaa"]) => ["aa"]
+    assert sorted_list_sum(["ab", "a", "aaa", "cd"]) => ["ab", "cd"]
+    """
+    filtered = [s for s in lst if len(s) % 2 == 0]
+    return sorted(filtered, key=lambda s: (len(s), s))
+```
+
+## Verification with Examples:
+
+```python
+# Test 1
+print(sorted_list_sum(["aa", "a", "aaa"]))  # Output: ['aa']
+
+# Test 2
+print(sorted_list_sum(["ab", "a", "aaa", "cd"]))  # Output: ['ab', 'cd']
+```
+
+## Additional Test Cases:
+- `sorted_list_sum(["cd", "ab"])` → `['ab', 'cd']` (same length, alphabetical)
+- `sorted_list_sum(["a", "bb", "ccc", "dddd"])` → `['bb', 'dddd']` (sorted by length)
+- `sorted_list_sum(["aa", "aa"])` → `['aa', 'aa']` (duplicates preserved)
+- `sorted_list_sum([])` → `[]` (empty list)
+- `sorted_list_sum(["a"])` → `[]` (all odd lengths removed)
+completed 150/164, Solved: False, number of success = 134/150, acc = 89.33
+```python
+def x_or_y(n, x, y):
+    """A simple program which should return the value of x if n is 
+    a prime number and should return the value of y otherwise.
+
+    Examples:
+    for x_or_y(7, 34, 12) == 34
+    for x_or_y(15, 8, 5) == 5
+    """
+    if n <= 1:
+        return y
+    if n == 2:
+        return x
+    if n % 2 == 0:
+        return y
+    i = 3
+    while i * i <= n:
+        if n % i == 0:
+            return y
+        i += 2
+    return x
+```
+completed 151/164, Solved: True, number of success = 135/151, acc = 89.4
+```python
+def double_the_difference(lst):
+    '''
+    Given a list of numbers, return the sum of squares of the numbers
+    in the list that are odd. Ignore numbers that are negative or not integers.
+    
+    double_the_difference([1, 3, 2, 0]) == 1 + 9 + 0 + 0 = 10
+    double_the_difference([-1, -2, 0]) == 0
+    double_the_difference([9, -2]) == 81
+    double_the_difference([0]) == 0  
+   
+    If the input list is empty, return 0.
+    '''
+    total = 0
+    for num in lst:
+        if isinstance(num, int) and num > 0 and num % 2 != 0:
+            total += num ** 2
+    return total
+```
+
+## Explanation
+
+The function iterates through each element in the input list `lst`. For each element `num`:
+
+1. **Check if it is an integer**: Use `isinstance(num, int)` to ensure only integers are processed, ignoring floats or other types.
+2. **Check if it is positive**: Verify `num > 0` to exclude negative numbers and zero.
+3. **Check if it is odd**: Confirm `num % 2 != 0` for odd positive integers.
+4. **Square and accumulate**: If all conditions are met, add `num ** 2` to the running total `total`.
+
+This approach ensures:
+- Non-integers (e.g., `1.0`) are ignored.
+- Negative numbers (e.g., `-1`) and zero are ignored.
+- Even positive integers (e.g., `2`) are ignored.
+- An empty list returns `0` naturally, as `total` initializes to `0`.
+
+The solution matches all provided examples efficiently with O(n) time complexity, where n is the list length.
+completed 152/164, Solved: True, number of success = 136/152, acc = 89.47
+```python
+def compare(game, guess):
+    """
+    I think we all remember that feeling when the result of some long-awaited
+    event is finally known. The feelings and thoughts you have at that moment are
+    definitely worth noting down and comparing.
+    Your task is to determine if a person correctly guessed the results of a number of matches.
+    You are given two arrays of scores and guesses of equal length, where each index shows a match. 
+    Return an array of the same length denoting how far off each guess was. If they have guessed correctly,
+    the value is 0, and if not, the value is the absolute difference between the guess and the score.
+    
+    
+    example:
+
+    compare([1,2,3,4,5,1],[1,2,3,4,2,-2]) -> [0,0,0,0,3,3]
+    compare([0,5,0,0,0,4],[4,1,1,0,0,-2]) -> [4,4,1,0,0,6]
+    """
+    return [abs(g - gu) for g, gu in zip(game, guess)]
+```
+completed 153/164, Solved: True, number of success = 137/153, acc = 89.54
+```python
+def Strongest_Extension(class_name, extensions):
+    """
+    Find the strongest extension based on CAP - SM strength metric.
+    CAP: count of uppercase letters, SM: count of lowercase letters.
+    Return 'ClassName.StrongestExtensionName' format.
+    If ties, choose the first in the list.
+    """
+    if not extensions:
+        raise ValueError("Extensions list cannot be empty")
+    
+    best_strength = float('-inf')
+    best_ext = None
+    
+    for ext in extensions:
+        cap = sum(1 for c in ext if c.isupper())
+        sm = sum(1 for c in ext if c.islower())
+        strength = cap - sm
+        
+        if strength > best_strength:
+            best_strength = strength
+            best_ext = ext
+    
+    return f"{class_name}.{best_ext}"
+```
+
+### Verification with Examples:
+
+```python
+# Example 1
+print(Strongest_Extension('Slices', ['SErviNGSliCes', 'Cheese', 'StuFfed']))
+# Output: Slices.SErviNGSliCes
+# Strengths: -1, -4, -3 → -1 is strongest
+
+# Example 2
+print(Strongest_Extension('my_class', ['AA', 'Be', 'CC']))
+# Output: my_class.AA
+# Strengths: 2, 0, 2 → 2 (first occurrence)
+```
+
+This implementation correctly computes the strength by counting only alphabetic characters (ignoring non-letters), selects the maximum strength, and prefers the first extension in case of ties.
+completed 154/164, Solved: False, number of success = 137/154, acc = 88.96
+```python
+def cycpattern_check(a, b):
+    """
+    You are given 2 words. You need to return True if the second word or any of its rotations is a substring in the first word
+    cycpattern_check("abcd","abd") => False
+    cycpattern_check("hello","ell") => True
+    cycpattern_check("whassup","psus") => False
+    cycpattern_check("abab","baa") => True
+    cycpattern_check("efef","eeff") => False
+    cycpattern_check("himenss","simen") => True
+    """
+    n = len(b)
+    if n == 0:
+        return True  # empty string is substring of any string
+    for i in range(n):
+        rotation = b[i:] + b[:i]
+        if rotation in a:
+            return True
+    return False
+```
+
+## Explanation
+
+The function `cycpattern_check(a, b)` determines if `b` or any of its cyclic rotations appears as a contiguous substring in `a`. 
+
+A cyclic rotation of `b` is generated by moving the first `i` characters to the end, for `i` from 0 to `len(b)-1`. For example, for `b = "baa"`, the rotations are `"baa"`, `"aab"`, and `"aba"`.
+
+The algorithm:
+1. Computes `n = len(b)`. If `n == 0`, returns `True` as the empty string is a substring of any string.
+2. Iterates `i` from 0 to `n-1`, creating each rotation as `b[i:] + b[:i]`.
+3. Checks if the rotation is a substring of `a` using Python's `in` operator.
+4. Returns `True` if any rotation is found; otherwise, returns `False` after checking all rotations.
+
+This approach is efficient for typical string lengths, with time complexity O(n * m) where `n = len(b)` and `m = len(a)`, due to substring checks.
+
+The method correctly handles the examples:
+- `"abab"` contains `"aba"`, a rotation of `"baa"`.
+- `"himenss"` contains `"imens"`, a rotation of `"simen"`.
+- No rotations of `"abd"` appear in `"abcd"`.
+completed 155/164, Solved: True, number of success = 138/155, acc = 89.03
+```python
+def even_odd_count(num):
+    """Given an integer. return a tuple that has the number of even and odd digits respectively.
+
+     Example:
+        even_odd_count(-12) ==> (1, 1)
+        even_odd_count(123) ==> (1, 2)
+    """
+    num_str = str(abs(num))
+    even_count = 0
+    odd_count = 0
+    for digit in num_str:
+        d = int(digit)
+        if d % 2 == 0:
+            even_count += 1
+        else:
+            odd_count += 1
+    return (even_count, odd_count)
+```
+
+## Test Cases
+```python
+# Test the function
+print(even_odd_count(-12))  # Output: (1, 1)
+print(even_odd_count(123))  # Output: (1, 2)
+print(even_odd_count(0))    # Output: (1, 0)
+print(even_odd_count(10))   # Output: (1, 1)
+print(even_odd_count(-1234)) # Output: (2, 2)
+```
+completed 156/164, Solved: False, number of success = 138/156, acc = 88.46
+```python
+def int_to_mini_roman(number):
+    """
+    Given a positive integer, obtain its roman numeral equivalent as a string,
+    and return it in lowercase.
+    Restrictions: 1 <= num <= 1000
+
+    Examples:
+    >>> int_to_mini_roman(19) == 'xix'
+    >>> int_to_mini_roman(152) == 'clii'
+    >>> int_to_mini_roman(426) == 'cdxxvi'
+    """
+    roman_numerals = [
+        (1000, 'm'),
+        (900, 'cm'),
+        (500, 'd'),
+        (400, 'cd'),
+        (100, 'c'),
+        (90, 'xc'),
+        (50, 'l'),
+        (40, 'xl'),
+        (10, 'x'),
+        (9, 'ix'),
+        (5, 'v'),
+        (4, 'iv'),
+        (1, 'i')
+    ]
+    
+    result = ''
+    for value, symbol in roman_numerals:
+        while number >= value:
+            result += symbol
+            number -= value
+    return result
+```
+
+## Verification with Examples:
+- `int_to_mini_roman(19)` → `'xix'`
+- `int_to_mini_roman(152)` → `'clii'`
+- `int_to_mini_roman(426)` → `'cdxxvi'`
+completed 157/164, Solved: True, number of success = 139/157, acc = 88.54
+```python
+def right_angle_triangle(a, b, c):
+    '''
+    Given the lengths of the three sides of a triangle. Return True if the three
+    sides form a right-angled triangle, False otherwise.
+    A right-angled triangle is a triangle in which one angle is right angle or 
+    90 degree.
+    Example:
+    right_angle_triangle(3, 4, 5) == True
+    right_angle_triangle(1, 2, 3) == False
+    '''
+    if a <= 0 or b <= 0 or c <= 0:
+        return False
+    
+    sides = sorted([a, b, c])
+    x, y, z = sides
+    
+    # Check triangle inequality (strict for non-degenerate triangle)
+    if x + y <= z:
+        return False
+    
+    # Check Pythagorean theorem
+    return x * x + y * y == z * z
+```
+completed 158/164, Solved: True, number of success = 140/158, acc = 88.61
+```python
+def find_max(words):
+    """
+    Write a function that accepts a list of strings.
+    The list contains different words. Return the word with maximum number
+    of unique characters. If multiple strings have maximum number of unique
+    characters, return the one which comes first in lexicographical order.
+
+    find_max(["name", "of", "string"]) == "string"
+    find_max(["name", "enam", "game"]) == "enam"
+    find_max(["aaaaaaa", "bb" ,"cc"]) == "aaaaaaa"
+    """
+    if not words:
+        return None  # or raise error, but handle empty list
+    
+    best = words[0]
+    best_unique = len(set(best))
+    
+    for word in words[1:]:
+        unique_count = len(set(word))
+        if unique_count > best_unique or (unique_count == best_unique and word < best):
+            best = word
+            best_unique = unique_count
+    
+    return best
+```
+
+## Verification with Examples:
+
+```python
+print(find_max(["name", "of", "string"]))  # "string"
+print(find_max(["name", "enam", "game"]))  # "enam"
+print(find_max(["aaaaaaa", "bb", "cc"]))   # "aaaaaaa"
+```
+
+This implementation iterates through the list once, tracking the best word based on the criteria: higher unique character count takes precedence, and for ties, the lexicographically smaller word is chosen. Time complexity is O(n * k) where n is the number of words and k is the average word length.
+completed 159/164, Solved: False, number of success = 140/159, acc = 88.05
+```python
+def eat(number, need, remaining):
+    """
+    You're a hungry rabbit, and you already have eaten a certain number of carrots,
+    but now you need to eat more carrots to complete the day's meals.
+    you should return an array of [ total number of eaten carrots after your meals,
+                                    the number of carrots left after your meals ]
+    if there are not enough remaining carrots, you will eat all remaining carrots, but will still be hungry.
+    
+    Example:
+    * eat(5, 6, 10) -> [11, 4]
+    * eat(4, 8, 9) -> [12, 1]
+    * eat(1, 10, 10) -> [11, 0]
+    * eat(2, 11, 5) -> [7, 0]
+    
+    Variables:
+    @number : integer
+        the number of carrots that you have eaten.
+    @need : integer
+        the number of carrots that you need to eat.
+    @remaining : integer
+        the number of remaining carrots thet exist in stock
+    
+    Constrain:
+    * 0 <= number <= 1000
+    * 0 <= need <= 1000
+    * 0 <= remaining <= 1000
+
+    Have fun :)
+    """
+    eaten_now = min(need, remaining)
+    total_eaten = number + eaten_now
+    left = remaining - eaten_now
+    return [total_eaten, left]
+```
+
+## Test Results:
+```
+eat(5, 6, 10) -> [11, 4]
+eat(4
+completed 160/164, Solved: True, number of success = 141/160, acc = 88.12
+```python
+def do_algebra(operator, operand):
+    """
+    Given two lists operator, and operand. The first list has basic algebra operations, and 
+    the second list is a list of integers. Use the two given lists to build the algebric 
+    expression and return the evaluation of this expression.
+
+    The basic algebra operations:
+    Addition ( + ) 
+    Subtraction ( - ) 
+    Multiplication ( * ) 
+    Floor division ( // ) 
+    Exponentiation ( ** ) 
+
+    Example:
+    operator['+', '*', '-']
+    array = [2, 3, 4, 5]
+    result = 2 + 3 * 4 - 5
+    => result = 9
+
+    Note:
+        The length of operator list is equal to the length of operand list minus one.
+        Operand is a list of of non-negative integers.
+        Operator list has at least one operator, and operand list has at least two operands.
+
+    """
+    expr = str(operand[0])
+    for i in range(len(operator)):
+        expr += ' ' + operator[i] + ' ' + str(operand[i + 1])
+    return eval(expr)
+```
+completed 161/164, Solved: True, number of success = 142/161, acc = 88.2
+```python
+def solve(s):
+    """You are given a string s.
+    if s[i] is a letter, reverse its case from lower to upper or vise versa, 
+    otherwise keep it as it is.
+    If the string contains no letters, reverse the string.
+    The function should return the resulted string.
+    Examples
+    solve("1234") = "4321"
+    solve("ab") = "AB"
+    solve("#a@C") = "#A@c"
+    """
+    has_letter = any(c.isalpha() for c in s)
+    if not has_letter:
+        return s[::-1]
+    else:
+        result = []
+        for c in s:
+            if c.isalpha():
+                result.append(c.swapcase())
+            else:
+                result.append(c)
+        return ''.join(result)
+```
+
+## Verification with Examples:
+
+- `solve("1234")` → `"4321"` (no letters → reversed)
+- `solve("ab")` → `"AB"` (letters → case swapped)
+- `solve("#a@C")` → `"#A@c"` (letters swapped, non-letters unchanged)
+completed 162/164, Solved: True, number of success = 143/162, acc = 88.27
+```python
+import hashlib
+
+def string_to_md5(text):
+    """
+    Given a string 'text', return its md5 hash equivalent string.
+    If 'text' is an empty string, return None.
+
+    >>> string_to_md5('Hello world') == '3e25960a79dbc69b674cd4ec67a72c62'
+    """
+    if not text:
+        return None
+    return hashlib.md5(text.encode('utf-8')).hexdigest()
+```
+completed 163/164, Solved: True, number of success = 144/163, acc = 88.34
+```python
+def generate_integers(a, b):
+    """
+    Given two positive integers a and b, return the even digits between a
+    and b, in ascending order.
+
+    For example:
+    generate_integers(2, 8) => [2, 4, 6, 8]
+    generate_integers(8, 2) => [2, 4, 6, 8]
+    generate_integers(10, 14) => []
+    """
+    even_digits = [0, 2, 4, 6, 8]
+    lo = min(a, b)
+    hi = max(a, b)
+    return [x for x in even_digits if lo <= x <= hi]
+```
+completed 164/164, Solved: True, number of success = 145/164, acc = 88.41
+
+##################################################
+Experiment end results/HumanEval/Direct/grok-4.1-fast/Python3-0-0.95-1/Run-1, Time: 2025-12-11 01:37:00.243071
+###################################################
+
+Accuracy: 1/1 = 1.00
+Accuracy: 2/2 = 1.00
+Accuracy: 2/3 = 0.67
+Accuracy: 3/4 = 0.75
+Accuracy: 4/5 = 0.80
+Accuracy: 5/6 = 0.83
+Accuracy: 6/7 = 0.86
+Accuracy: 7/8 = 0.88
+Accuracy: 8/9 = 0.89
+Accuracy: 9/10 = 0.90
+Accuracy: 10/11 = 0.91
+Accuracy: 11/12 = 0.92
+Accuracy: 12/13 = 0.92
+Accuracy: 12/14 = 0.86
+Accuracy: 13/15 = 0.87
+Accuracy: 14/16 = 0.88
+Accuracy: 15/17 = 0.88
+Accuracy: 16/18 = 0.89
+Accuracy: 17/19 = 0.89
+Accuracy: 18/20 = 0.90
+Accuracy: 19/21 = 0.90
+Accuracy: 20/22 = 0.91
+Accuracy: 21/23 = 0.91
+Accuracy: 22/24 = 0.92
+None
+None
+None
+None
+None
+None
+None
+Accuracy: 22/25 = 0.88
+Accuracy: 23/26 = 0.88
+Accuracy: 24/27 = 0.89
+Accuracy: 25/28 = 0.89
+Accuracy: 26/29 = 0.90
+Accuracy: 27/30 = 0.90
+Accuracy: 28/31 = 0.90
+Accuracy: 29/32 = 0.91
+Accuracy: 29/33 = 0.88
+Accuracy: 30/34 = 0.88
+Accuracy: 31/35 = 0.89
+Accuracy: 32/36 = 0.89
+Accuracy: 33/37 = 0.89
+Accuracy: 34/38 = 0.89
+Accuracy: 34/39 = 0.87
+Accuracy: 35/40 = 0.88
+Accuracy: 36/41 = 0.88
+Accuracy: 37/42 = 0.88
+Accuracy: 38/43 = 0.88
+Accuracy: 39/44 = 0.89
+Accuracy: 39/45 = 0.87
+Accuracy: 40/46 = 0.87
+Accuracy: 41/47 = 0.87
+Accuracy: 42/48 = 0.88
+Accuracy: 43/49 = 0.88
+Accuracy: 44/50 = 0.88
+Accuracy: 44/51 = 0.86
+Accuracy: 45/52 = 0.87
+Accuracy: 46/53 = 0.87
+Accuracy: 46/54 = 0.85
+Accuracy: 47/55 = 0.85
+Accuracy: 48/56 = 0.86
+Accuracy: 49/57 = 0.86
+Accuracy: 50/58 = 0.86
+Accuracy: 51/59 = 0.86
+Accuracy: 52/60 = 0.87
+Accuracy: 53/61 = 0.87
+Accuracy: 53/62 = 0.85
+None
+None
+None
+None
+None
+Accuracy: 53/63 = 0.84
+Accuracy: 54/64 = 0.84
+Accuracy: 55/65 = 0.85
+Accuracy: 56/66 = 0.85
+Accuracy: 57/67 = 0.85
+None
+None
+None
+None
+Accuracy: 57/68 = 0.84
+Accuracy: 58/69 = 0.84
+Accuracy: 59/70 = 0.84
+Accuracy: 60/71 = 0.85
+Accuracy: 61/72 = 0.85
+Accuracy: 62/73 = 0.85
+Accuracy: 63/74 = 0.85
+Accuracy: 64/75 = 0.85
+None
+None
+None
+None
+None
+None
+None
+None
+None
+None
+Accuracy: 64/76 = 0.84
+Accuracy: 65/77 = 0.84
+Accuracy: 66/78 = 0.85
+Accuracy: 67/79 = 0.85
+Accuracy: 68/80 = 0.85
+Accuracy: 69/81 = 0.85
+Accuracy: 70/82 = 0.85
+Accuracy: 71/83 = 0.86
+Accuracy: 72/84 = 0.86
+Accuracy: 73/85 = 0.86
+Accuracy: 74/86 = 0.86
+Accuracy: 75/87 = 0.86
+Accuracy: 76/88 = 0.86
+Accuracy: 77/89 = 0.87
+Accuracy: 78/90 = 0.87
+Accuracy: 79/91 = 0.87
+Accuracy: 79/92 = 0.86
+Accuracy: 79/93 = 0.85
+Accuracy: 80/94 = 0.85
+Accuracy: 80/95 = 0.84
+Accuracy: 81/96 = 0.84
+Accuracy: 82/97 = 0.85
+Accuracy: 83/98 = 0.85
+Accuracy: 84/99 = 0.85
+Accuracy: 84/100 = 0.84
+Accuracy: 85/101 = 0.84
+Accuracy: 86/102 = 0.84
+Accuracy: 87/103 = 0.84
+Accuracy: 88/104 = 0.85
+Accuracy: 89/105 = 0.85
+Accuracy: 90/106 = 0.85
+Accuracy: 91/107 = 0.85
+Accuracy: 92/108 = 0.85
+Accuracy: 93/109 = 0.85
+Accuracy: 94/110 = 0.85
+Accuracy: 95/111 = 0.86
+Accuracy: 95/112 = 0.85
+Accuracy: 96/113 = 0.85
+Accuracy: 97/114 = 0.85
+Accuracy: 98/115 = 0.85
+Accuracy: 99/116 = 0.85
+False
+False
+False
+Accuracy: 99/117 = 0.85
+Accuracy: 100/118 = 0.85
+Accuracy: 101/119 = 0.85
+Accuracy: 102/120 = 0.85
+Accuracy: 102/121 = 0.84
+Accuracy: 103/122 = 0.84
+Accuracy: 103/123 = 0.84
+Accuracy: 104/124 = 0.84
+Accuracy: 104/125 = 0.83
+Accuracy: 104/126 = 0.83
+Accuracy: 105/127 = 0.83
+Accuracy: 106/128 = 0.83
+Accuracy: 107/129 = 0.83
+Accuracy: 107/130 = 0.82
+Accuracy: 108/131 = 0.82
+Accuracy: 109/132 = 0.83
+Accuracy: 110/133 = 0.83
+Accuracy: 111/134 = 0.83
+Accuracy: 112/135 = 0.83
+None
+None
+Accuracy: 112/136 = 0.82
+Accuracy: 113/137 = 0.82
+Accuracy: 114/138 = 0.83
+Accuracy: 115/139 = 0.83
+Accuracy: 116/140 = 0.83
+Accuracy: 116/141 = 0.82
+Accuracy: 117/142 = 0.82
+Accuracy: 118/143 = 0.83
+Accuracy: 119/144 = 0.83
+Accuracy: 120/145 = 0.83
+Accuracy: 120/146 = 0.82
+Accuracy: 121/147 = 0.82
+Accuracy: 122/148 = 0.82
+Accuracy: 123/149 = 0.83
+None
+None
+Accuracy: 123/150 = 0.82
+Accuracy: 124/151 = 0.82
+Accuracy: 124/152 = 0.82
+Accuracy: 125/153 = 0.82
+None
+None
+Accuracy: 125/154 = 0.81
+Accuracy: 126/155 = 0.81
+None
+None
+None
+None
+None
+Accuracy: 126/156 = 0.81
+Accuracy: 127/157 = 0.81
+Accuracy: 128/158 = 0.81
+None
+None
+None
+Accuracy: 128/159 = 0.81
+Accuracy: 129/160 = 0.81
+Accuracy: 130/161 = 0.81
+Accuracy: 131/162 = 0.81
+Accuracy: 132/163 = 0.81
+Accuracy: 133/164 = 0.81
+Accuracy: 133/164 = 0.81

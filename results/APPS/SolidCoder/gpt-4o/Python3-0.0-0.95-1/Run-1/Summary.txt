@@ -1,0 +1,73 @@
+Accuracy:                            26.8
+Solved:                                40
+Unsolved:                             109
+
+
+Total Prompt Tokens:              5759786
+Average Prompt Tokens:              38656
+
+Total Completion Tokens:          3241918
+Average Completion Tokens:          21758
+
+Total Taken Time:                42965.75s
+Average Taken Time:                288.36s
+
+
+Total Api Calls:                  5277.00
+Max Api Calls:                         75
+Min Api Calls:                          4
+Average Api Calls:                3.5e+01
+
+
+Solved Api Calls              
+Api calls                          Solved
+4                                      22
+5                                       5
+6                                       4
+7                                       2
+10                                      1
+9                                       1
+27                                      1
+20                                      1
+58                                      1
+25                                      1
+8                                       1
+
+Unsolved Api Calls            
+Api calls                        Unsolved
+45                                     19
+70                                     10
+49                                      8
+4                                       8
+47                                      5
+63                                      4
+9                                       4
+51                                      4
+71                                      3
+48                                      3
+46                                      3
+6                                       3
+62                                      3
+55                                      2
+66                                      2
+7                                       2
+72                                      2
+69                                      2
+57                                      2
+64                                      2
+5                                       2
+60                                      2
+56                                      1
+75                                      1
+54                                      1
+50                                      1
+58                                      1
+53                                      1
+65                                      1
+40                                      1
+14                                      1
+52                                      1
+34                                      1
+68                                      1
+12                                      1
+23                                      1

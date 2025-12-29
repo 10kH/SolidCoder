@@ -1,0 +1,35 @@
+Accuracy:                            33.6
+Solved:                                50
+Unsolved:                              99
+
+
+Total Prompt Tokens:              3284683
+Average Prompt Tokens:              22045
+
+Total Completion Tokens:         11247832
+Average Completion Tokens:          75489
+
+Total Taken Time:               117682.04s
+Average Taken Time:                789.81s
+
+
+Total Api Calls:                  2212.00
+Max Api Calls:                         25
+Min Api Calls:                          1
+Average Api Calls:                1.5e+01
+
+
+Solved Api Calls              
+Api calls                          Solved
+8                                      48
+9                                       2
+
+Unsolved Api Calls            
+Api calls                        Unsolved
+25                                     62
+8                                      20
+1                                       8
+9                                       4
+11                                      3
+10                                      1
+13                                      1

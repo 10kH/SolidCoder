@@ -1,0 +1,195 @@
+
+completed 1/165, Solved: True, number of success = 1/1, acc = 100.0
+completed 2/165, Solved: True, number of success = 2/2, acc = 100.0
+completed 3/165, Solved: True, number of success = 3/3, acc = 100.0
+completed 4/165, Solved: True, number of success = 4/4, acc = 100.0
+completed 5/165, Solved: True, number of success = 5/5, acc = 100.0
+completed 6/165, Solved: True, number of success = 6/6, acc = 100.0
+completed 7/165, Solved: True, number of success = 7/7, acc = 100.0
+completed 8/165, Solved: True, number of success = 8/8, acc = 100.0
+completed 9/165, Solved: True, number of success = 9/9, acc = 100.0
+completed 10/165, Solved: True, number of success = 10/10, acc = 100.0
+completed 11/165, Solved: True, number of success = 11/11, acc = 100.0
+completed 12/165, Solved: True, number of success = 12/12, acc = 100.0
+completed 13/165, Solved: True, number of success = 13/13, acc = 100.0
+
+completed 14/165, Solved: True, number of success = 14/14, acc = 100.0
+completed 15/165, Solved: True, number of success = 15/15, acc = 100.0
+completed 16/165, Solved: True, number of success = 16/16, acc = 100.0
+completed 17/165, Solved: True, number of success = 17/17, acc = 100.0
+completed 18/165, Solved: True, number of success = 18/18, acc = 100.0
+completed 19/165, Solved: True, number of success = 19/19, acc = 100.0
+completed 20/165, Solved: True, number of success = 20/20, acc = 100.0
+
+completed 21/165, Solved: True, number of success = 21/21, acc = 100.0
+completed 22/165, Solved: True, number of success = 22/22, acc = 100.0
+completed 23/165, Solved: True, number of success = 23/23, acc = 100.0
+completed 24/165, Solved: True, number of success = 24/24, acc = 100.0
+completed 25/165, Solved: True, number of success = 25/25, acc = 100.0
+completed 26/165, Solved: True, number of success = 26/26, acc = 100.0
+
+completed 27/165, Solved: False, number of success = 26/27, acc = 96.3
+completed 28/165, Solved: False, number of success = 26/28, acc = 92.86
+
+completed 29/165, Solved: True, number of success = 27/29, acc = 93.1
+completed 30/165, Solved: True, number of success = 28/30, acc = 93.33
+completed 31/165, Solved: True, number of success = 29/31, acc = 93.55
+completed 32/165, Solved: True, number of success = 30/32, acc = 93.75
+completed 33/165, Solved: True, number of success = 31/33, acc = 93.94
+completed 34/165, Solved: True, number of success = 32/34, acc = 94.12
+completed 35/165, Solved: True, number of success = 33/35, acc = 94.29
+completed 36/165, Solved: True, number of success = 34/36, acc = 94.44
+
+completed 37/165, Solved: False, number of success = 34/37, acc = 91.89
+completed 38/165, Solved: False, number of success = 34/38, acc = 89.47
+completed 39/165, Solved: False, number of success = 34/39, acc = 87.18
+completed 40/165, Solved: False, number of success = 34/40, acc = 85.0
+completed 41/165, Solved: False, number of success = 34/41, acc = 82.93
+completed 42/165, Solved: False, number of success = 34/42, acc = 80.95
+completed 43/165, Solved: False, number of success = 34/43, acc = 79.07
+completed 44/165, Solved: False, number of success = 34/44, acc = 77.27
+completed 45/165, Solved: False, number of success = 34/45, acc = 75.56
+
+completed 46/165, Solved: True, number of success = 35/46, acc = 76.09
+completed 47/165, Solved: True, number of success = 36/47, acc = 76.6
+completed 48/165, Solved: True, number of success = 37/48, acc = 77.08
+completed 49/165, Solved: True, number of success = 38/49, acc = 77.55
+completed 50/165, Solved: True, number of success = 39/50, acc = 78.0
+completed 51/165, Solved: True, number of success = 40/51, acc = 78.43
+
+completed 52/165, Solved: True, number of success = 41/52, acc = 78.85
+completed 53/165, Solved: True, number of success = 42/53, acc = 79.25
+completed 54/165, Solved: True, number of success = 43/54, acc = 79.63
+completed 55/165, Solved: True, number of success = 44/55, acc = 80.0
+completed 56/165, Solved: True, number of success = 45/56, acc = 80.36
+completed 57/165, Solved: True, number of success = 46/57, acc = 80.7
+completed 58/165, Solved: True, number of success = 47/58, acc = 81.03
+
+completed 59/165, Solved: True, number of success = 48/59, acc = 81.36
+completed 60/165, Solved: True, number of success = 49/60, acc = 81.67
+completed 61/165, Solved: True, number of success = 50/61, acc = 81.97
+completed 62/165, Solved: True, number of success = 51/62, acc = 82.26
+completed 63/165, Solved: True, number of success = 52/63, acc = 82.54
+completed 64/165, Solved: True, number of success = 53/64, acc = 82.81
+completed 65/165, Solved: True, number of success = 54/65, acc = 83.08
+
+completed 66/165, Solved: False, number of success = 54/66, acc = 81.82
+completed 67/165, Solved: False, number of success = 54/67, acc = 80.6
+completed 68/165, Solved: False, number of success = 54/68, acc = 79.41
+completed 69/165, Solved: False, number of success = 54/69, acc = 78.26
+completed 70/165, Solved: False, number of success = 54/70, acc = 77.14
+completed 71/165, Solved: False, number of success = 54/71, acc = 76.06
+completed 72/165, Solved: False, number of success = 54/72, acc = 75.0
+completed 73/165, Solved: False, number of success = 54/73, acc = 73.97
+completed 74/165, Solved: False, number of success = 54/74, acc = 72.97
+completed 75/165, Solved: False, number of success = 54/75, acc = 72.0
+
+completed 76/165, Solved: False, number of success = 54/76, acc = 71.05
+completed 77/165, Solved: False, number of success = 54/77, acc = 70.13
+completed 78/165, Solved: False, number of success = 54/78, acc = 69.23
+
+completed 79/165, Solved: False, number of success = 54/79, acc = 68.35
+completed 80/165, Solved: False, number of success = 54/80, acc = 67.5
+completed 81/165, Solved: False, number of success = 54/81, acc = 66.67
+completed 82/165, Solved: False, number of success = 54/82, acc = 65.85
+completed 83/165, Solved: False, number of success = 54/83, acc = 65.06
+completed 84/165, Solved: False, number of success = 54/84, acc = 64.29
+
+completed 85/165, Solved: False, number of success = 54/85, acc = 63.53
+completed 86/165, Solved: False, number of success = 54/86, acc = 62.79
+completed 87/165, Solved: False, number of success = 54/87, acc = 62.07
+
+completed 88/165, Solved: True, number of success = 55/88, acc = 62.5
+completed 89/165, Solved: True, number of success = 56/89, acc = 62.92
+completed 90/165, Solved: True, number of success = 57/90, acc = 63.33
+completed 91/165, Solved: True, number of success = 58/91, acc = 63.74
+completed 92/165, Solved: True, number of success = 59/92, acc = 64.13
+
+completed 93/165, Solved: True, number of success = 60/93, acc = 64.52
+completed 94/165, Solved: True, number of success = 61/94, acc = 64.89
+completed 95/165, Solved: True, number of success = 62/95, acc = 65.26
+completed 96/165, Solved: True, number of success = 63/96, acc = 65.62
+completed 97/165, Solved: True, number of success = 64/97, acc = 65.98
+completed 98/165, Solved: True, number of success = 65/98, acc = 66.33
+
+completed 99/165, Solved: True, number of success = 66/99, acc = 66.67
+completed 100/165, Solved: True, number of success = 67/100, acc = 67.0
+completed 101/165, Solved: True, number of success = 68/101, acc = 67.33
+completed 102/165, Solved: True, number of success = 69/102, acc = 67.65
+completed 103/165, Solved: True, number of success = 70/103, acc = 67.96
+completed 104/165, Solved: True, number of success = 71/104, acc = 68.27
+completed 105/165, Solved: True, number of success = 72/105, acc = 68.57
+completed 106/165, Solved: True, number of success = 73/106, acc = 68.87
+
+completed 107/165, Solved: True, number of success = 74/107, acc = 69.16
+completed 108/165, Solved: True, number of success = 75/108, acc = 69.44
+completed 109/165, Solved: True, number of success = 76/109, acc = 69.72
+completed 110/165, Solved: True, number of success = 77/110, acc = 70.0
+completed 111/165, Solved: True, number of success = 78/111, acc = 70.27
+completed 112/165, Solved: True, number of success = 79/112, acc = 70.54
+completed 113/165, Solved: True, number of success = 80/113, acc = 70.8
+
+completed 114/165, Solved: True, number of success = 81/114, acc = 71.05
+completed 115/165, Solved: True, number of success = 82/115, acc = 71.3
+completed 116/165, Solved: True, number of success = 83/116, acc = 71.55
+completed 117/165, Solved: True, number of success = 84/117, acc = 71.79
+completed 118/165, Solved: True, number of success = 85/118, acc = 72.03
+completed 119/165, Solved: True, number of success = 86/119, acc = 72.27
+
+completed 120/165, Solved: True, number of success = 87/120, acc = 72.5
+completed 121/165, Solved: True, number of success = 88/121, acc = 72.73
+completed 122/165, Solved: True, number of success = 89/122, acc = 72.95
+completed 123/165, Solved: True, number of success = 90/123, acc = 73.17
+completed 124/165, Solved: True, number of success = 91/124, acc = 73.39
+completed 125/165, Solved: True, number of success = 92/125, acc = 73.6
+completed 126/165, Solved: True, number of success = 93/126, acc = 73.81
+completed 127/165, Solved: True, number of success = 94/127, acc = 74.02
+
+completed 128/165, Solved: False, number of success = 94/128, acc = 73.44
+completed 129/165, Solved: False, number of success = 94/129, acc = 72.87
+completed 130/165, Solved: False, number of success = 94/130, acc = 72.31
+completed 131/165, Solved: False, number of success = 94/131, acc = 71.76
+completed 132/165, Solved: False, number of success = 94/132, acc = 71.21
+
+completed 133/165, Solved: True, number of success = 95/133, acc = 71.43
+completed 134/165, Solved: True, number of success = 96/134, acc = 71.64
+completed 135/165, Solved: True, number of success = 97/135, acc = 71.85
+completed 136/165, Solved: True, number of success = 98/136, acc = 72.06
+completed 137/165, Solved: True, number of success = 99/137, acc = 72.26
+completed 138/165, Solved: True, number of success = 100/138, acc = 72.46
+completed 139/165, Solved: True, number of success = 101/139, acc = 72.66
+
+completed 140/165, Solved: True, number of success = 102/140, acc = 72.86
+completed 141/165, Solved: True, number of success = 103/141, acc = 73.05
+completed 142/165, Solved: True, number of success = 104/142, acc = 73.24
+completed 143/165, Solved: True, number of success = 105/143, acc = 73.43
+completed 144/165, Solved: True, number of success = 106/144, acc = 73.61
+completed 145/165, Solved: True, number of success = 107/145, acc = 73.79
+completed 146/165, Solved: True, number of success = 108/146, acc = 73.97
+completed 147/165, Solved: True, number of success = 109/147, acc = 74.15
+
+completed 148/165, Solved: False, number of success = 109/148, acc = 73.65
+completed 149/165, Solved: False, number of success = 109/149, acc = 73.15
+completed 150/165, Solved: False, number of success = 109/150, acc = 72.67
+completed 151/165, Solved: False, number of success = 109/151, acc = 72.19
+completed 152/165, Solved: False, number of success = 109/152, acc = 71.71
+completed 153/165, Solved: False, number of success = 109/153, acc = 71.24
+completed 154/165, Solved: False, number of success = 109/154, acc = 70.78
+
+completed 155/165, Solved: True, number of success = 110/155, acc = 70.97
+completed 156/165, Solved: True, number of success = 111/156, acc = 71.15
+completed 157/165, Solved: True, number of success = 112/157, acc = 71.34
+completed 158/165, Solved: True, number of success = 113/158, acc = 71.52
+completed 159/165, Solved: True, number of success = 114/159, acc = 71.7
+completed 160/165, Solved: True, number of success = 115/160, acc = 71.88
+
+completed 161/165, Solved: True, number of success = 116/161, acc = 72.05
+completed 162/165, Solved: True, number of success = 117/162, acc = 72.22
+completed 163/165, Solved: True, number of success = 118/163, acc = 72.39
+completed 164/165, Solved: True, number of success = 119/164, acc = 72.56
+completed 165/165, Solved: True, number of success = 120/165, acc = 72.73
+
+##################################################
+Experiment end results/CC/CodeSIM/gpt-4o/Python3-0.0-0.95-1/Run-1, Time: 2025-12-05 01:02:11.694642
+###################################################
+

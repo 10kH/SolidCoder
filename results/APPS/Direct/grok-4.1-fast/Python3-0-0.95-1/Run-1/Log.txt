@@ -1,0 +1,5342 @@
+OpenRouter model initialized: x-ai/grok-4.1-fast
+```python
+import sys
+import itertools
+import functools
+
+@functools.lru_cache(None)
+def max_score(state):
+    total = sum(state)
+    if total == 0:
+        return 0
+    res = 0
+    # single 1 (index 0)
+    if state[0] > 0:
+        new_state = list(state)
+        new_state[0] -= 1
+        res = max(res, 100 + max_score(tuple(new_state)))
+    # single 5 (index 4)
+    if state[4] > 0:
+        new_state = list(state)
+        new_state[4] -= 1
+        res = max(res, 50 + max_score(tuple(new_state)))
+    # multiples of a kind
+    scores = [0, 1000, 200, 300, 400, 500, 600]
+    for i in range(6):
+        for n in range(3, 7):
+            if state[i] >= n:
+                new_state = list(state)
+                new_state[i] -= n
+                pts = (n - 2) * scores[i + 1]
+                res = max(res, pts + max_score(tuple(new_state)))
+    # straight
+    if all(x >= 1 for x in state):
+        new_state = list(state)
+        for j in range(6):
+            new_state[j] -= 1
+        res = max(res, 1000 + max_score(tuple(new_state)))
+    # three pairs
+    for a, b, c in itertools.combinations(range(6), 3):
+        if state[a] >= 2 and state[b] >= 2 and state[c] >= 2:
+            new_state = list(state)
+            new_state[a] -= 2
+            new_state[b] -= 2
+            new_state[c] -= 2
+            res = max(res, 750 + max_score(tuple(new_state)))
+    return res
+
+# Read input
+line = sys.stdin.readline().strip()
+if line.startswith('[') and line.endswith(']'):
+    line = line[1:-1]
+parts = line.split(',')
+dice = []
+for p in parts:
+    p = p.strip()
+    if p:
+        dice.append(int(p))
+freq = [0] * 6
+for d in dice:
+    if 1 <= d <= 6:
+        freq[d - 1] += 1
+state = tuple(freq)
+sc = max_score(state)
+print("Zonk" if sc == 0 else sc)
+```
+completed 1/150, Solved: False, number of success = 0/1, acc = 0.0
+```python
+import re
+
+def drop_cap(s):
+    def replacer(match):
+        word = match.group(0)
+        if len(word) > 2:
+            return word[0].upper() + word[1:].lower()
+        else:
+            return word
+    return re.sub(r'\S+', replacer, s)
+
+s = input()
+print(drop_cap(s))
+```
+completed 2/150, Solved: False, number of success = 0/2, acc = 0.0
+```python
+def possibles(c):
+    res = set()
+    o = ord(c)
+    if o > ord('a'):
+        res.add(chr(o - 1))
+    if o < ord('z'):
+        res.add(chr(o + 1))
+    return res
+
+s = input().strip()
+n = len(s)
+ans = True
+for i in range((n + 1) // 2):
+    left = possibles(s[i])
+    right = possibles(s[n - 1 - i])
+    if not (left & right):
+        ans = False
+        break
+print(ans)
+```
+completed 3/150, Solved: False, number of success = 0/3, acc = 0.0
+```python
+import sys
+
+def generate_expression(n_str):
+    if n_str == '0':
+        return ''
+    terms = []
+    length = len(n_str)
+    for i in range(length):
+        digit = int(n_str[i])
+        if digit == 0:
+            continue
+        power = length - 1 - i
+        if power == 0:
+            term = str(digit)
+        elif power == 1:
+            term = f"{digit}*10"
+        else:
+            term = f"{digit}*{10**power}"
+        terms.append(term)
+    return '+'.join(terms)
+
+n = sys.stdin.read().strip()
+result = generate_expression(n)
+if result:
+    print(result)
+```
+completed 4/150, Solved: True, number of success = 1/4, acc = 25.0
+```python
+def solution(string1, string2):
+    map_pc = {}
+    map_cp = {}
+    for i in range(len(string1)):
+        p = string1[i]
+        c = string2[i]
+        if p in map_pc and map_pc[p] != c:
+            return False
+        map_pc[p] = c
+        if c in map_cp and map_cp[c] != p:
+            return False
+        map_cp[c] = p
+    return True
+
+string1 = input().strip()
+string2 = input().strip()
+print(solution(string1, string2))
+```
+completed 5/150, Solved: False, number of success = 1/5, acc = 20.0
+```python
+def super_size(num):
+    s = ''.join(sorted(str(num), reverse=True))
+    return s
+
+num = int(input().strip())
+print(super_size(num))
+```
+completed 6/150, Solved: False, number of success = 1/6, acc = 16.67
+```python
+def elevator(left, right, call):
+    left_dist = abs(left - call)
+    right_dist = abs(right - call)
+    if left_dist < right_dist:
+        return "left"
+    else:
+        return "right"
+
+left = int(input())
+right = int(input())
+call = int(input())
+print(elevator(left, right, call))
+```
+completed 7/150, Solved: True, number of success = 2/7, acc = 28.57
+```python
+import math
+
+def solution(x):
+    y = x * 2
+    return math.floor(y + 0.5) / 2
+
+x = float(input().strip())
+res = solution(x)
+if res.is_integer():
+    print(int(res))
+else:
+    print(res)
+```
+completed 8/150, Solved: False, number of success = 2/8, acc = 25.0
+```python
+n = int(input())
+print(n * (n * n + 1) // 2)
+```
+completed 9/150, Solved: False, number of success = 2/9, acc = 22.22
+```python
+def validate_pin(pin):
+    return len(pin) in (4, 6) and pin.isdigit()
+
+pin = input().strip()
+print(validate_pin(pin))
+```
+completed 10/150, Solved: False, number of success = 2/10, acc = 20.0
+```python
+def hofstadter_q(n):
+    if n == 1 or n == 2:
+        return 1
+    q = [0] * (n + 1)
+    q[1] = 1
+    q[2] = 1
+    for i in range(3, n + 1):
+        q[i] = q[i - q[i - 1]] + q[i - q[i - 2]]
+    return q[n]
+
+n = int(input())
+print(hofstadter_q(n))
+```
+completed 11/150, Solved: False, number of success = 2/11, acc = 18.18
+```python
+def anagrams(target, wordlist):
+    sorted_target = sorted(target)
+    result = []
+    for word in wordlist:
+        if sorted(word) == sorted_target:
+            result.append(word)
+    return result
+
+# Read input
+target = input().strip()
+line = input().strip()
+
+# Parse the list without import
+if line.startswith('[') and line.endswith(']'):
+    content = line[1:-1]
+else:
+    content = line
+
+words = [w.strip().strip("'\"") for w in content.split(',') if w.strip()]
+
+# Call function
+result = anagrams(target, words)
+
+# Output
+print(result)
+```
+completed 12/150, Solved: False, number of success = 2/12, acc = 16.67
+```python
+cycle = [0] * 60
+cycle[0] = 1
+cycle[1] = 1
+for i in range(2, 60):
+    cycle[i] = (cycle[i-1] + cycle[i-2]) % 10
+
+n = int(input().strip())
+print(cycle[(n - 1) % 60])
+```
+completed 13/150, Solved: False, number of success = 2/13, acc = 15.38
+```python
+def alphabet_war(fight):
+    n = len(fight)
+    dead = [False] * n
+    for i in range(n):
+        if fight[i] == '*':
+            if i - 1 >= 0:
+                dead[i - 1] = True
+            dead[i] = True
+            if i + 1 < n:
+                dead[i + 1] = True
+    left_power = 0
+    right_power = 0
+    left_powers = {'w': 4, 'p': 3, 'b': 2, 's': 1}
+    right_powers = {'m': 4, 'q': 3, 'd': 2, 'z': 1}
+    for i in range(n):
+        if not dead[i]:
+            c = fight[i]
+            if c in left_powers:
+                left_power += left_powers[c]
+            elif c in right_powers:
+                right_power += right_powers[c]
+    if left_power > right_power:
+        return "Left side wins!"
+    elif right_power > left_power:
+        return "Right side wins!"
+    else:
+        return "Let's fight again!"
+
+if __name__ == "__main__":
+    import sys
+    input = sys.stdin.read
+    data = input().splitlines()
+    index = 0
+    t = int(data[index])
+    index += 1
+    for _ in range(t):
+        fight = data[index].strip()
+        index += 1
+        print(alphabet_war(fight))
+```
+completed 14/150, Solved: False, number of success = 2/14, acc = 14.29
+```python
+def nameInStr(str, name):
+    str = str.lower()
+    name = name.lower()
+    i = 0
+    for char in str:
+        if i < len(name) and char == name[i]:
+            i += 1
+    return i == len(name)
+
+str_input = input()
+name_input = input()
+print(nameInStr(str_input, name_input))
+```
+completed 15/150, Solved: False, number of success = 2/15, acc = 13.33
+```python
+def specialNumber(s):
+    for c in s:
+        if c not in '012345':
+            return "NOT!!"
+    return "Special!!"
+
+num_str = input().strip()
+print(specialNumber(num_str))
+```
+completed 16/150, Solved: True, number of success = 3/16, acc = 18.75
+```python
+import json
+
+def battle(player1, player2):
+    min_len = min(len(player1
+completed 17/150, Solved: False, number of success = 3/17, acc = 17.65
+```python
+def getAllPrimeFactors(n):
+    if not isinstance(n, int) or n <= 0:
+        return []
+    if n == 1:
+        return [1]
+    factors = []
+    while n % 2 == 0:
+        factors.append(2)
+        n //= 2
+    i = 3
+    while i * i <= n:
+        while n % i == 0:
+            factors.append(i)
+            n //= i
+        i += 2
+    if n > 1:
+        factors.append(n)
+    return factors
+
+def getUniquePrimeFactorsWithCount(n):
+    if not isinstance(n, int) or n <= 0:
+        return [[], []]
+    if n == 1:
+        return [[1], [1]]
+    primes = []
+    counts = []
+    count = 0
+    while n % 2 == 0:
+        count += 1
+        n //= 2
+    if count > 0:
+        primes.append(2)
+        counts.append(count)
+    i = 3
+    while i * i <= n:
+        count = 0
+        while n % i == 0:
+            count += 1
+            n //= i
+        if count > 0:
+            primes.append(i)
+            counts.append(count)
+        i += 2
+    if n > 1:
+        primes.append(n)
+        counts.append(1)
+    return [primes, counts]
+
+def getUniquePrimeFactorsWithProducts(n):
+    if not isinstance(n, int) or n <= 0:
+        return []
+    if n == 1:
+        return [1]
+    products = []
+    count = 0
+    while n % 2 == 0:
+        count += 1
+        n //= 2
+    if count > 0:
+        products.append(2 ** count)
+    i = 3
+    while i * i <= n:
+        count = 0
+        while n % i == 0:
+            count += 1
+            n //= i
+        if count > 0:
+            products.append(i ** count)
+        i += 2
+    if n > 1:
+        products.append(n)
+    return products
+
+# Main program
+import sys
+input_str = sys.stdin.read().strip()
+try:
+    n = int(input_str)
+    result = getAllPrimeFactors(n)
+    print(result)
+except ValueError:
+    print([])
+```
+completed 18/150, Solved: False, number of success = 3/18, acc = 16.67
+```python
+import sys
+
+input = sys.stdin.read
+data = input().strip()
+
+total1_str = ''.join(str(ord(c)) for c in data)
+count_sevens = total1_str.count('7')
+difference = 6 * count_sevens
+
+print(difference)
+```
+completed 19/150, Solved: False, number of success = 3/19, acc = 15.79
+```python
+def find_longest(s):
+    n = len(s)
+    max_len = 0
+    best_start = float('inf')
+    best_sub = ""
+    i = 1
+    while i < n:
+        if (s[i-1] in '!?' and s[i] in '!?' and s[i-1] != s[i]):
+            first_char = s[i-1]
+            second_char = s[i]
+            # find start of first group
+            start = i - 1
+            while start > 0 and s[start - 1] == first_char:
+                start -= 1
+            # find end of second group
+            end = i
+            while end < n and s[end] == second_char:
+                end += 1
+            length = end - start
+            if length > max_len or (length == max_len and start < best_start):
+                max_len = length
+                best_start = start
+                best_sub = s[start:end]
+        i += 1
+    return best_sub
+
+s = input().strip()
+print(find_longest(s))
+```
+completed 20/150, Solved: True, number of success = 4/20, acc = 20.0
+```python
+import sys
+import ast
+
+# Read input from stdin
+input_str = sys.stdin.read().strip()
+
+# Safely parse the input string as a list using ast.literal_eval
+couples = ast.literal_eval(input_str)
+
+# Initialize variables
+max_diff = -1
+result = None
+
+# Process each couple
+for couple in couples:
+    parts = couple.split('-')
+    if len(parts) == 2:
+        try:
+            a = int(parts[0])
+            b = int(parts[1])
+            diff = abs(a - b)
+            if diff > max_diff:
+                max_diff = diff
+                result = couple
+        except ValueError:
+            # Skip invalid couples
+            pass
+
+# Output the result
+if result is None or max_diff == 0:
+    print("false")
+else:
+    print(result)
+```
+completed 21/150, Solved: False, number of success = 4/21, acc = 19.05
+```python
+def transform(s):
+    result = []
+    vowels = set('aeiou')
+    for char in s:
+        orig = char
+        if char in 'co':
+            new_ord = (ord(char) - ord('a') - 1) % 26 + ord('a')
+            new = chr(new_ord)
+        elif char == 'd':
+            new_ord = (ord(char) - ord('a') - 3) % 26 + ord('a')
+            new = chr(new_ord)
+        elif char == 'e':
+            new_ord = (ord(char) - ord('a') - 4) % 26 + ord('a')
+            new = chr(new_ord)
+        elif char in vowels:
+            new_ord = (ord(char) - ord('a') - 5) % 26 + ord('a')
+            new = chr(new_ord)
+        else:  # consonant
+            new_ord = (ord(char) - ord('a') + 9) % 26 + ord('a')
+            new = chr(new_ord)
+        if new in 'code':
+            new = orig
+        result.append(new)
+    return ''.join(result)
+
+# Read input
+s = input().strip()
+# Call function and print output
+print(transform(s))
+```
+completed 22/150, Solved: True, number of success = 5/22, acc = 22.73
+```python
+def is_word_char(c):
+    return c.isalnum() or c in "'-"
+
+def process_token(token):
+    if not token:
+        return ''
+    i = len(token) - 1
+    suffix = ''
+    while i >= 0 and not is_word_char(token[i]):
+        suffix = token[i] + suffix
+        i -= 1
+    word_part = token[:i + 1] if i >= 0 else ''
+    length = len(word_part)
+    t_count = sum(1 for c in word_part if c.lower() == 't')
+    if length > 6 or t_count >= 2:
+        new_part = word_part[::-1]
+    elif length == 2 or token.endswith(','):
+        new_part = word_part.upper()
+    elif length == 1:
+        new_part = '0'
+    else:
+        new_part = word_part
+    return new_part + suffix
+
+# Read input
+s = input().strip()
+tokens = s.split()
+processed = [process_token(t) for t in tokens]
+print(' '.join(processed))
+```
+completed 23/150, Solved: True, number of success = 6/23, acc = 26.09
+```python
+import re
+import sys
+
+def gymSlang(text):
+    # Title case replacements first
+    text = re.sub(r'\bProbably\b', 'Prolly', text)
+    text = re.sub(r'\bInstagram\b', 'Insta', text)
+    text = re.sub(r'\bCombination\b', 'Combo', text)
+    text = re.sub(r'\bI am\b', "I'm", text)
+    text = re.sub(r'\bDo not\b', "Don't", text)
+    text = re.sub(r'\bGoing to\b', 'Gonna', text)
+    
+    # Lowercase replacements
+    text = re.sub(r'\bprobably\b', 'prolly', text)
+    text = re.sub(r'\binstagram\b', 'insta', text)
+    text = re.sub(r'\bcombination\b', 'combo', text)
+    text = re.sub(r'\bi am\b', "i'm", text)
+    text = re.sub(r'\bdo not\b', "don't", text)
+    text = re.sub(r'\bgoing to\b', 'gonna', text)
+    
+    return text
+
+# Read input
+s = input().strip()
+# Call function and print
+print(gymSlang(s))
+```
+completed 24/150, Solved: True, number of success = 7/24, acc = 29.17
+```python
+def isMadhavArray(arr):
+    n = len(arr)
+    if n <= 1:
+        return False
+    temp = 8 * n + 1
+
+completed 25/150, Solved: False, number of success = 7/25, acc = 28.0
+```python
+def is_lucky(ticket: str) -> bool:
+    if len(ticket) != 6:
+        return False
+    sum1 = int(ticket[0]) + int(ticket[1]) + int(ticket[2])
+    sum2 = int(ticket[3]) + int(ticket[4]) + int(ticket[5])
+    return sum1 == sum2
+
+# Read input from standard input
+ticket = input().strip()
+
+# Call the function and print the result
+print(is_lucky(ticket))
+```
+completed 26/150, Solved: False, number of success = 7/26, acc = 26.92
+```python
+arr_str = input().strip()
+arr = [int(x) for x in arr_str.strip('[]').split(',')]
+result = [arr[i] for i in range(1, len(arr)) if arr[i] % i == 0]
+print(result)
+```
+completed 27/150, Solved: False, number of success = 7/27, acc = 25.93
+```python
+def compute_hash(s):
+    a = sum(ord(c) for c in s)
+    b = 0
+    if len(s) >= 2:
+        b = sum(ord(s[i + 1]) - ord(s[i]) for i in range(len(s) - 1))
+    ab_or = a | b
+    not_a_shifted = (~a) << 2
+    c = ab_or & not_a_shifted
+    spaces = s.count(' ')
+    d = c ^ (32 * spaces)
+    return d
+
+# Read input
+s = input()
+# Compute and print
+print(compute_hash(s))
+```
+completed 28/150, Solved: False, number of success = 7/28, acc = 25.0
+```python
+import sys
+
+yellow_map = {
+    "gold": "ForestGreen",
+    "khaki": "LimeGreen",
+    "lemonchiffon": "PaleGreen",
+    "lightgoldenrodyellow": "SpringGreen",
+    "lightyellow": "MintCream",
+    "palegoldenrod": "LightGreen",
+    "yellow": "Lime"
+}
+
+def process_color(s):
+    s = s.strip()
+    if len(s) == 7 and s.startswith('#') and all(c in '0123456789ABCDEFabcdef' for c in s[1:]):
+        # Process as hex
+        hex_part = s[1:]
+        has_upper = any(c.isupper() and c in 'ABCDEF' for c in hex_part)
+        r = int(hex_part[0:2], 16)
+        g = int(hex_part[2:4], 16)
+        b = int(hex_part[4:6], 16)
+        if r > b and g > b:
+            vals = sorted([r, g, b], reverse=True)
+            new_r = vals[2]
+            new_g = vals[0]
+            new_b = vals[1]
+            if has_upper:
+                rr = f"{new_r:02X}"
+                gg = f"{new_g:02X}"
+                bb = f"{new_b:02X}"
+            else:
+                rr = f"{new_r:02x}"
+                gg = f"{new_g:02x}"
+                bb = f"{new_b:02x}"
+            return f"#{rr}{gg}{bb}"
+        else:
+            return s
+    else:
+        # Process as name
+        lower_s = s.lower()
+        if lower_s in yellow_map:
+            return yellow_map[lower_s]
+        else:
+            return s
+
+input_color = sys.stdin.read().strip()
+result = process_color(input_color)
+print(result)
+```
+completed 29/150, Solved: True, number of success = 8/29, acc = 27.59
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+m = int(data[1])
+
+horiz = n * (n - 1) // 2
+vert = m * (m - 1) // 2
+
+print(horiz * vert)
+```
+completed 30/150, Solved: False, number of success = 8/30, acc = 26.67
+completed 31/150, Solved: True, number of success = 9/31, acc = 29.03
+```python
+import sys
+import bisect
+
+N = 500001
+is_prime = [True] * N
+is_prime[0] = is_prime[1] = False
+for i in range(2, int(N ** 0.5) + 1):
+    if is_prime[i]:
+        for j in range(i * i, N, i):
+            is_prime[j] = False
+
+primes = [i for i in range(N) if is_prime[i]]
+
+dominant = []
+for idx, p in enumerate(primes):
+    pos = idx + 1
+    if pos < N and is_prime[pos]:
+        dominant.append(p)
+
+prefix = [0]
+for p in dominant:
+    prefix.append(prefix[-1] + p)
+
+input_data = sys.stdin.read().split()
+a = int(input_data[0])
+b = int(input_data[1])
+
+i = bisect.bisect_left(dominant, a)
+j = bisect.bisect_right(dominant, b)
+print(prefix[j] - prefix[i])
+```
+completed 32/150, Solved: False, number of success = 9/32, acc = 28.12
+```python
+def tiyFizzBuzz(s):
+    result = []
+    upper_vowels = 'AEIOU'
+    lower_vowels = 'aeiou'
+    for char in s:
+        if char.isalpha():
+            if char.isupper():
+                if char in upper_vowels:
+                    result.append('Iron Yard')
+                else:
+                    result.append('Iron')
+            else:  # lowercase
+                if char in lower_vowels:
+                    result.append('Yard')
+                else:
+                    result.append(char)
+        else:
+            result.append(char)
+    return ''.join(result)
+
+s = input()
+print(tiyFizzBuzz(s))
+```
+completed 33/150, Solved: True, number of success = 10/33, acc = 30.3
+```python
+from collections import deque
+import bisect
+import sys
+
+def generate_all_polydivisibles():
+    poly = []
+    q = deque(str(d) for d in range(1, 10))
+    for d in range(1, 10):
+        poly.append(d)
+    while q:
+        s = q.popleft()
+        for d in range(10):
+            news = s + str(d)
+            num = int(news)
+            length = len(news)
+            if num % length == 0:
+                poly.append(num)
+                q.append(news)
+    return sorted(poly)
+
+all_poly = generate_all_polydivisibles()
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+t = int(data[index])
+index += 1
+
+outputs = []
+for _ in range(t):
+    n = int(data[index])
+    index += 1
+    idx = bisect.bisect_right(all_poly, n)
+    if idx < len(all_poly):
+        outputs.append(str(all_poly[idx]))
+    else:
+        outputs.append('-1')
+
+print('\n'.join(outputs))
+```
+completed 34/150, Solved: False, number of success = 10/34, acc = 29.41
+```python
+import sys
+
+def can_be_increasing(sequence):
+    n = len(sequence)
+    violations = []
+    for i in range(n - 1):
+        if sequence[i] >= sequence[i + 1]:
+            violations.append(i)
+    num_v = len(violations)
+    if num_v == 0:
+        return True
+    if num_v > 1:
+        return False
+    k = violations[0]
+    # Try removing sequence[k]
+    can_remove_k = (k == 0) or (sequence[k - 1] < sequence[k + 1])
+    # Try removing sequence[k+1]
+    can_remove_kp1 = (k + 1 == n - 1) or (sequence[k] < sequence[k + 2])
+    return can_remove_k or can_remove_kp1
+
+# Read and parse input
+data = sys.stdin.read().strip()
+if data.startswith('[') and data.endswith(']'):
+    seq_str = data[1:-1].split(',')
+    sequence = [int(x.strip()) for x in seq_str if x.strip()]
+else:
+    sequence = []
+
+result = can_be_increasing(sequence)
+print("True" if result else "False")
+```
+completed 35/150, Solved: False, number of success = 10/35, acc = 28.57
+```python
+def is_factor(base, factor):
+    return base % factor == 0
+
+base = int(input().strip())
+factor = int(input().strip())
+print(is_factor(base, factor))
+```
+completed 36/150, Solved: False, number of success = 10/36, acc = 27.78
+```python
+def calc_tip(p: int, r: int) -> int:
+    # Step 1: Round p at the tens place
+    rounded_p = ((p + 5) // 10) * 10
+    
+    # Step 2: Base tip T by dropping the singles place digit
+    base_t = rounded_p // 10
+    
+    # Step 3: Apply rating R
+    if r == 1:
+        tip = base_t + 1
+    elif r == 0:
+        tip = base_t - 1
+    else:  # r == -1
+        tip = (base_t // 2) - 1
+    
+    # Ensure non-negative
+    return max(0, tip)
+
+if __name__ == "__main__":
+    n = int(input())
+    for _ in range(n):
+        p, r = map(int, input().split())
+        print(calc_tip(p, r))
+```
+completed 37/150, Solved: False, number of success = 10/37, acc = 27.03
+```python
+def to_alternating_case(s):
+    result = []
+    for c in s:
+        if c.islower():
+            result.append(c.upper())
+        elif c.isupper():
+            result.append(c.lower())
+        else:
+            result.append(c)
+    return ''.join(result)
+
+# Read input from standard input
+input_str = input()
+
+# Call the function and print the output to standard output
+print(to_alternating_case(input_str))
+```
+completed 38/150, Solved: True, number of success = 11/38, acc = 28.95
+```python
+def find_missing(nums):
+    n = len(nums) + 1
+    expected_sum = n * (n + 1) // 2
+    actual_sum = sum(nums)
+    return expected_sum - actual_sum
+
+# Parse input
+line = input().strip()
+if line == '[]':
+    nums = []
+else:
+    content = line[1:-1]
+    nums = [int(x.strip()) for x in content.split(',')]
+
+# Call function and print result
+print(find_missing(nums))
+```
+completed 39/150, Solved: False, number of success = 11/39, acc = 28.21
+```python
+def vector_affinity(v1, v2):
+    n = len(v1)
+    if n == 0:
+        return 1.0
+    matches = sum(1 for a, b in zip(v1, v2) if a == b)
+    return matches / n
+
+v1 = eval(input().strip())
+v2 = eval(input().strip())
+print(vector_affinity(v1, v2))
+```
+completed 40/150, Solved: False, number of success = 11/40, acc = 27.5
+```python
+import sys
+import ast
+
+# Read input
+data = sys.stdin.read().strip()
+arr = ast.literal_eval(data)
+
+n = len(arr)
+max_prod = float('-inf')
+candidates = []
+
+for i in range(n):
+    prod = 1
+    for j in range(n):
+        if j != i:
+            prod *= arr[j]
+    if prod > max_prod:
+        max_prod = prod
+        candidates = [arr[i]]
+    elif prod == max_prod:
+        candidates.append(arr[i])
+
+result = min(candidates)
+print(result)
+```
+completed 41/150, Solved: False, number of success = 11/41, acc = 26.83
+```python
+from collections import deque
+import sys
+
+def min_steps(num):
+    if num == 0:
+        return 0  # Though constraint is 1 <= num
+    q = deque([(1, 0)])
+    visited = set([1])
+    while q:
+        cur, steps = q.popleft()
+        if cur == num:
+            return steps
+        for next_val in [cur + 1, cur * 2]:
+            if next_val <= num and next_val not in visited:
+                visited.add(next_val)
+                q.append((next_val, steps + 1))
+    return -1  # Unreachable
+
+input_data = sys.stdin.read().strip()
+num = int(input_data)
+print(min_steps(num))
+```
+completed 42/150, Solved: False, number of success = 11/42, acc = 26.19
+```python
+def get_primes(n):
+    if n < 2:
+        return []
+    sieve = [True] * n
+    sieve[0] = sieve[1] = False
+    for i in range(2, int(n**0.5) + 1):
+        if sieve[i]:
+            for j in range(i*i, n, i):
+                sieve[j] = False
+    return [i for i in range(n) if sieve[i]]
+
+N = int(input().strip())
+primes = get_primes(N)
+k = len(primes)
+count = k * (k - 1) // 2
+prefix = [0]
+for p in primes:
+    prefix.append(prefix[-1] + p)
+s = 0.0
+for j in range(1, k):
+    s += prefix[j] / primes[j]
+int_part = int(s)
+print(f"[{count}, {int_part}]")
+```
+completed 43/150, Solved: False, number of success = 11/43, acc = 25.58
+```python
+import sys
+
+def digit_sum(x):
+    return sum(int(d) for d in str(x))
+
+input = sys.stdin.read
+data = input().strip()
+n = int(data)
+
+if n == 0:
+    print(0)
+else:
+    np1 = n + 1
+    k = len(str(np1)) - 1
+    pow10 = 10 ** k
+    a = np1 - pow10
+    sa = digit_sum(a)
+    sb = 9 * k
+    print(sa + sb)
+```
+completed 44/150, Solved: False, number of success = 11/44, acc = 25.0
+```python
+def fit_in(a, b, m, n):
+    if a > m or a > n or b > m or b > n:
+        return False
+    if a + b <= m or a + b <= n:
+        return True
+    return False
+
+a = int(input().strip())
+b = int(input().strip())
+m = int(input().strip())
+n = int(input().strip())
+
+print(fit_in(a, b, m, n))
+```
+completed 45/150, Solved: False, number of success = 11/45, acc = 24.44
+```python
+def count_inversion(arr):
+    count = 0
+    n = len(arr)
+    for i in range(n):
+        for j in range(i + 1, n):
+            if arr[i] > arr[j]:
+                count += 1
+    return count
+
+# Read input from standard input
+s = input().strip()
+
+# Parse the input string like "[1, 2, 5, 3, 4, 7, 6]"
+if s.startswith('[') and s.endswith(']'):
+    inner = s[1:-1]
+else:
+    inner = s
+
+arr_str = inner.split(',')
+arr = [int(x.strip()) for x in arr_str]
+
+# Compute and print the result
+print(count_inversion(arr))
+```
+completed 46/150, Solved: False, number of success = 11/46, acc = 23.91
+```python
+import sys
+
+def solve(s):
+    vowels = set('aeiou')
+    vlist = [c for c in s if c in vowels]
+    clist = [c for c in s if c not in vowels]
+    nv = len(vlist)
+    nc = len(clist)
+    n = len(s)
+    if abs(nv - nc) > 1:
+        return "failed"
+    # Determine starting with vowel
+    if nv == nc:
+        starts_with_v = True
+    elif nv == nc + 1:
+        starts_with_v = True
+    else:  # nc == nv + 1
+        starts_with_v = False
+    # Sort lists
+    vlist.sort()
+    clist.sort()
+    # Build result
+    result = [''] * n
+    v_idx = 0
+    c_idx = 0
+    for i in range(n):
+        if (i % 2 == 0) == starts_with_v:
+            # V position
+            result[i] = vlist[v_idx]
+            v_idx += 1
+        else:
+            # C position
+            result[i] = clist[c_idx]
+            c_idx += 1
+    return ''.join(result)
+
+# Read input
+s = sys.stdin.read().strip()
+print(solve(s))
+```
+completed 47/150, Solved: True, number of success = 12/47, acc = 25.53
+```python
+def family_ages(ages):
+    min_age = min(ages)
+    max_age = max(ages)
+    diff = max_age - min_age
+    return (min_age, max_age, diff)
+
+# Read input
+n = int(input())
+ages = list(map(int, input().split()))
+
+# Call function and print result
+result = family_ages(ages)
+print(*result)
+```
+completed 48/150, Solved: False, number of success = 12/48, acc = 25.0
+```python
+def factors(n):
+    if not isinstance(n, int) or n < 1:
+        return -1
+    factors_list = []
+    for i in range(n, 0, -1):
+        if n % i == 0:
+            factors_list.append(i)
+    return factors_list
+
+# Read input from standard input
+input_str = input().strip()
+
+# Try to convert to int and process
+try:
+    num = int(input_str)
+    result = factors(num)
+except ValueError:
+    result = -1
+
+# Output the result
+if result == -1:
+    print(-1)
+else:
+    print(result)
+```
+completed 49/150, Solved: False, number of success = 12/49, acc = 24.49
+```python
+import sys
+
+def is_prime(n):
+    if n <= 1:
+        return False
+    if n
+completed 50/150, Solved: False, number of success = 12/50, acc = 24.0
+```python
+import sys
+
+sys.setrecursionlimit(10**5)
+
+def almost_everywhere_zero(n_str, k):
+    if not n_str or n_str == '0':
+        return 0
+    digits = [int(c) for c in n_str]
+    L = len(digits)
+    memo = {}
+    
+    def dp(pos, tight, started, cnt):
+        if pos == L:
+            return 1 if started and cnt == k else 0
+        key = (pos, tight, started, cnt)
+        if key in memo:
+            return memo[key]
+        ans = 0
+        up = digits[pos] if tight else 9
+        for d in range(up + 1):
+            new_tight = 1 if tight and d == up else 0
+            if started == 0 and d == 0:
+                new_started = 0
+                new_cnt = cnt
+            else:
+                new_started = 1
+                new_cnt = cnt + (1 if d > 0 else 0)
+            if new_cnt > k:
+                continue
+            ans += dp(pos + 1, new_tight, new_started, new_cnt)
+        memo[key] = ans
+        return ans
+    
+    return dp(0, 1, 0, 0)
+
+n = input().strip()
+k = int(input().strip())
+print(almost_everywhere_zero(n, k))
+```
+completed 51/150, Solved: False, number of success = 12/51, acc = 23.53
+completed 52/150, Solved: False, number of success = 12/52, acc = 23.08
+```python
+def is_polydivisible(n, b):
+    chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+    digit_value = {c: i for i, c in enumerate(chars)}
+    
+    def to_dec(prefix):
+        val = 0
+        for c in prefix:
+            d = digit_value[c]
+            val = val * b + d
+        return val
+    
+    length = len(n)
+    for k in range(1, length + 1):
+        prefix_num = to_dec(n[:k])
+        if prefix_num % k != 0:
+            return False
+    return True
+
+s = input().strip()
+b = int(input().strip())
+print(is_polydivisible(s, b))
+```
+completed 53/150, Solved: False, number of success = 12/53, acc = 22.64
+```python
+import sys
+
+def sum_divisors(n):
+    res = 0
+    i = 1
+    while i <= n:
+        q = n // i
+        r = n // q
+        res += (r - i + 1) * q
+        i = r + 1
+    return res
+
+input_data = sys.stdin.read().strip()
+n = int(input_data)
+print(sum_divisors(n))
+```
+completed 54/150, Solved: False, number of success = 12/54, acc = 22.22
+```python
+import sys
+from collections import Counter
+
+data = sys.stdin.read().splitlines()
+s1 = data[0]
+s2 = data[1]
+
+c1 = Counter(c for c in s1 if c.islower())
+c2 = Counter(c for c in s2 if c.islower())
+
+parts = []
+for let in 'abcdefghijklmnopqrstuvwxyz':
+    cnt1 = c1[let]
+    cnt2 = c2[let]
+    mx = max(cnt1, cnt2)
+    if mx > 1:
+        if cnt1 > cnt2:
+            pref = '1:'
+        elif cnt2 > cnt1:
+            pref = '2:'
+        else:
+            pref = '=:'
+        sub = pref + let * mx
+        parts.append((-mx, sub))
+
+parts.sort()
+result = '/'.join(t[1] for t in parts)
+print(result)
+```
+completed 55/150, Solved: True, number of success = 13/55, acc = 23.64
+```python
+import sys
+
+def validate_and_parse(num_str):
+    if not num_str:
+        return None
+    sign = 1
+    digits_str = num_str
+    if num_str.startswith('-'):
+        sign = -1
+        digits_str = num_str[1:]
+    if not digits_str or not all(c.isdigit() for c in digits_str):
+        return None
+    if len(digits_str) > 1 and digits_str[0] == '0':
+        return None
+    val = int(digits_str)
+    if abs(val) > 1000000:
+        return None
+    return sign * val
+
+def parse_pos(i, s):
+    n = len(s)
+    num_str = ''
+    digit_start = i
+    if i < n and s[i] == '-':
+        num_str = '-'
+        i += 1
+        digit_start = i
+    while i < n and s[i] in '0123456789?':
+        num_str += s[i]
+        i += 1
+    if i == digit_start:
+        return None
+    return i, num_str
+
+def solve(s):
+    n = len(s)
+    i = 0
+    # parse A
+    res = parse_pos(i, s)
+    if res is None:
+        return -1
+    i, A_str = res
+    if i >= n or s[i] not in '+-*':
+        return -1
+    op = s[i]
+    i += 1
+    # parse B
+    res = parse_pos(i, s)
+    if res is None:
+        return -1
+    i, B_str = res
+    if i >= n or s[i] != '=':
+        return -1
+    i += 1
+    # parse C
+    res = parse_pos(i, s)
+    if res is None:
+        return -1
+    i, C_str = res
+    if i != n:
+        return -1
+    forbidden = {c for c in s if c.isdigit()}
+    num_q = s.count('?')
+    if num_q == 0:
+        return -1
+    possible_ds = [d for d in range(10) if str(d) not in forbidden]
+    for d in possible_ds:
+        a_str = A_str.replace('?', str(d))
+        b_str = B_str.replace('?', str(d))
+        c_str = C_str.replace('?', str(d))
+        a_val = validate_and_parse(a_str)
+        if a_val is None:
+            continue
+        b_val = validate_and_parse(b_str)
+        if b_val is None:
+            continue
+        c_val = validate_and_parse(c_str)
+        if c_val is None:
+            continue
+        if op == '+':
+            left = a_val + b_val
+        elif op == '-':
+            left = a_val - b_val
+        elif op == '*':
+            left = a_val * b_val
+        else:
+            continue
+        if left == c_val:
+            return d
+    return -1
+
+s = sys.stdin.read().strip()
+ans = solve(s)
+print(ans)
+```
+completed 56/150, Solved: False, number of success = 13/56, acc = 23.21
+```python
+import sys
+
+# Read input
+s = sys.stdin.read().strip().lower()
+s = s.replace('-', ' ')
+words = s.split()
+
+# Dictionaries
+num_dict = {
+    'zero': 0, 'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
+    'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10,
+    'eleven': 11, 'twelve': 12, 'thirteen': 13, 'fourteen': 14,
+    'fifteen': 15, 'sixteen': 16, 'seventeen': 17, 'eighteen': 18, 'nineteen': 19,
+    'twenty': 20, 'thirty': 30, 'forty': 40, 'fifty': 50,
+    'sixty': 60, 'seventy': 70, 'eighty': 80, 'ninety': 90
+}
+
+group_multipliers = {
+    'thousand': 1000,
+    'million': 1000000
+}
+
+# Parse
+result = 0
+current = 0
+for word in words:
+    if word == 'and' or word == '':
+        continue
+    if word in num_dict:
+        current += num_dict[word]
+    elif word == 'hundred':
+        current *= 100
+    elif word in group_multipliers:
+        result += current * group_multipliers[word]
+        current = 0
+
+result += current
+print(result)
+```
+completed 57/150, Solved: False, number of success = 13/57, acc = 22.81
+```python
+def factor(n):
+    if n == 1:
+        return {}
+    exponents = {}
+    # Handle 2 separately
+    while n % 2 == 0:
+        exponents[2] = exponents.get(2, 0) + 1
+        n //= 2
+    # Odd factors
+    d = 3
+    while d * d <= n:
+        while n % d == 0:
+            exponents[d] = exponents.get(d, 0) + 1
+            n //= d
+        d += 2
+    if n > 1:
+        exponents[n] = 1
+    return exponents
+
+def binom(m, r):
+    if r > m - r:
+        r = m - r
+    res = 1
+    for i in range(1, r + 1):
+        res = res * (m - r + i) // i
+    return res
+
+n = int(input().strip())
+k = int(input().strip())
+exps = factor(n)
+res = 1
+for e in exps.values():
+    m = e + k - 1
+    r = min(e, k - 1)
+    res *= binom(m, r)
+print(res)
+```
+completed 58/150, Solved: False, number of success = 13/58, acc = 22.41
+```python
+import ast
+import sys
+
+def same_structure_as(a, b):
+    if isinstance(a, list) != isinstance(b, list):
+        return False
+    if not isinstance(a, list):
+        return True
+    if len(a) != len(b):
+        return False
+    for i in range(len(a)):
+        if not same_structure_as(a[i], b[i]):
+            return False
+    return True
+
+# Read input
+a_str = sys.stdin.readline().strip()
+b_str = sys.stdin.readline().strip()
+
+# Parse strings to lists
+a = ast.literal_eval(a_str)
+b = ast.literal_eval(b_str)
+
+# Call function and print result
+print(same_structure_as(a, b))
+```
+completed 59/150, Solved: False, number of success = 13/59, acc = 22.03
+```python
+import sys
+from math import gcd
+
+def spinningRings(innerMax, outerMax):
+    n = innerMax + 1
+    m = outerMax + 1
+    d = gcd(n, m)
+    lcmv = n * (m // d)
+    ans = lcmv
+    s = min(n, m)
+
+    def update(tt):
+        nonlocal ans
+        if 0 < tt < ans:
+            ans = tt
+
+    # Choose construction with smaller N
+    if n <= m:
+        # Use outer: N = n, M = m, is_inner = False
+        N = n
+        M = m
+        is_inner = False
+    else:
+        # Use inner: N = m, M = n, is_inner = True
+        N = m
+        M = n
+        is_inner = True
+
+    p = 0
+    while p * M < ans and p < N * 2 + 10:
+        if is_inner:
+            multiplier = p + 1
+            c = (multiplier * n % N)
+        else:
+            pm_mod = (p * M % N)
+            c = (N - pm_mod) % N
+        gs = gcd(2, N)
+        if c % gs == 0:
+            found = False
+            if gs == 1:
+                inv = pow(2, -1, N)
+                bb = (c * inv) % N
+                if 1 <= bb < s:
+                    if is_inner:
+                        tt = p * M + M - bb
+                    else:
+                        tt = p * M + bb
+                    update(tt)
+                    found = True
+            else:
+                nh = N // 2
+                ch = c // 2
+                b1 = ch % nh
+                for bb in [b1, b1 + nh]:
+                    if 1 <= bb < s:
+                        if is_inner:
+                            tt = p * M + M - bb
+                        else:
+                            tt = p * M + bb
+                        update(tt)
+                        found = True
+                        break
+            if found:
+                break
+        p += 1
+    return ans
+
+innerMax = int(input())
+outerMax = int(input())
+print(spinningRings(innerMax, outerMax))
+```
+completed 60/150, Solved: False, number of success = 13/60, acc = 21.67
+```python
+import math
+import sys
+
+def to_digit_char(d: int) -> str:
+    if 0 <= d <= 9:
+        return str(d)
+    elif 10 <= d <= 35:
+        return chr(ord('A') + d - 10)
+    else:
+        raise ValueError(f"Invalid digit: {d}")
+
+def converter(num: float, decimals: int = 0, base: float = math.pi) -> str:
+    sign = ''
+    if num < 0:
+        sign = '-'
+        num = -num
+    if num == 0:
+        return '0'
+
+    # Find highest power and initial scale
+    power = 0
+    scale = 1.0
+    while scale * base <= num + 1e-9:
+        next_scale = scale * base
+        if math.isinf(next_scale):
+            break
+        scale = next_scale
+        power += 1
+
+    # Integer part digits (MSD first)
+    current_num = num
+    int_digits = []
+    for i in range(power, -1, -1):
+        digit = math.floor(current_num / scale)
+        int_digits.append(int(digit))
+        current_num -= digit * scale
+        if i > 0:
+            scale /= base
+
+    remainder = current_num
+
+    # Fractional part digits
+    frac_digits = []
+    r = remainder
+    for _ in range(decimals):
+        r *= base
+        digit = math.floor(r)
+        frac_digits.append(int(digit))
+        r -= digit
+
+    # Build integer part string
+    int_str = ''.join(to_digit_char(d) for d in int_digits).lstrip('0')
+    if not int_str:
+        int_str = '0'
+
+    # Build result
+    if decimals == 0:
+        result = int_str
+    else:
+        frac_str = ''.join(to_digit_char(d) for d in frac_digits)
+        result = int_str + '.' + frac_str
+
+    return sign + result
+
+# Read input and output
+data = sys.stdin.read().strip()
+num = float(data)
+print(converter(num))
+```
+completed 61/150, Solved: False, number of success = 13/61, acc = 21.31
+```python
+from collections import defaultdict
+
+def parse_terms(expr):
+    terms = []
+    i = 0
+    n = len(expr)
+    while i < n:
+        # determine sign
+        if i == 0:
+            if expr[i] in '+-':
+                cursign = 1 if expr[i] == '+' else -1
+                i += 1
+            else:
+                cursign = 1
+        else:
+            if expr[i] not in '+-':
+                i = n
+                continue
+            cursign = 1 if expr[i] == '+' else -1
+            i += 1
+        # coefficient
+        coeff_str = ''
+        while i < n and expr[i].isdigit():
+            coeff_str += expr[i]
+            i += 1
+        coeff = int(coeff_str) if coeff_str else 1
+        # variables
+        var_list = []
+        while i < n and expr[i].islower():
+            var_list.append(expr[i])
+            i += 1
+        key = ''.join(sorted(var_list))
+        terms.append((key, cursign * coeff))
+    return terms
+
+def simplify(expr):
+    if not expr:
+        return ''
+    terms = parse_terms(expr)
+    coeff_dict = defaultdict(int)
+    for key, c in terms:
+        coeff_dict[key] += c
+    monoms = [(k, coeff_dict[k]) for k in coeff_dict if coeff_dict[k] != 0]
+    monoms.sort(key=lambda p: (len(p[0]), p[0]))
+    terms_str = []
+    for key, coeff in monoms:
+        abs_c = abs(coeff)
+        cstr = str(abs_c) if (abs_c != 1 or not key) else ''
+        vstr = key
+        monom = cstr + vstr
+        if coeff > 0:
+            terms_str.append('+' + monom)
+        else:
+            terms_str.append('-' + monom)
+    if terms_str and terms_str[0].startswith('+'):
+        terms_str[0] = terms_str[0][1:]
+    return ''.join(terms_str)
+
+expr = input().strip()
+print(simplify(expr))
+```
+completed 62/150, Solved: True, number of success = 14/62, acc = 22.58
+```python
+import sys
+import ast
+
+def solution(text, markers):
+    lines = text.splitlines()
+    cleaned_lines = []
+    for line in lines:
+        min_pos = len(line)
+        for m in markers:
+            pos = line.find(m)
+            if pos != -1:
+                min_pos = min(min_pos, pos)
+        if min_pos < len(line):
+            cleaned = line[:min_pos].rstrip()
+        else:
+            cleaned = line.rstrip()
+        cleaned_lines.append(cleaned)
+    return '\n'.join(cleaned_lines)
+
+# Read from stdin
+data = sys.stdin.read().splitlines()
+text_lines = data[:-1]
+text = '\n'.join(text_lines)
+markers_str = data[-1]
+markers = ast.literal_eval(markers_str)
+
+result = solution(text, markers)
+print(result)
+```
+completed 63/150, Solved: False, number of success = 14/63, acc = 22.22
+```python
+import sys
+import math
+
+data = sys.stdin.read().strip()
+if data.startswith('[') and data.endswith(']'):
+    nums_str = data[1:-1].split(',')
+    nums = [int(x.strip()) for x in nums_str if x.strip()]
+else:
+    nums = []
+
+if not nums:
+    print(-1)
+    sys.exit(0)
+
+nums = sorted(set(x for x in nums if x > 0))
+if not nums:
+    print(-1)
+    sys.exit(0)
+
+g = nums[0]
+for x in nums[1:]:
+    g = math.gcd(g, x)
+
+if g > 1:
+    print(-1)
+    sys.exit(0)
+
+a = nums[0]
+if a == 1:
+    print(0)
+    sys.exit(0)
+
+MAX = 2000000
+reachable = [False] * (MAX + 1)
+reachable[0] = True
+
+for coin in nums:
+    for j in range(coin, MAX + 1):
+        if reachable[j - coin]:
+            reachable[j] = True
+
+candidate = -1
+for i in range(1, MAX + 1):
+    if not reachable[i]:
+        candidate = i
+
+if candidate == -1:
+    print(0)
+else:
+    print(candidate)
+```
+completed 64/150, Solved: False, number of success = 14/64, acc = 21.88
+```python
+def next_smaller(n):
+    s = list(str(n))
+    # Find the largest i such that s[i] > s[i+1]
+    i = len(s) - 2
+    while i >= 0:
+        if s[i] > s[i + 1]:
+            break
+        i -= 1
+    else:
+        # No such i, it's the smallest permutation
+        return -1
+    
+    # Find the largest j > i such that s[j] < s[i]
+    j = len(s) - 1
+    while j > i:
+        if s[j] < s[i]:
+            break
+        j -= 1
+    
+    # Swap s[i] and s[j]
+    s[i], s[j] = s[j], s[i]
+    
+    # Reverse the suffix from i+1 to end
+    left = i + 1
+    right = len(s) - 1
+    while left < right:
+        s[left], s[right] = s[right], s[left]
+        left += 1
+        right -= 1
+    
+    # Check for leading zero
+    if s[0] == '0':
+        return -1
+    
+    # Return the integer
+    return int(''.join(s))
+
+# Read input and print output
+n = int(input().strip())
+print(next_smaller(n))
+```
+completed 65/150, Solved: False, number of success = 14/65, acc = 21.54
+completed 66/150, Solved: False, number of success = 14/66, acc = 21.21
+```python
+import sys
+
+def main():
+    input_str = sys.stdin.read().strip()
+    x = int(input_str)
+    if x == 0:
+        print(1)
+        return
+    total = 1
+    inc = 9
+    dec_raw = 10
+    for k in range(1, x + 1):
+        contrib = inc + dec_raw - 10
+        total += contrib
+        next_k = k + 1
+        inc = inc * (8 + next_k) // next_k
+        dec_raw = dec_raw * (9 + next_k) // next_k
+    print(total)
+
+if __name__ == "__main__":
+    main()
+```
+completed 67/150, Solved: False, number of success = 14/67, acc = 20.9
+```python
+import sys
+import math
+
+def is_square(x):
+    if x < 0:
+        return False
+    s = int(math.sqrt(x))
+    return s * s == x
+
+def sum_of_squares(n):
+    # Check if n is a perfect square (1 square)
+    if is_square(n):
+        return 1
+    
+    # Check if n is sum of two perfect squares
+    s = int(math.sqrt(n)) + 1
+    for i in range(1, s):
+        if is_square(n - i * i):
+            return 2
+    
+    # Check if n can be expressed as sum of three squares
+    # Using Legendre's three-square theorem
+    m = n
+    while m % 4 == 0:
+        m //= 4
+    if m % 8 == 7:
+        return 4
+    else:
+        return 3
+
+# Read input
+input_data = sys.stdin.read().strip()
+n = int(input_data)
+print(sum_of_squares(n))
+```
+completed 68/150, Solved: False, number of success = 14/68, acc = 20.59
+```python
+import sys
+from math import gcd
+from functools import reduce
+
+input = sys.stdin.read
+data = input().strip()
+
+if data == '[]':
+    print(0)
+else:
+    nums = [int(x.strip()) for x in data[1:-1].split(',')]
+    if nums:
+        g = reduce(gcd, nums)
+        print(len(nums) * g)
+    else:
+        print(0)
+```
+completed 69/150, Solved: False, number of success = 14/69, acc = 20.29
+```python
+n = int(input())
+
+dp = [0] * (n + 1)
+dp[0] = 1
+
+for i in range(1, n + 1):
+    for j in range(i, n + 1):
+        dp[j] += dp[j - i]
+
+print(dp[n])
+```
+completed 70/150, Solved: False, number of success = 14/70, acc = 20.0
+```python
+def next_bigger(n):
+    s = list(str(n))
+    i = len(s) - 2
+    while i >= 0 and s[i] >= s[i + 1]:
+        i -= 1
+    if i < 0:
+        return -1
+    j = len(s) - 1
+    while s[j] <= s[i]:
+        j -= 1
+    s[i], s[j] = s[j], s[i]
+    s[i + 1:] = s[i + 1:][::-1]
+    return int(''.join(s))
+
+n = int(input().strip())
+print(next_bigger(n))
+```
+completed 71/150, Solved: False, number of success = 14/71, acc = 19.72
+completed 72/150, Solved: False, number of success = 14/72, acc = 19.44
+```python
+import sys
+
+data = sys.stdin.read().strip()
+n = int(data)
+
+branches = ["0", "1", "5", "6"]
+greens = []
+k = 1
+
+while len(greens) < n:
+    # Process current level k
+    new_g = []
+    for s in branches:
+        numstr = s.lstrip('0')
+        if numstr and len(numstr) == k:
+            new_g.append(int(numstr))
+    new_g.sort()
+    greens.extend(new_g)
+
+    if len(greens) >= n:
+        break
+
+    # Extend to next level k+1
+    new_branches = []
+    d = k
+    pow10d = 10 ** d
+    pow10dp1 = pow10d * 10
+    for s in branches:
+        a = int(s)
+        a2_mod = pow(a, 2, pow10dp1)
+        m = a2_mod // pow10d
+        target = (-m) % 10
+        c = (2 * a - 1) % 10
+        for x in range(10):
+            if (x * c) % 10 == target:
+                new_s = str(x) + s
+                new_branches.append(new_s)
+                break
+    branches = new_branches
+    k += 1
+
+print(str(greens[n - 1]))
+```
+completed 73/150, Solved: False, number of success = 14/73, acc = 19.18
+```python
+def countSubsequences(needle, haystack):
+    MOD = 100000000
+    m = len(needle)
+    if m == 0:
+        return 1
+    dp = [0] * (m + 1)
+    dp[0] = 1
+    for char in haystack:
+        for j in range(m, 0, -1):
+            if char == needle[j - 1]:
+                dp[j] = (dp[j] + dp[j - 1]) % MOD
+    return dp[m]
+
+t = int(input())
+for _ in range(t):
+    needle = input()
+    haystack = input()
+    ans = countSubsequences(needle, haystack)
+    print(ans)
+```
+completed 74/150, Solved: False, number of success = 14/74, acc = 18.92
+completed 75/150, Solved: False, number of success = 14/75, acc = 18.67
+completed 76/150, Solved: False, number of success = 14/76, acc = 18.42
+completed 77/150, Solved: False, number of success = 14/77, acc = 18.18
+```python
+import ast
+
+def tcp_fsm(events):
+    fsm = {
+        "CLOSED": {
+            "APP_PASSIVE_OPEN": "LISTEN",
+            "APP_ACTIVE_OPEN": "SYN_SENT"
+        },
+        "LISTEN": {
+            "RCV_SYN": "SYN_RCVD",
+            "APP_SEND": "SYN_SENT",
+            "APP_CLOSE": "CLOSED"
+        },
+        "SYN_RCVD": {
+            "APP_CLOSE": "FIN_WAIT_1",
+            "RCV_ACK": "ESTABLISHED"
+        },
+        "SYN_SENT": {
+            "RCV_SYN": "SYN_RCVD",
+            "RCV_SYN_ACK": "ESTABLISHED",
+            "APP_CLOSE": "CLOSED"
+        },
+        "ESTABLISHED": {
+            "APP_CLOSE": "FIN_WAIT_1",
+            "RCV_FIN": "CLOSE_WAIT"
+        },
+        "FIN_WAIT_1": {
+            "RCV_FIN": "CLOSING",
+            "RCV_FIN_ACK": "TIME_WAIT",
+            "RCV_ACK": "FIN_WAIT_2"
+        },
+        "CLOSING": {
+            "RCV_ACK": "TIME_WAIT"
+        },
+        "FIN_WAIT_2": {
+            "RCV_FIN": "TIME_WAIT"
+        },
+        "TIME_WAIT": {
+            "APP_TIMEOUT": "CLOSED"
+        },
+        "CLOSE_WAIT": {
+            "APP_CLOSE": "LAST_ACK"
+        },
+        "LAST_ACK": {
+            "RCV_ACK": "CLOSED"
+        }
+    }
+    state = "CLOSED"
+    for event in events:
+        if state not in fsm or event not in fsm[state]:
+            return "ERROR"
+        state = fsm[state][event]
+    return state
+
+events = ast.literal_eval(input())
+print(tcp_fsm(events))
+```
+completed 78/150, Solved: True, number of success = 15/78, acc = 19.23
+completed 79/150, Solved: False, number of success = 15/79, acc = 18.99
+completed 80/150, Solved: True, number of success = 16/80, acc = 20.0
+completed 81/150, Solved: False, number of success = 16/81, acc = 19.75
+```python
+def count_change(amount, coins):
+    if amount == 0:
+        return 1
+    dp = [0] * (amount + 1)
+    dp[0] = 1
+    for coin in coins:
+        for i in range(coin, amount + 1):
+            dp[i] += dp[i - coin]
+    return dp[amount]
+
+# Read input
+amount = int(input().strip())
+coins_str = input().strip()
+
+# Parse coins
+if coins_str.startswith('[') and coins_str.endswith(']'):
+    coins_str = coins_str[1:-1]
+coins = [int(x.strip()) for x in coins_str.split(',') if x.strip()]
+
+# Compute and print
+result = count_change(amount, coins)
+print(result)
+```
+completed 82/150, Solved: False, number of success = 16/82, acc = 19.51
+```python
+def proper_fractions(n):
+    if n < 2:
+        return 0
+    result = n
+    if n % 2 == 0:
+        result -= result // 2
+        while n % 2 == 0:
+            n //= 2
+    p = 3
+    while p * p <= n:
+        if n % p == 0:
+            result -= result // p
+            while n % p == 0:
+                n //= p
+        p += 2
+    if n > 1:
+        result -= result // n
+    return result
+
+n = int(input())
+print(proper_fractions(n))
+```
+completed 83/150, Solved: False, number of success = 16/83, acc = 19.28
+```python
+import sys
+
+sys.setrecursionlimit(10**6)
+
+MOD = 10**9 + 7
+
+class SegTree:
+    def __init__(self, size):
+        self.n = size + 1
+        self.tree = [0] * (4 * self.n)
+
+    def _update(self, node, start, end, idx, val):
+        if start == end:
+            self.tree[node] = (self.tree[node] + val) % MOD
+            return
+        mid = (start + end) // 2
+        if idx <= mid:
+            self._update(2 * node, start, mid, idx, val)
+        else:
+            self._update(2 * node + 1, mid + 1, end, idx, val)
+        self.tree[node] = (self.tree[2 * node] + self.tree[2 * node + 1]) % MOD
+
+    def update(self, idx, val):
+        if val == 0:
+            return
+        self._update(1, 0, self.n - 1, idx, val)
+
+    def _query(self, node, start, end, l, r):
+        if r < start or end < l:
+            return 0
+        if l <= start and end <= r:
+            return self.tree[node]
+        mid = (start + end) // 2
+        left = self._query(2 * node, start, mid, l, r)
+        right = self._query(2 * node + 1, mid + 1, end, l, r)
+        return (left + right) % MOD
+
+    def query(self, l, r):
+        if l > r:
+            return 0
+        return self._query(1, 0, self.n - 1, l, r)
+
+def get_hmin(suffix, target, m):
+    lim = m - 1 - target
+    lo = 0
+    hi = target
+    ans = target + 1
+    while lo <= hi:
+        mid = (lo + hi) // 2
+        if suffix[mid] <= lim:
+            ans = mid
+            hi = mid - 1
+        else:
+            lo = mid + 1
+    return ans
+
+data = sys.stdin.read().splitlines()
+line = 0
+n, m = map(int, data[line].split())
+line += 1
+grid = data[line:line + n]
+
+if n == 0 or m == 0:
+    print(0)
+    sys.exit(0)
+
+# 0-based: rows 0 to n-1, cols 0 to m-1
+suffix_row = [[0] * m for _ in range(n)]
+for r in range(n):
+    if m > 0:
+        suffix_row[r][m - 1] = 0
+    for c in range(m - 2, -1, -1):
+        suffix_row[r][c] = suffix_row[r][c + 1] + (1 if grid[r][c + 1] == 'R' else 0)
+
+suffix_col = [[0] * n for _ in range(m)]
+for c in range(m):
+    if n > 0:
+        suffix_col[c][n - 1] = 0
+    for r in range(n - 2, -1, -1):
+        suffix_col[c][r] = suffix_col[c][r + 1] + (1 if grid[r + 1][c] == 'R' else 0)
+
+hmin = [[0] * m for _ in range(n)]
+for r in range(n):
+    for target in range(m):
+        hmin[r][target] = get_hmin(suffix_row[r], target, m)
+
+segtrees = [SegTree(n) for _ in range(m)]
+
+if n == 1:
+    if suffix_row[0][0] <= 0:
+        print(1)
+    else:
+        print(0)
+else:
+    # init row 0
+    max_exit = m - 1 - suffix_row[0][0]
+    for k in range(max(0, max_exit + 1)):
+        snew = suffix_col[k][0]
+        segtrees[k].update(snew, 1)
+
+    for rr in range(n - 1):
+        limit = n - 1 - (rr + 1)
+        sum_ok = [segtrees[c].query(0, limit) for c in range(m)]
+        pref = [0] * (m + 1)
+        for c in range(1, m + 1):
+            pref[c] = (pref[c - 1] + sum_ok[c - 1]) % MOD
+        for k in range(m):
+            lminn = hmin[rr + 1][k]
+            if lminn > k:
+                continue
+            sum_end = (pref[k + 1] - pref[lminn] + MOD) % MOD
+            snew = suffix_col[k][rr + 1]
+            segtrees[k].update(snew, sum_end)
+
+    # now ans for last row n-1
+    ans = 0
+    for L in range(m):
+        ways = segtrees[L].query(0, 0)
+        if suffix_row[n - 1][L] <= 0:
+            ans = (ans + ways) % MOD
+    print(ans)
+```
+
+## Explanation
+
+The solution uses dynamic programming with segment trees to count legal paths while enforcing both horizontal and vertical pushing constraints efficiently.
+
+**Precomputations:**
+- `suffix_row[r][c]`: Number of rocks in row `r` from column `c+1` to `m-1`.
+- `suffix_col[c][r]`: Number of rocks in column `c` from row `r+1` to `n-1`.
+- `hmin[r][k]`: Minimum entry column `L` ≤ `k` such that traversing from `L` to `k` in row `r` is legal, i.e., `m-1 - k ≥ suffix_row[r][L]`, computed via binary search per target `k`.
+
+**Segment Trees:**
+- One per column `c` (0 to `m-1`), indexing `s = 0` to `n`, storing ways to exit a row at column `c` with ongoing vertical run having `s` rocks below start row `T`.
+
+**Initialization (Row 0):**
+- Entry at column 0.
+- Compute `max_exit = m-1 - suffix_row[0][0]`.
+- For each valid exit `k ≤ max_exit`, start new vertical run at `T=0`, `s = suffix_col[k][0]`, add 1 way.
+
+**Transitions (Rows 0 to n-2 to next row):**
+- Compute `limit = n-1 - (rr+1)` for ending runs at row `rr+1`.
+- For each column `c`, `sum_ok[c]` = sum of ways with `s ≤ limit` (query segment tree).
+- Prefix sums of `sum_ok` enable O(1) range sums.
+- For each target exit `k` in row `rr+1`:
+  - `sum_end` = sum of `sum_ok[c]` for `c` from `hmin[rr+1][k]` to `k-1` (ending previous runs).
+  - Add `sum_end` to segment tree `k` at `s_new = suffix_col[k][rr+1]` (new runs starting at `rr+1`).
+- Continues are implicitly carried (previous distributions remain).
+
+**Final Answer (Row n-1):**
+- For each entry `L`, `ways =` ways with `s ≤ 0` (ending runs at row `n-1`).
+- Add `ways` if `suffix_row[n-1][L] ≤ 0` (horizontal to column `m-1` legal).
+
+**Special Case n=1:**
+- Directly check if `suffix_row[0][0] ≤ 0`.
+
+This ensures all horizontal and vertical segment conditions are satisfied, with time O(n m log n) via segment trees and prefix sums.
+
+</explanation_end>
+completed 84/150, Solved: False, number of success = 16/84, acc = 19.05
+```python
+def parse_frame(frame):
+    frame_rolls = []
+    i = 0
+    while i < len(frame):
+        ch = frame[i]
+        if ch == 'X':
+            frame_rolls.append(10)
+            i += 1
+        elif ch == '-':
+            frame_rolls.append(0)
+            i += 1
+        elif ch.isdigit():
+            val = int(ch)
+            frame_rolls.append(val)
+            i += 1
+            if i < len(frame) and frame[i] == '/':
+                frame_rolls.append(10 - val)
+                i += 1
+        else:
+            i += 1
+    return frame_rolls
+
+def bowlingScore(frames_str):
+    frames = frames_str.split()
+    rolls = []
+    for frame in frames:
+        rolls.extend(parse_frame(frame))
+    total = 0
+    roll_idx = 0
+    for frame_num in range(10):
+        if frame_num < 9:
+            if rolls[roll_idx] == 10:
+                total += 10 + rolls[roll_idx + 1] + rolls[roll_idx + 2]
+                roll_idx += 1
+            elif roll_idx + 1 < len(rolls) and rolls[roll_idx] + rolls[roll_idx + 1] == 10:
+                total += 10 + rolls[roll_idx + 2]
+                roll_idx += 2
+            else:
+                total += rolls[roll_idx]
+                if roll_idx + 1 < len(rolls):
+                    total += rolls[roll_idx + 1]
+                roll_idx += 2
+        else:
+            total += sum(rolls[roll_idx:])
+    return total
+
+if __name__ == "__main__":
+    s = input().strip()
+    print(bowlingScore(s))
+```
+completed 85/150, Solved: False, number of success = 16/85, acc = 18.82
+completed 86/150, Solved: True, number of success = 17/86, acc = 19.77
+completed 87/150, Solved: False, number of success = 17/87, acc = 19.54
+completed 88/150, Solved: True, number of success = 18/88, acc = 20.45
+completed 89/150, Solved: False, number of success = 18/89, acc = 20.22
+```python
+from fractions import Fraction
+
+def expand(x, digits):
+    s = Fraction(1)
+    num_abs = abs(s.numerator)
+    if len(str(num_abs)) >= digits:
+        return [int(s.numerator), int(s.denominator)]
+    term = Fraction(1)
+    n = 1
+    fx = Fraction(x)
+    max_iter = 1000000  # safety to prevent infinite loops
+    while n < max_iter:
+        term *= fx / n
+        s += term
+        num_abs = abs(s.numerator)
+        if len(str(num_abs)) >= digits:
+            break
+        n += 1
+    return [int(s.numerator), int(s.denominator)]
+
+x = float(input().strip())
+digits = int(input().strip())
+res = expand(x, digits)
+print(f"[{res[0]}, {res[1]}]")
+```
+completed 90/150, Solved: False, number of success = 18/90, acc = 20.0
+```python
+import sys
+
+def L(n):
+    if n == 0:
+        return 0
+    s = str(n)
+    length = len(s)
+    total = 0
+    for d in range(1, length):
+        total += 9 * (10 ** (d - 1)) * d
+    first = 10 ** (length - 1)
+    total += (n - first + 1) * length
+    return total
+
+def Q(n):
+    if n == 0:
+        return 0
+    s = str(n)
+    length = len(s)
+    total = 0
+    for d in range(1, length):
+        A = 10 ** (d - 1)
+        B = 10 ** d - 1
+        count = B - A + 1
+        sumi = count * (A + B) // 2
+        total += sumi * d
+    A = 10 ** (length - 1)
+    B = n
+    count = B - A + 1
+    sumi = count * (A + B) // 2
+    total += sumi * length
+    return total
+
+def S(m):
+    if m == 0:
+        return 0
+    return (m + 1) * L(m) - Q(m)
+
+def find_block(n):
+    low = 1
+    high = 10**10
+    while low < high:
+        mid = (low + high) // 2
+        if S(mid) >= n:
+            high = mid
+        else:
+            low = mid + 1
+    return low
+
+def find_number(pos, maxk):
+    low = 1
+    high = maxk
+    while low < high:
+        mid = (low + high) // 2
+        if L(mid) >= pos:
+            high = mid
+        else:
+            low = mid + 1
+    return low
+
+input = sys.stdin.read
+data = input().strip()
+n = int(data)
+
+m = find_block(n)
+prev_S = S(m - 1)
+pos = n - prev_S
+
+k = find_number(pos, m)
+prev_L = L(k - 1)
+offset = pos - prev_L
+
+num_str = str(k)
+digit = int(num_str[offset - 1])
+
+print(digit)
+```
+completed 91/150, Solved: False, number of success = 18/91, acc = 19.78
+completed 92/150, Solved: False, number of success = 18/92, acc = 19.57
+completed 93/150, Solved: False, number of success = 18/93, acc = 19.35
+```python
+import sys
+from collections import Counter
+
+input = sys.stdin.read
+data = input().strip()
+
+if data.startswith('[') and data.endswith(']'):
+    data = data[1:-1]
+
+seq_str = [x.strip() for x in data.split(',') if x.strip()]
+sequence = [int(x) for x in seq_str]
+
+N = len(sequence)
+if N == 0:
+    print(0)
+    sys.exit(0)
+
+counts = Counter(sequence)
+l7 = counts[7]
+l8 = counts[8]
+l9 = counts[9]
+
+z7 = sequence[:l7]
+z8 = sequence[l7:l7 + l8]
+z9 = sequence[l7 + l8:]
+
+a = sum(1 for x in z7 if x == 8)
+b = sum(1 for x in z7 if x == 9)
+c = sum(1 for x in z8 if x == 7)
+d = sum(1 for x in z8 if x == 9)
+e = sum(1 for x in z9 if x == 7)
+f = sum(1 for x in z9 if x == 8)
+
+swaps = min(a, c) + min(b, e) + min(d, f) + 2 * abs(a - c)
+print(swaps)
+```
+completed 94/150, Solved: False, number of success = 18/94, acc = 19.15
+completed 95/150, Solved: False, number of success = 18/95, acc = 18.95
+completed 96/150, Solved: False, number of success = 18/96, acc = 18.75
+completed 97/150, Solved: False, number of success = 18/97, acc = 18.56
+completed 98/150, Solved: False, number of success = 18/98, acc = 18.37
+```python
+import re
+import sys
+
+def differentiate(poly, x_val):
+    poly = poly.replace(' ', '')
+    parts = re.split(r'([+-])', poly)
+    terms = []
+    if parts and parts[0] == '':
+        terms.append((parts[1], parts[2]))
+        i = 3
+    else:
+        terms.append(('+', parts[0]))
+        i = 1
+    while i < len(parts):
+        terms.append((parts[i], parts[i + 1]))
+        i += 2
+    der_value = 0
+    for sign, t in terms:
+        if 'x' not in t:
+            continue
+        x_pos = t.find('x')
+        left = t[:x_pos]
+        right = t[x_pos + 1:]
+        if right and right.startswith('^'):
+            power = int(right[1:])
+        else:
+            power = 1
+        if left == '':
+            coeff = 1
+        else:
+            coeff = int(left)
+        if sign == '-':
+            coeff *= -1
+        contrib = coeff * power * (x_val ** (power - 1))
+        der_value += contrib
+    return der_value
+
+poly = sys.stdin.readline().strip()
+x_val = int(sys.stdin.readline().strip())
+result = differentiate(poly, x_val)
+print(result)
+```
+completed 99/150, Solved: False, number of success = 18/99, acc = 18.18
+```python
+import sys
+
+def longest_palindrome(s):
+    if not s:
+        return ""
+    t = '^#' + '#'.join(s) + '#$'
+    P = [0] * len(t)
+    C = 0
+    R = 0
+    max_len = 0
+    max_center = 0
+    for i in range(1, len(t) - 1):
+        if i < R:
+            mirror = 2 * C - i
+            P[i] = min(R - i, P[mirror])
+        while t[i + (P[i] + 1)] == t[i - (P[i] + 1)]:
+            P[i] += 1
+        if i + P[i] > R:
+            C = i
+            R = i + P[i]
+        if P[i] > max_len:
+            max_len = P[i]
+            max_center = i
+    start = (max_center - max_len) // 2
+    return s[start:start + max_len]
+
+s = sys.stdin.read().strip()
+print(longest_palindrome(s))
+```
+completed 100/150, Solved: True, number of success = 19/100, acc = 19.0
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+
+A = [0] * (n + 1)
+for i in range(1, n + 1):
+    A[i] = int(data[index])
+    index += 1
+
+sorted_A = sorted(A[1:])
+
+target = {}
+for j in range(1, n + 1):
+    target[sorted_A[j - 1]] = j
+
+t = [0] * (n + 1)
+for i in range(1, n + 1):
+    t[i] = target[A[i]]
+
+visited = [False] * (n + 1)
+cycles = []
+
+for i in range(1, n + 1):
+    if not visited[i]:
+        cycle = []
+        x = i
+        while not visited[x]:
+            visited[x] = True
+            cycle.append(x)
+            x = t[x]
+        cycles.append(cycle)
+
+k = len(cycles)
+print(k)
+for cycle in cycles:
+    print(len(cycle), end=' ')
+    print(' '.join(map(str, cycle)))
+```
+completed 101/150, Solved: False, number of success = 19/101, acc = 18.81
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+m = int(data[index])
+index += 1
+
+party_costs = [[] for _ in range(m + 1)]
+init1 = 0
+
+for i in range(n):
+    p = int(data[index])
+    index += 1
+    c = int(data[index])
+    index += 1
+    if p == 1:
+        init1 += 1
+    else:
+        party_costs[p].append(c)
+
+# Sort costs for each party
+prefix = [[] for _ in range(m + 1)]
+for j in range(2, m + 1):
+    costs = party_costs[j]
+    costs.sort()
+    party_costs[j] = costs
+    pre = [0]
+    for c in costs:
+        pre.append(pre[-1] + c)
+    prefix[j] = pre
+
+ans = float('inf')
+
+for s in range(1, n + 1):
+    t = s - 1
+    need = max(0, s - init1)
+    mand_cost = 0
+    mand_cnt = 0
+    optional = []
+    for j in range(2, m + 1):
+        costs = party_costs[j]
+        sz = len(costs)
+        if sz == 0:
+            continue
+        excess = max(0, sz - t)
+        if excess > 0:
+            mand_cost += prefix[j][excess]
+            mand_cnt += excess
+        # optional: costs[excess:]
+        optional.extend(costs[excess:])
+    
+    if mand_cnt >= need:
+        ans = min(ans, mand_cost)
+    else:
+        add_need = need - mand_cnt
+        optional.sort()
+        add_cost = sum(optional[:add_need])
+        total_cost = mand_cost + add_cost
+        ans = min(ans, total_cost)
+
+print(int(ans))
+```
+completed 102/150, Solved: True, number of success = 20/102, acc = 19.61
+```python
+import sys
+from functools import lru_cache
+
+sys.setrecursionlimit(20000)
+
+@lru_cache(maxsize=None)
+def is_win(counts: tuple, f: int) -> bool:
+    for s in range(1, 101):
+        idx = s - 1
+        if counts[idx] == 0:
+            continue
+        if s == f and counts[idx] == 1:
+            continue
+        # can move
+        new_counts_list = list(counts)
+        new_counts_list[idx] -= 1
+        new_f = -1
+        if s > 1:
+            new_idx = s - 2
+            new_counts_list[new_idx] += 1
+            new_f = s - 1
+        new_counts = tuple(new_counts_list)
+        if not is_win(new_counts, new_f):
+            return True
+    return False
+
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    a = list(map(int, input().split()))
+    counts = [0] * 100
+    for x in a:
+        if 1 <= x <= 100:
+            counts[x - 1] += 1
+    counts_t = tuple(counts)
+    if is_win(counts_t, -1):
+        print("T")
+    else:
+        print("HL")
+```
+completed 103/150, Solved: True, number of success = 21/103, acc = 20.39
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+idx = 0
+n = int(data[idx]); idx += 1
+m = int(data[idx]); idx += 1
+
+lang_emps = [[] for _ in range(m + 1)]
+has_lang = False
+
+for i in range(n):
+    k = int(data[idx]); idx += 1
+    if k > 0:
+        has_lang = True
+    for _ in range(k):
+        a = int(data[idx]); idx += 1
+        lang_emps[a].append(i)
+
+# Union-Find
+parent = list(range(n))
+rank = [0] * n
+
+def find(x):
+    if parent[x] != x:
+        parent[x] = find(parent[x])
+    return parent[x]
+
+def unite(x, y):
+    px = find(x)
+    py = find(y)
+    if px == py:
+        return
+    if rank[px] < rank[py]:
+        parent[px] = py
+    elif rank[px] > rank[py]:
+        parent[py] = px
+    else:
+        parent[py] = px
+        rank[px] += 1
+
+for l in range(1, m + 1):
+    ems = lang_emps[l]
+    if len(ems) >= 2:
+        first = ems[0]
+        for j in range(1, len(ems)):
+            unite(first, ems[j])
+
+# Count components
+roots = set()
+for i in range(n):
+    roots.add(find(i))
+
+c = len(roots)
+cost = c - 1 if has_lang else c
+print(cost)
+```
+completed 104/150, Solved: True, number of success = 22/104, acc = 21.15
+```python
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+
+n = int(data[0])
+home = data[1]
+flights = data[2:2 + n]
+
+depart = 0
+arrive = 0
+
+for f in flights:
+    parts = f.split('->')
+    dep = parts[0]
+    arr = parts[1]
+    if dep == home:
+        depart += 1
+    if arr == home:
+        arrive += 1
+
+if depart == arrive:
+    print("home")
+else:
+    print("contest")
+```
+completed 105/150, Solved: True, number of success = 23/105, acc = 21.9
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+a = [int(data[index + i]) for i in range(n)]
+index += n
+q = int(data[index])
+index += 1
+
+events = [None] * (q + 1)
+for t in range(1, q + 1):
+    typ = int(data[index])
+    index += 1
+    if typ == 1:
+        p = int(data[index])
+        index += 1
+        x = int(data[index])
+        index += 1
+        events[t] = (1, p, x)
+    else:
+        x = int(data[index])
+        index += 1
+        events[t] = (2, x)
+
+last_time = [0] * (n + 1)
+last_val = [0] * (n + 1)
+for i in range(1, n + 1):
+    last_val[i] = a[i - 1]
+
+for t in range(1, q + 1):
+    if events[t] and events[t][0] == 1:
+        p = events[t][1]
+        x = events[t][2]
+        last_time[p] = t
+        last_val[p] = x
+
+sufmax = [0] * (q + 1)
+sufmax[q] = 0
+for t in range(q - 1, -1, -1):
+    sufmax[t] = sufmax[t + 1]
+    if events[t + 1] and events[t + 1][0] == 2:
+        x = events[t + 1][1]
+        sufmax[t] = max(sufmax[t], x)
+
+final = []
+for i in range(1, n + 1):
+    final.append(str(max(last_val[i], sufmax[last_time[i]])))
+
+print(' '.join(final))
+```
+completed 106/150, Solved: True, number of success = 24/106, acc = 22.64
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+a = data[1]
+b = data[2]
+
+num0 = 0
+num1 = 0
+num0_O = 0
+num1_O = 0
+
+for i in range(n):
+    if a[i] == '0':
+        num0 += 1
+        if b[i] == '1':
+            num0_O += 1
+    else:
+        num1 += 1
+        if b[i] == '1':
+            num1_O += 1
+
+ans = num0 * num1 - num0_O * num1_O
+print(ans)
+```
+completed 107/150, Solved: True, number of success = 25/107, acc = 23.36
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+h = [0] * (n + 1)
+for i in range(1, n + 1):
+    h[i] = int(data[index])
+    index += 1
+
+INF = 10**18 + 5
+
+left_cont = [0] * (n + 1)
+min_l = INF
+for i in range(1, n + 1):
+    l_towers = min_l + i if min_l < INF else INF
+    left_cont[i] = min(i, l_towers)
+    min_l = min(min_l, h[i] - i)
+
+right_cont = [0] * (n + 1)
+min_r = INF
+for i in range(n, 0, -1):
+    r_towers = min_r - i if min_r < INF else INF
+    right_cont[i] = min(n + 1 - i, r_towers)
+    min_r = min(min_r, h[i] + i)
+
+ans = 0
+for i in range(1, n + 1):
+    ti = min(h[i], left_cont[i], right_cont[i])
+    if ti > ans:
+        ans = ti
+
+print(ans)
+```
+completed 108/150, Solved: True, number of success = 26/108, acc = 24.07
+```python
+import sys
+
+sys.setrecursionlimit(10**6)
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+q = int(data[index])
+index += 1
+
+blocked_top = [False] * (n + 1)
+blocked_bot = [False] * (n + 1)
+
+m = n - 1
+tree = [[0, 0, 0, 0] for _ in range(4 * (n + 2))]
+
+def compute_trans(col):
+    t_open = not blocked_top[col]
+    b_open = not blocked_bot[col]
+    trans = [0] * 4
+    for inp in range(4):
+        has_t = (inp & 1) > 0
+        has_b = (inp & 2) > 0
+        arrive_t = has_t and t_open
+        arrive_b = has_b and b_open
+        cv = t_open and b_open
+        reach_t = arrive_t or (arrive_b and cv)
+        reach_b = arrive_b or (arrive_t and cv)
+        out = 0
+        if reach_t:
+            out |= 1
+        if reach_b:
+            out |= 2
+        trans[inp] = out
+    return trans
+
+def build(node, start, end):
+    if start == end:
+        tree[node] = compute_trans(start + 1)
+        return
+    mid = (start + end) // 2
+    build(2 * node, start, mid)
+    build(2 * node + 1, mid + 1, end)
+    left_trans = tree[2 * node]
+    right_trans = tree[2 * node + 1]
+    for i in range(4):
+        tree[node][i] = right_trans[left_trans[i]]
+
+def update(node, start, end, idx):
+    if start == end:
+        tree[node] = compute_trans(start + 1)
+        return
+    mid = (start + end) // 2
+    if idx <= mid:
+        update(2 * node, start, mid, idx)
+    else:
+        update(2 * node + 1, mid + 1, end, idx)
+    left_trans = tree[2 * node]
+    right_trans = tree[2 * node + 1]
+    for i in range(4):
+        tree[node][i] = right_trans[left_trans[i]]
+
+if m >= 1:
+    build(1, 1, m)
+
+answers = []
+for _ in range(q):
+    r = int(data[index])
+    index += 1
+    c = int(data[index])
+    index += 1
+    if r == 1:
+        blocked_top[c] = not blocked_top[c]
+    else:
+        blocked_bot[c] = not blocked_bot[c]
+    if c >= 2:
+        leaf_idx = c - 1
+        update(1, 1, m, leaf_idx)
+    b1_open = not blocked_bot[1]
+    init_mask = 1 | (2 if b1_open else 0)
+    final_mask = init_mask if m == 0 else tree[1][init_mask]
+    if (final_mask & 2) != 0:
+        answers.append("Yes")
+    else:
+        answers.append("No")
+
+print("\n".join(answers))
+```
+completed 109/150, Solved: True, number of success = 27/109, acc = 24.77
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+a = list(map(int, data[1:1 + n]))
+
+all_or = set()
+current = set()
+
+for i in range(n):
+    new_current = set()
+    new_current.add(a[i])
+    for x in current:
+        new_current.add(x | a[i])
+    current = new_current
+    for val in current:
+        all_or.add(val)
+
+print(len(all_or))
+```
+completed 110/150, Solved: True, number of success = 28/110, acc = 25.45
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+ms = [int(data[i]) for i in range(1, t + 1)]
+MOD = 10**9 + 7
+answers = []
+
+for m in ms:
+    k = m // 2
+    vec = [1, 0, 0, 0]
+    bits = bin(k)[2:]
+    for ch in bits:
+        bit = int(ch)
+        if bit == 0:
+            v0 = (vec[0] + 2 * vec[1] + vec[2]) % MOD
+            v1 = (2 * vec[1] + 2 * vec[2]) % MOD
+            v2 = (vec[1] + 2 * vec[2] + vec[3]) % MOD
+            v3 = (2 * vec[2] + 2 * vec[3]) % MOD
+        else:
+            v0 = (2 * vec[0] + 2 * vec[1]) % MOD
+            v1 = (vec[0] + 2 * vec[1] + vec[2]) % MOD
+            v2 = (2 * vec[1] + 2 * vec[2]) % MOD
+            v3 = (vec[1] + 2 * vec[2] + vec[3]) % MOD
+        vec = [v0, v1, v2, v3]
+    ans = vec[0]
+    answers.append(str(ans))
+
+print('\n'.join(answers))
+```
+completed 111/150, Solved: True, number of success = 29/111, acc = 26.13
+```python
+from collections import deque
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+
+k1 = int(data[index])
+index += 1
+S1 = [int(data[i]) for i in range(index, index + k1)]
+index += k1
+
+k2 = int(data[index])
+index += 1
+S2 = [int(data[i]) for i in range(index, index + k2)]
+
+isWinR = [False] * n
+isLoseR = [False] * n
+isWinM = [False] * n
+isLoseM = [False] * n
+countR = [0] * n
+countM = [0] * n
+
+# Compute direct wins for Rick
+for p in range(1, n):
+    for s in S1:
+        if (p + s) % n == 0:
+            isWinR[p] = True
+            break
+
+# Compute direct wins for Morty
+for p in range(1, n):
+    for s in S2:
+        if (p + s) % n == 0:
+            isWinM[p] = True
+            break
+
+# Initialize counts for Rick
+for p in range(1, n):
+    if isWinR[p]:
+        continue
+    cnt = 0
+    for s in S1:
+        q = (p + s) % n
+        if q != 0 and not isWinM[q]:
+            cnt += 1
+    countR[p] = cnt
+
+# Initialize counts for Morty
+for p in range(1, n):
+    if isWinM[p]:
+        continue
+    cnt = 0
+    for s in S2:
+        q = (p + s) % n
+        if q != 0 and not isWinR[q]:
+            cnt += 1
+    countM[p] = cnt
+
+# Queues
+queue_winR = deque()
+queue_loseR = deque()
+queue_winM = deque()
+queue_loseM = deque()
+
+# Initial LOSE
+for p in range(1, n):
+    if not isWinR[p] and countR[p] == 0:
+        isLoseR[p] = True
+        queue_loseR.append(p)
+    if not isWinM[p] and countM[p] == 0:
+        isLoseM[p] = True
+        queue_loseM.append(p)
+
+# Propagation
+while True:
+    processed = False
+
+    while queue_winR:
+        p = queue_winR.popleft()
+        # process_winR: decrement Morty counts
+        for s in S2:
+            q = (p - s + n) % n
+            if 1 <= q < n and not isWinM[q]:
+                countM[q] -= 1
+                if countM[q] == 0:
+                    isLoseM[q] = True
+                    queue_loseM.append(q)
+        processed = True
+
+    while queue_loseR:
+        p = queue_loseR.popleft()
+        # process_loseR: set WinM for Morty preds
+        for s in S2:
+            q = (p - s + n) % n
+            if 1 <= q < n and not isWinM[q]:
+                isWinM[q] = True
+                queue_winM.append(q)
+        processed = True
+
+    while queue_winM:
+        p = queue_winM.popleft()
+        # process_winM: decrement Rick counts
+        for s in S1:
+            r = (p - s + n) % n
+            if 1 <= r < n and not isWinR[r]:
+                countR[r] -= 1
+                if countR[r] == 0:
+                    isLoseR[r] = True
+                    queue_loseR.append(r)
+        processed = True
+
+    while queue_loseM:
+        p = queue_loseM.popleft()
+        # process_loseM: set WinR for Rick preds
+        for s in S1:
+            r = (p - s + n) % n
+            if 1 <= r < n and not isWinR[r]:
+                isWinR[r] = True
+                queue_winR.append(r)
+        processed = True
+
+    if not processed:
+        break
+
+# Output
+def get_outcome(is_win, is_lose, p):
+    if is_win[p]:
+        return "Win"
+    if is_lose[p]:
+        return "Lose"
+    return "Loop"
+
+out1 = [get_outcome(isWinR, isLoseR, i) for i in range(1, n)]
+out2 = [get_outcome(isWinM, isLoseM, i) for i in range(1, n)]
+
+print(' '.join(out1))
+print(' '.join(out2))
+```
+completed 112/150, Solved: True, number of success = 30/112, acc = 26.79
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+schedules = data[1:1 + n]
+
+max_rooms = 0
+for slot in range(7):
+    count = 0
+    for sched in schedules:
+        if sched[slot] == '1':
+            count += 1
+    if count > max_rooms:
+        max_rooms = count
+
+print(max_rooms)
+```
+completed 113/150, Solved: True, number of success = 31/113, acc = 27.43
+```python
+import sys
+from collections import defaultdict
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+q = int(data[index])
+index += 1
+a = [int(data[index + i]) for i in range(n)]
+index += n
+
+pos = [[] for _ in range(200001)]
+for i in range(n):
+    pos[a[i]].append(i + 1)
+
+intervals = []
+for v in range(1, 200001):
+    if pos[v]:
+        s = min(pos[v])
+        e = max(pos[v])
+        c = len(pos[v])
+        intervals.append((s, e, v, c))
+
+intervals.sort(key=lambda x: x[0])
+
+N = len(intervals)
+uf = list(range(200001))
+rank = [0] * 200001
+
+def find(x):
+    if uf[x] != x:
+        uf[x] = find(uf[x])
+    return uf[x]
+
+def union(x, y):
+    px = find(x)
+    py = find(y)
+    if px != py:
+        if rank[px] < rank[py]:
+            uf[px] = py
+        elif rank[px] > rank[py]:
+            uf[py] = px
+        else:
+            uf[py] = px
+            rank[px] += 1
+
+active = []
+for idx in range(N):
+    s, e, v, c = intervals[idx]
+    while active and intervals[active[-1]][1] < s:
+        active.pop()
+    if active:
+        prev_v = intervals[active[-1]][2]
+        union(v, prev_v)
+    active.append(idx)
+
+comp_min = defaultdict(lambda: n + 1)
+comp_max = defaultdict(lambda: 0)
+comp_maxc = defaultdict(lambda: 0)
+
+for idx in range(N):
+    s, e, v, c = intervals[idx]
+    root = find(v)
+    comp_min[root] = min(comp_min[root], s)
+    comp_max[root] = max(comp_max[root], e)
+    comp_maxc[root] = max(comp_maxc[root], c)
+
+total_cost = 0
+for root in list(comp_min.keys()):
+    lft = comp_min[root]
+    rgt = comp_max[root]
+    length = rgt - lft + 1
+    total_cost += length - comp_maxc[root]
+
+print(total_cost)
+```
+completed 114/150, Solved: True, number of success = 32/114, acc = 28.07
+```python
+import sys
+
+data = sys.stdin.read().split()
+idx = 0
+t = int(data[idx])
+idx += 1
+
+MOD = 10**9 + 7
+
+answers = []
+for _ in range(t):
+    x = int(data[idx])
+    idx += 1
+    s = data[idx]
+    idx += 1
+    n = len(s)
+    
+    chars = [None] * (x + 2)
+    for i in range(1, min(n, x) + 1):
+        chars[i] = s[i - 1]
+    
+    small_L = n
+    large = (n >= x)
+    L_mod = n % MOD
+    
+    for k in range(1, x + 1):
+        d = int(chars[k])
+        
+        do_update = False
+        rlen = 0
+        if not large:
+            rlen = small_L - k
+            if small_L < x:
+                do_update = True
+        
+        # Update L_mod
+        L_mod = (d * L_mod % MOD + ((1 - d) * k) % MOD) % MOD
+        
+        # Update chars if necessary
+        if do_update and d >= 2:
+            appended_max = d * rlen
+            max_qq = x - k
+            for qq in range(1, max_qq + 1):
+                offset = qq - 1
+                if offset >= appended_max:
+                    break
+                local = offset % rlen
+                old_pos = k + local + 1
+                chars[k + qq] = chars[old_pos]
+        
+        # Update small_L
+        if not large:
+            new_small = k + d * rlen
+            if new_small >= x:
+                large = True
+            else:
+                small_L = new_small
+    
+    answers.append(str(L_mod))
+
+print('\n'.join(answers))
+```
+completed 115/150, Solved: True, number of success = 33/115, acc = 28.7
+```python
+s = input().strip()
+n = len(s)
+prefix = [0] * (n + 1)
+for i in range(n):
+    prefix[i + 1] = prefix[i] + (1 if s[i] == 'Q' else 0)
+total_q = prefix[n]
+ans = 0
+for j in range(n):
+    if s[j] == 'A':
+        left = prefix[j]
+        right = total_q - prefix[j + 1]
+        ans += left * right
+print(ans)
+```
+completed 116/150, Solved: True, number of success = 34/116, acc = 29.31
+  ```python
+import sys
+
+sys.setrecursionlimit(10**6)
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+a = [int(data[index + i]) for i in range(n)]
+
+INF = 10**9 + 7
+tree = [-1] * (n + 2)
+
+def update(idx, val):
+    while idx <= n:
+        tree[idx] = max(tree[idx], val)
+        idx += idx & -idx
+
+def query(idx):
+    res = -1
+    while idx > 0:
+        res = max(res, tree[idx])
+        idx -= idx & -idx
+    return res
+
+life_max = 0
+update(a[0], INF)
+
+for i in range(1, n):
+    if a[i - 1] > a[i]:
+        cur_life = 0
+    else:
+        q = query(a[i])
+        if q >= INF:
+            cur_life = INF
+        else:
+            cur_life = 1 + q
+    update(a[i], cur_life)
+    if cur_life < INF:
+        life_max = max(life_max, cur_life + 1)
+
+print(life_max)
+  ```
+completed 117/150, Solved: False, number of success = 34/117, acc = 29.06
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+a_line = [int(data[i]) for i in range(index, index + n)]
+a = [0] + a_line
+
+visited = [False] * (n + 1)
+C = 0
+rep_of = {}
+cycle_id = [-1] * (n + 1)
+
+for start in range(1, n + 1):
+    if visited[start]:
+        continue
+    path = []
+    local_visited = set()
+    cur = start
+    while not visited[cur] and cur not in local_visited:
+        local_visited.add(cur)
+        path.append(cur)
+        cur = a[cur]
+    if cur in local_visited:
+        cycle_start_idx = path.index(cur)
+        cycle_len = len(path) - cycle_start_idx
+        if cycle_len >= 2:
+            C += 1
+            cid = C
+            rep_of[cid] = path[cycle_start_idx]
+            for j in range(cycle_start_idx, len(path)):
+                cycle_id[path[j]] = cid
+    for node in path:
+        visited[node] = True
+
+self_roots = [i for i in range(1, n + 1) if a[i] == i]
+S = len(self_roots)
+
+if S > 0:
+    r = self_roots[0]
+    my_cid = -1
+    gain = 2
+else:
+    r = rep_of[1]
+    my_cid = 1
+    gain = 1
+
+min_changes = 1 + S + C - gain
+
+p = [0] + a_line[:]
+p[r] = r
+
+for i in self_roots:
+    if i != r:
+        p[i] = r
+
+for cid in range(1, C + 1):
+    if cid == my_cid:
+        continue
+    rep = rep_of[cid]
+    p[rep] = r
+
+print(min_changes)
+print(' '.join(map(str, p[1:])))
+```
+completed 118/150, Solved: False, number of success = 34/118, acc = 28.81
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+index = 0
+n = int(data[index])
+index += 1
+a = int(data[index])
+index += 1
+b = int(data[index])
+index += 1
+T = int(data[index])
+index += 1
+s = data[index].strip()
+
+c = [1 + (b if ch == 'w' else 0) for ch in s]
+
+prefix_right = [0] * (n + 1)
+for i in range(1, n + 1):
+    prefix_right[i] = prefix_right[i - 1] + c[i - 1]
+
+prefix_left = [0] * n
+for j in range(1, n):
+    prefix_left[j] = prefix_left[j - 1] + c[n - j]
+
+def check(k: int) -> bool:
+    if k == 0:
+        return True
+    for L in range(k):
+        R = k - 1 - L
+        sumc = prefix_right[R + 1] + prefix_left[L]
+        moves = min(2 * L + R, 2 * R + L)
+        time_needed = sumc + a * moves
+        if time_needed <= T:
+            return True
+    return False
+
+lo = 0
+hi = n
+while lo < hi:
+    mid = (lo + hi + 1) // 2
+    if check(mid):
+        lo = mid
+    else:
+        hi = mid - 1
+print(lo)
+```
+completed 119/150, Solved: True, number of success = 35/119, acc = 29.41
+```python
+import sys
+import heapq
+
+def generate_multisets():
+    multis = []
+    def rec(current):
+        multis.append(current)
+        if len(current) == 4:
+            return
+        start = 1 if len(current) == 0 else current[-1]
+        for d in range(start, 10):
+            rec(current + (d,))
+    rec(())
+    return multis
+
+data = sys.stdin.read().split()
+n = int(data[0])
+S = []
+D = []
+idx = 1
+for i in range(n):
+    a = int(data[idx])
+    b = int(data[idx + 1])
+    S.append(a)
+    D.append(b)
+    idx += 2
+
+multis = generate_multisets()
+num_inside = len(multis)
+id_dict = {multis[i]: i for i in range(num_inside)}
+empty_id = id_dict[()]
+
+N_K = n + 1
+N_POS = 9
+total_states = N_K * N_POS * num_inside
+INF = 10**18
+dist = [INF] * total_states
+
+def get_idx(k, pos, iid):
+    return (k * N_POS + (pos - 1)) * num_inside + iid
+
+pq = []
+init_idx = get_idx(0, 1, empty_id)
+dist[init_idx] = 0
+heapq.heappush(pq, (0, 0, 1, empty_id))  # time, k, pos, iid
+
+dirs = [1, -1]
+while pq:
+    time, k, pos, iid = heapq.heappop(pq)
+    idx = get_idx(k, pos, iid)
+    if time > dist[idx]:
+        continue
+
+    # Move up
+    if pos < 9:
+        new_pos = pos + 1
+        new_time = time + 1
+        new_idx = get_idx(k, new_pos, iid)
+        if new_time < dist[new_idx]:
+            dist[new_idx] = new_time
+            heapq.heappush(pq, (new_time, k, new_pos, iid))
+
+    # Move down
+    if pos > 1:
+        new_pos = pos - 1
+        new_time = time + 1
+        new_idx = get_idx(k, new_pos, iid)
+        if new_time < dist[new_idx]:
+            dist[new_idx] = new_time
+            heapq.heappush(pq, (new_time, k, new_pos, iid))
+
+    # Stop and open doors
+    dests = list(multis[iid])
+    out_count = sum(1 for d in dests if d == pos)
+    after_drop_size = len(dests) - out_count
+    avail = 4 - after_drop_size
+    num_pick = 0
+    if k < n and S[k] == pos:
+        while num_pick < avail and k + num_pick < n and S[k + num_pick] == pos:
+            num_pick += 1
+    add_time = out_count + num_pick
+    new_dests = [d for d in dests if d != pos]
+    for i in range(num_pick):
+        new_dests.append(D[k + i])
+    new_tuple = tuple(sorted(new_dests))
+    new_iid = id_dict[new_tuple]
+    new_k = k + num_pick
+    new_time = time + add_time
+    new_pos = pos
+    new_idx = get_idx(new_k, new_pos, new_iid)
+    if new_time < dist[new_idx]:
+        dist[new_idx] = new_time
+        heapq.heappush(pq, (new_time, new_k, new_pos, new_iid))
+
+ans = INF
+for p in range(1, 10):
+    idx = get_idx(n, p, empty_id)
+    if dist[idx] < ans:
+        ans = dist[idx]
+print(ans)
+```
+completed 120/150, Solved: True, number of success = 36/120, acc = 30.0
+```python
+import sys
+import heapq
+
+sys.setrecursionlimit(200010)
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+
+adj = [[] for _ in range(n + 1)]
+for i in range(n - 1):
+    u = int(data[index])
+    index += 1
+    v = int(data[index])
+    index += 1
+    adj[u].append(v)
+    adj[v].append(u)
+
+depth = [0] * (n + 1)
+sz = [0] * (n + 1)
+parent = [0] * (n + 1)
+rem_kids = [0] * (n + 1)
+
+def dfs1(u, p, d):
+    parent[u] = p
+    depth[u] = d
+    sz[u] = 1
+    rem_kids[u] = 0
+    for v in adj[u]:
+        if v != p:
+            dfs1(v, u, d + 1)
+            sz[u] += sz[v]
+            rem_kids[u] += 1
+
+dfs1(1, 0, 0)
+
+pq = []
+for u in range(1, n + 1):
+    if rem_kids[u] == 0:
+        gain = depth[u] - (sz[u] - 1)
+        heapq.heappush(pq, (-gain, u))
+
+ans = 0
+cnt = 0
+while cnt < k and pq:
+    neg, u = heapq.heappop(pq)
+    gain = -neg
+    ans += gain
+    cnt += 1
+    p = parent[u]
+    if p != 0:
+        rem_kids[p] -= 1
+        if rem_kids[p] == 0:
+            gain_p = depth[p] - (sz[p] - 1)
+            heapq.heappush(pq, (-gain_p, p))
+
+print(ans)
+```
+completed 121/150, Solved: True, number of success = 37/121, acc = 30.58
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+k = int(data[index])
+index += 1
+
+boxes = [[] for _ in range(k)]
+sums = [0] * k
+value_to_box = {}
+all_values = []
+
+for i in range(k):
+    n = int(data[index])
+    index += 1
+    box = []
+    s = 0
+    for j in range(n):
+        a = int(data[index])
+        index += 1
+        box.append(a)
+        s += a
+        value_to_box[a] = i
+    boxes[i] = box
+    sums[i] = s
+
+S_total = sum(sums)
+if S_total % k != 0:
+    print("No")
+    sys.exit(0)
+
+T = S_total // k
+delta = [T - sums[i] for i in range(k)]
+
+succ = {}
+for i in range(k):
+    for a in boxes[i]:
+        target = a + delta[i]
+        if target in value_to_box:
+            succ[a] = target
+
+visited = set()
+mask_to_cycle = {}
+for start in list(value_to_box.keys()):
+    if start in visited:
+        continue
+    path = []
+    path_map = set()
+    cur = start
+    broke = False
+    while cur not in visited and cur not in path_map:
+        path.append(cur)
+        path_map.add(cur)
+        if cur not in succ:
+            broke = True
+            break
+        next_cur = succ[cur]
+        if next_cur in path_map:
+            cycle_start_idx = path.index(next_cur)
+            cycle = path[cycle_start_idx:]
+            box_list = [value_to_box[v] for v in cycle]
+            if len(box_list) == len(set(box_list)):
+                cm = 0
+                duplicate = False
+                for b in box_list:
+                    bit = 1 << b
+                    if cm & bit:
+                        duplicate = True
+                        break
+                    cm |= bit
+                if not duplicate and cm not in mask_to_cycle:
+                    mask_to_cycle[cm] = cycle
+            break
+        cur = next_cur
+    if not broke:
+        for p in path:
+            visited.add(p)
+    else:
+        for p in path:
+            visited.add(p)
+
+full = (1 << k) - 1
+dp = [False] * (1 << k)
+parent = [-1] * (1 << k)
+used_cm_dict = [-1] * (1 << k)
+dp[0] = True
+
+for mask in range(1 << k):
+    if not dp[mask]:
+        continue
+    for cm in list(mask_to_cycle.keys()):
+        if (mask & cm) == 0:
+            newm = mask | cm
+            if not dp[newm]:
+                dp[newm] = True
+                parent[newm] = mask
+                used_cm_dict[newm] = cm
+
+if not dp[full]:
+    print("No")
+else:
+    print("Yes")
+    chosen_c = [0] * k
+    p = [0] * k
+    current = full
+    while current != 0:
+        cm = used_cm_dict[current]
+        cycle = mask_to_cycle[cm]
+        l = len(cycle)
+        for ii in range(l):
+            v = cycle[ii]
+            b = value_to_box[v]
+            chosen_c[b] = v
+            next_v = succ[v]
+            next_b = value_to_box[next_v]
+            p[b] = next_b + 1
+        current = parent[current]
+    for i in range(k):
+        print(chosen_c[i], p[i])
+```
+
+## Explanation
+
+The solution balances box sums by selecting one number per box such that the redistribution forms a permutation where each selected number maps to another via f(a) = a + delta[box(a)], ensuring new sums equal T = total_sum / k.
+
+First, verify total_sum % k == 0; otherwise, impossible. Compute T and delta[j] = T - sum_j for each box j.
+
+Build the functional graph: for each number a in box j, add edge a → a + delta[j] if the target exists.
+
+Identify all cycles in this graph using iterative traversal, detecting back-edges to the current path.
+
+For each cycle, check if its nodes belong to distinct boxes. If so, compute the bitmask of those boxes and store one representative cycle per unique bitmask in a dictionary.
+
+Use bitmask DP to check if the full set of boxes (mask = 2^k - 1) can be covered by disjoint valid cycles: dp[0] = true; for each mask and valid cycle mask cm disjoint from it, set dp[mask | cm] = true, tracking predecessors.
+
+If dp[2^k - 1] is true, reconstruct by backtracking: for each used cycle, assign chosen values and destinations based on successors.
+
+Output "Yes" and the assignments (c_i from box i to p_i), ensuring each box receives exactly one number and sums balance.
+completed 122/150, Solved: False, number of success = 37/122, acc = 30.33
+```python
+import sys
+import heapq
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+
+a = []
+for i in range(n):
+    a.append(int(data[index]))
+    index += 1
+
+def cost(aa, mm):
+    if mm == 0:
+        return 0
+    q = aa // mm
+    r = aa % mm
+    return r * (q + 1) * (q + 1) + (mm - r) * q * q
+
+sum_sq = 0
+for i in range(n):
+    sum_sq += a[i] * a[i]
+
+current_m = [1] * n
+heap = []
+
+for i in range(n):
+    delta = cost(a[i], 1) - cost(a[i], 2)
+    heapq.heappush(heap, (-delta, i))
+
+total_reduction = 0
+extra = k - n
+for _ in range(extra):
+    negd, i = heapq.heappop(heap)
+    delta = -negd
+    total_reduction += delta
+    current_m[i] += 1
+    new_m = current_m[i]
+    new_delta = cost(a[i], new_m) - cost(a[i], new_m + 1)
+    heapq.heappush(heap, (-new_delta, i))
+
+print(sum_sq - total_reduction)
+```
+completed 123/150, Solved: True, number of success = 38/123, acc = 30.89
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+a = [int(data[i]) % (10**9 + 7) for i in range(index, index + n)]
+
+MOD = 10**9 + 7
+N = 200010
+inv = [0] * (N + 1)
+inv[1] = 1
+for i in range(2, N + 1):
+    inv[i] = MOD - (MOD // i) * inv[MOD % i] % MOD
+
+m = n - 1
+q = m // 4
+r = m % 4
+qq = 2 * q
+
+power_p = [0] * (m + 1)
+if q == 0:
+    power_p[0] = 1
+else:
+    b = [0] * (qq + 1)
+    b[0] = 1
+    for k in range(1, qq + 1):
+        b[k] = b[k - 1] * (qq - k + 1) % MOD * inv[k] % MOD
+    for k in range(qq + 1):
+        sk = 1 if (k % 2 == 0) else (MOD - 1)
+        if 2 * k <= m:
+            power_p[2 * k] = b[k] * sk % MOD
+
+# compute tail
+tail = [1]
+for tt in range(1, r + 1):
+    exp = n * (tt - 1) + (tt * (tt - 1) // 2)
+    parity = exp % 2
+    s = 1 if parity == 0 else (MOD - 1)
+    new_tail_len = len(tail) + 1
+    new_tail = [0] * new_tail_len
+    for j in range(len(tail)):
+        new_tail[j] = (new_tail[j] + tail[j]) % MOD
+        new_tail[j + 1] = (new_tail[j + 1] + tail[j] * s % MOD) % MOD
+    tail = new_tail
+
+# multiply power_p * tail
+p = [0] * (m + 1)
+for pos in range(m + 1):
+    if power_p[pos] == 0:
+        continue
+    term = power_p[pos]
+    for dd in range(len(tail)):
+        if pos + dd > m:
+            break
+        p[pos + dd] = (p[pos + dd] + term * tail[dd] % MOD) % MOD
+
+# compute ans
+ans = 0
+for i in range(n):
+    rr = i
+    sgn = 1 if (rr % 4 == 0 or rr % 4 == 1) else (MOD - 1)
+    contrib = p[rr] * sgn % MOD * a[i] % MOD
+    ans = (ans + contrib) % MOD
+
+print(ans)
+```
+completed 124/150, Solved: True, number of success = 39/124, acc = 31.45
+```python
+import sys
+import heapq
+
+data = sys.stdin.read().split()
+index = 0
+n = int(data[index]); index += 1
+m = int(data[index]); index += 1
+k = int(data[index]); index += 1
+
+adj = [[] for _ in range(n + 1)]
+for _ in range(m):
+    u = int(data[index]); index += 1
+    v = int(data[index]); index += 1
+    x = int(data[index]); index += 1
+    adj[u].append((v, x))
+    adj[v].append((u, x))
+
+miny = [10**18 * 2] * (n + 1)
+for _ in range(k):
+    s = int(data[index]); index += 1
+    y = int(data[index]); index += 1
+    if y < miny[s]:
+        miny[s] = y
+
+INF = 10**18 * 2
+
+def dijkstra(start):
+    dist = [INF] * (n + 1)
+    dist[start] = 0
+    pq = []
+    heapq.heappush(pq, (0, start))
+    while pq:
+        dd, u = heapq.heappop(pq)
+        if dd > dist[u]:
+            continue
+        for v, w in adj[u]:
+            nd = dist[u] + w
+            if nd < dist[v]:
+                dist[v] = nd
+                heapq.heappush(pq, (nd, v))
+    return dist
+
+d1 = dijkstra(1)
+
+# compute dist_t
+dist_t = [INF] * (n + 1)
+pq = []
+for u in range(1, n + 1):
+    if miny[u] < INF:
+        dist_t[u] = miny[u]
+        heapq.heappush(pq, (dist_t[u], u))
+
+while pq:
+    dd, u = heapq.heappop(pq)
+    if dd > dist_t[u]:
+        continue
+    for v, w in adj[u]:
+        nd = dist_t[u] + w
+        if nd < dist_t[v]:
+            dist_t[v] = nd
+            heapq.heappush(pq, (nd, v))
+
+# count critical sources
+num_crit = 0
+for u in range(2, n + 1):
+    if dist_t[u] == INF or dist_t[u] >= d1[u]:
+        continue
+    # check if source
+    is_source = True
+    for v, w in adj[u]:
+        if dist_t[v] < INF and dist_t[v] + w == dist_t[u]:
+            is_source = False
+            break
+    if is_source:
+        num_crit += 1
+
+print(k - num_crit)
+```
+completed 125/150, Solved: True, number of success = 40/125, acc = 32.0
+```python
+import sys
+
+input = sys.stdin.read
+data = input().strip()
+n = int(data)
+
+if n < 2:
+    print(0)
+    sys.exit(0)
+
+used = [False] * (n + 1)
+pairs = []
+
+# Sieve to find all primes
+is_prime = [True] * (n + 1)
+is_prime[0] = is_prime[1] = False
+primes = []
+for i in range(2, n + 1):
+    if is_prime[i]:
+        primes.append(i)
+        for j in range(i * i, n + 1, i):
+            is_prime[j] = False
+
+# Odd primes
+odd_primes = [p for p in primes if p % 2 == 1]
+
+# Process each odd prime
+for p in odd_primes:
+    if p > n:
+        break
+    multiples = []
+    m = p
+    while m <= n:
+        if not used[m]:
+            multiples.append(m)
+        m += p
+    if len(multiples) < 2:
+        continue
+
+    # Separate odds and evens
+    odds = [m for m in multiples if m % 2 == 1]
+    evens = [m for m in multiples if m % 2 == 0]
+
+    # Sort odds descending
+    odds.sort(reverse=True)
+
+    # Pair odd-odd
+    num_odd_pairs = len(odds) // 2
+    for k in range(num_odd_pairs):
+        a = odds[2 * k]
+        b = odds[2 * k + 1]
+        pairs.append((a, b))
+        used[a] = True
+        used[b] = True
+
+    # Remaining odd?
+    if len(odds) % 2 == 1 and len(evens) > 0:
+        # Sort evens descending
+        evens.sort(reverse=True)
+        e = evens[0]
+        o = odds[-1]
+        pairs.append((e, o))
+        used[e] = True
+        used[o] = True
+
+# Now pair remaining evens
+evens_remain = []
+m = 2
+while m <= n:
+    if not used[m]:
+        evens_remain.append(m)
+    m += 2
+
+# Sort descending
+evens_remain.sort(reverse=True)
+
+# Pair them
+num_even_pairs = len(evens_remain) // 2
+for k in range(num_even_pairs):
+    a = evens_remain[2 * k]
+    b = evens_remain[2 * k + 1]
+    pairs.append((a, b))
+    used[a] = True
+    used[b] = True
+
+# Output
+print(len(pairs))
+for a, b in pairs:
+    print(a, b)
+```
+completed 126/150, Solved: False, number of success = 40/126, acc = 31.75
+```python
+from collections import deque
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+
+grid = []
+for i in range(4):
+    row = []
+    for j in range(n):
+        row.append(int(data[index]))
+        index += 1
+    grid.append(row)
+
+# target_pos[car] = (tr, tc)
+target_pos = {}
+# current
+current = [[0] * n for _ in range(4)]
+car_pos = {}
+for r in range(4):
+    for c in range(n):
+        x = grid[r][c]
+        if 1 <= x <= k:
+            if r == 1 or r == 2:
+                car_pos[x] = (r, c)
+                current[r][c] = x
+            else:
+                target_pos[x] = (r, c)
+
+moves = []
+
+dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+
+def is_valid(r, c):
+    return 0 <= r < 4 and 0 <= c < n
+
+def can_move_car(car, nr, nc):
+    if not is_valid(nr, nc):
+        return False
+    if nr == 1 or nr == 2:
+        return True
+    tr, tc = target_pos[car]
+    if nr == 0:
+        return tr == 0 and tc == nc
+    if nr == 3:
+        return tr == 3 and tc == nc
+    return False
+
+def do_move(car, nr, nc):
+    r, c = car_pos[car]
+    current[r][c] = 0
+    current[nr][nc] = car
+    car_pos[car] = (nr, nc)
+    moves.append((car, nr + 1, nc + 1))
+
+def get_exit(car):
+    tr, tc = target_pos[car]
+    return (1 if tr == 0 else 2, tc)
+
+def park_ready():
+    while True:
+        ready_cars = []
+        for car in list(car_pos):
+            r, c = car_pos[car]
+            er, ec = get_exit(car)
+            if r == er and c == ec:
+                ready_cars.append(car)
+        if not ready_cars:
+            return
+        car = min(ready_cars)
+        tr, tc = target_pos[car]
+        do_move(car, tr, tc)
+        del car_pos[car]
+
+def bfs_single(car, goal_r, goal_c):
+    sr, sc = car_pos[car]
+    if (sr, sc) == (goal_r, goal_c):
+        return [(sr, sc)]
+    visited = set()
+    q = deque()
+    q.append(((sr, sc), [(sr, sc)]))
+    visited.add((sr, sc))
+    while q:
+        (r, c), path = q.popleft()
+        for dr, dc in dirs:
+            nr = r + dr
+            nc = c + dc
+            if is_valid(nr, nc) and (nr, nc) not in visited and current[nr][nc] == 0 and can_move_car(car, nr, nc):
+                new_path = path + [(nr, nc)]
+                if nr == goal_r and nc == goal_c:
+                    return new_path
+                visited.add((nr, nc))
+                q.append(((nr, nc), new_path))
+    return None
+
+# Main loop
+while car_pos:
+    park_ready()
+    if not car_pos:
+        break
+    if len(moves) > 20000:
+        print(-1)
+        sys.exit(0)
+
+    empties_pos = [(r, c) for r in range(1, 3) for c in range(n) if current[r][c] == 0]
+    if len(empties_pos) == 0:
+        print(-1)
+        sys.exit(0)
+
+    # Try candidates
+    best_car = None
+    best_path = None
+    min_dist = float('inf')
+    for car in sorted(car_pos):
+        er, ec = get_exit(car)
+        if current[er][ec] == 0:
+            path = bfs_single(car, er, ec)
+            if path is not None:
+                d = len(path) - 1
+                if d < min_dist:
+                    min_dist = d
+                    best_car = car
+                    best_path = path
+
+    if best_car is not None:
+        for i in range(1, len(best_path)):
+            nr, nc = best_path[i]
+            do_move(best_car, nr, nc)
+        continue
+
+    # Try blockers
+    best_block_car = None
+    best_block_path = None
+    min_bdist = float('inf')
+    for owner in sorted(car_pos):
+        er, ec = get_exit(owner)
+        blocker = current[er][ec]
+        if blocker in car_pos and blocker != owner:
+            bpos_r, bpos_c = car_pos[blocker]
+            for e_r, e_c in empties_pos:
+                path = bfs_single(blocker, e_r, e_c)
+                if path is not None:
+                    d = len(path) - 1
+                    if d < min_bdist:
+                        min_bdist = d
+                        best_block_car = blocker
+                        best_block_path = path
+
+    if best_block_car is not None:
+        for i in range(1, len(best_block_path)):
+            nr, nc = best_block_path[i]
+            do_move(best_block_car, nr, nc)
+        continue
+
+    # Arbitrary move: first possible
+    moved = False
+    for car in sorted(car_pos):
+        r, c = car_pos[car]
+        for dr, dc in dirs:
+            nr = r + dr
+            nc = c + dc
+            if is_valid(nr, nc) and current[nr][nc] == 0 and can_move_car(car, nr, nc):
+                do_move(car, nr, nc)
+                moved = True
+                break
+        if moved:
+            break
+
+    if not moved:
+        print(-1)
+        sys.exit(0)
+
+if len(car_pos) == 0 and len(moves) <= 20000:
+    print(len(moves))
+    for move in moves:
+        print(move[0], move[1], move[2])
+else:
+    print(-1)
+```
+completed 127/150, Solved: False, number of success = 40/127, acc = 31.5
+```python
+import sys
+import heapq
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+d = int(data[index])
+index += 1
+
+a = [0] * (n + 1)
+if n > 2:
+    for i in range(2, n):
+        a[i] = int(data[index])
+        index += 1
+
+x = [0] * (n + 1)
+y = [0] * (n + 1)
+for i in range(1, n + 1):
+    x[i] = int(data[index])
+    index += 1
+    y[i] = int(data[index])
+    index += 1
+
+INF = 10**18
+dist = [INF] * (n + 1)
+dist[1] = 0
+
+pq = []
+heapq.heappush(pq, (0, 1))  # cost, node
+
+while pq:
+    cc, u = heapq.heappop(pq)
+    if cc > dist[u]:
+        continue
+    for v in range(1, n + 1):
+        if v == u:
+            continue
+        manh = abs(x[u] - x[v]) + abs(y[u] - y[v])
+        ecost = d * manh - a[v]
+        newc = cc + ecost
+        if newc < dist[v]:
+            dist[v] = newc
+            heapq.heappush(pq, (newc, v))
+
+print(dist[n])
+```
+completed 128/150, Solved: True, number of success = 41/128, acc = 32.03
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+d = int(data[index])
+index += 1
+m = int(data[index])
+index += 1
+
+a = []
+for i in range(n):
+    a.append(int(data[index]))
+    index += 1
+
+big = [x for x in a if x > m]
+small = [x for x in a if x <= m]
+
+big.sort(reverse=True)
+small.sort(reverse=True)
+
+b_len = len(big)
+s_len = len(small)
+
+big_pre = [0] * (b_len + 1)
+for i in range(b_len):
+    big_pre[i + 1] = big_pre[i] + big[i]
+
+small_pre = [0] * (s_len + 1)
+for i in range(s_len):
+    small_pre[i + 1] = small_pre[i] + small[i]
+
+k_max = 1 + (n - 1) // (d + 1)
+ans = 0
+
+for k in range(min(b_len, k_max) + 1):
+    if k == 0:
+        if b_len == 0:
+            ans = small_pre[s_len]
+        continue
+    low = (k - 1) * d
+    req = b_len - k
+    muz = max(low, req)
+    if muz > k * d or muz > n - k:
+        continue
+    speak = n - muz
+    need_small = speak - k
+    if need_small < 0 or need_small > s_len:
+        continue
+    cur_sum = big_pre[k] + small_pre[need_small]
+    if cur_sum > ans:
+        ans = cur_sum
+
+print(ans)
+```
+completed 129/150, Solved: True, number of success = 42/129, acc = 32.56
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+T = int(data[index])
+index += 1
+
+tasks = []
+for _ in range(n):
+    t = int(data[index])
+    index += 1
+    q = int(data[index])
+    index += 1
+    m = T - t
+    tasks.append((m, q, t))
+
+# sort by decreasing m, then decreasing q
+tasks.sort(key=lambda x: (-x[0], -x[1]))
+
+NEG = -10**18
+dp = [[NEG] * (T + 1) for _ in range(n + 1)]
+
+for i in range(1, n + 1):
+    m, q, t = tasks[i - 1]
+    for rem in range(1, T + 1):
+        # skip
+        dp[i][rem] = dp[i - 1][rem]
+        # leaf
+        if t <= rem:
+            dp[i][rem] = max(dp[i][rem], q)
+        # split: task i as leaf in one child, other child subtree from first i-1
+        if rem >= 2 and t <= rem - 1:
+            prev = dp[i - 1][rem - 1]
+            if prev != NEG:
+                dp[i][rem] = max(dp[i][rem], q + prev)
+
+ans = 0
+for i in range(1, n + 1):
+    if dp[i][T] > ans:
+        ans = dp[i][T]
+
+print(ans)
+```
+completed 130/150, Solved: False, number of success = 42/130, acc = 32.31
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+index = 1
+vectors = []
+for i in range(n):
+    x = int(data[index])
+    y = int(data[index + 1])
+    vectors.append((x, y, i))
+    index += 2
+
+# Sort by decreasing squared norm
+vectors.sort(key=lambda t: -(t[0] * t[0] + t[1] * t[1]))
+
+px = 0
+py = 0
+signs = [0] * n
+for vec in vectors:
+    x, y, idx = vec
+    sq_plus = (px + x) * (px + x) + (py + y) * (py + y)
+    sq_minus = (px - x) * (px - x) + (py - y) * (py - y)
+    if sq_plus <= sq_minus:
+        signs[idx] = 1
+        px += x
+        py += y
+    else:
+        signs[idx] = -1
+        px -= x
+        py -= y
+
+print(' '.join(map(str, signs)))
+```
+completed 131/150, Solved: False, number of success = 42/131, acc = 32.06
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+x = list(map(int, data[1:]))
+x.sort()
+
+half = n // 2
+min_dist = float('inf')
+for i in range(n - half):
+    dist = x[i + half] - x[i]
+    if dist < min_dist:
+        min_dist = dist
+
+print(min_dist)
+```
+completed 132/150, Solved: True, number of success = 43/132, acc = 32.58
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+n = int(data[0])
+coords = list(map(int, data[1:]))
+a = sorted(coords)
+N = 2 * n
+
+ans = float('inf')
+for i in range(n + 1):
+    width = a[i + n - 1] - a[i]
+    if i > 0:
+        min_y_idx = 0
+    else:
+        min_y_idx = i + n
+    if i < n:
+        max_y_idx = N - 1
+    else:
+        max_y_idx = i - 1
+    height = a[max_y_idx] - a[min_y_idx]
+    area = width * height
+    if area < ans:
+        ans = area
+
+print(ans)
+```
+completed 133/150, Solved: True, number of success = 44/133, acc = 33.08
+```python
+import sys
+from collections import Counter
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index]); index += 1
+m = int(data[index]); index += 1
+k = int(data[index]); index += 1
+A = [int(data[index + i]) for i in range(n)]; index += n
+B = [int(data[index + i]) for i in range(m)]; index += m
+
+ca = Counter(A)
+cb = Counter(B)
+all_types = sorted(set(ca) | set(cb))
+
+suffix = 0
+possible = False
+for t in reversed(all_types):
+    d = ca[t] - cb[t]
+    suffix += d
+    if suffix > 0:
+        possible = True
+        break
+
+print("YES" if possible else "NO")
+```
+completed 134/150, Solved: True, number of success = 45/134, acc = 33.58
+```python
+import sys
+from collections import deque
+import heapq
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+m = int(data[index])
+index += 1
+a = int(data[index])
+index += 1
+b = int(data[index])
+index += 1
+
+alledges = []
+adj_a = [[] for _ in range(n)]
+for _ in range(m):
+    u = int(data[index]) - 1
+    index += 1
+    v = int(data[index]) - 1
+    index += 1
+    cc = int(data[index])
+    index += 1
+    alledges.append((u, v, cc))
+    if cc == a:
+        adj_a[u].append(v)
+        adj_a[v].append(u)
+
+# Compute components
+comp = [-1] * n
+vis = [False] * n
+cid = 0
+for i in range(n):
+    if not vis[i]:
+        q = deque([i])
+        vis[i] = True
+        comp[i] = cid
+        while q:
+            u = q.popleft()
+            for v in adj_a[u]:
+                if not vis[v]:
+                    vis[v] = True
+                    comp[v] = cid
+                    q.append(v)
+        cid += 1
+c = cid
+
+# Build super_adj_set
+super_adj_set = [set() for _ in range(c)]
+adjw = [[] for _ in range(n)]
+for u, v, cc in alledges:
+    if cc == a:
+        adjw[u].append((v, a))
+        adjw[v].append((u, a))
+    else:
+        ci = comp[u]
+        cj = comp[v]
+        if ci != cj:
+            super_adj_set[ci].add(cj)
+            super_adj_set[cj].add(ci)
+            adjw[u].append((v, b))
+            adjw[v].append((u, b))
+
+# BFS for dist_super from S = comp[0]
+S = comp[0]
+dist_super = [-1] * c
+dist_super[S] = 0
+q = deque([S])
+while q:
+    ci = q.popleft()
+    for cj in super_adj_set[ci]:
+        if dist_super[cj] == -1:
+            dist_super[cj] = dist_super[ci] + 1
+            q.append(cj)
+
+# Multi-state Dijkstra
+INF = 4 * 10**18
+mindist = [[INF] * n for _ in range(n)]
+mindist[0][0] = 0
+pq = []
+heapq.heappush(pq, (0, 0, 0))  # cost, u, lb
+
+while pq:
+    costt, u, lb = heapq.heappop(pq)
+    if costt > mindist[u][lb]:
+        continue
+    for v, ww in adjw[u]:
+        newlb = lb + (1 if ww == b else 0)
+        if newlb >= n:
+            continue
+        newc = costt + ww
+        if newc < mindist[v][newlb]:
+            mindist[v][newlb] = newc
+            heapq.heappush(pq, (newc, v, newlb))
+
+# Answers
+answer = []
+for pp in range(n):
+    cp = comp[pp]
+    dd = dist_super[cp]
+    answer.append(str(mindist[pp][dd]))
+
+print(' '.join(answer))
+```
+completed 135/150, Solved: True, number of success = 46/135, acc = 34.07
+```python
+import sys
+
+data = sys.stdin.read().split()
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+
+disass_other = 0
+main_m = 0
+L = 0
+
+for _ in range(k):
+    m = int(data[index])
+    index += 1
+    if index >= len(data):
+        break
+    first = int(data[index])
+    index += 1
+    if first == 1:
+        # This is the main chain
+        chain = [first]
+        for j in range(m - 1):
+            chain.append(int(data[index]))
+            index += 1
+        # Compute L
+        L = 1
+        for i in range(1, m):
+            if chain[i] == chain[i - 1] + 1:
+                L += 1
+            else:
+                break
+        main_m = m
+    else:
+        # Skip the remaining m-1 numbers
+        index += m - 1
+        disass_other += m - 1
+
+peel = main_m - L
+assembles = n - L
+total = disass_other + peel + assembles
+print(total)
+```
+completed 136/150, Solved: True, number of success = 47/136, acc = 34.56
+```python
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+
+n = int(data[0])
+words = data[1:1+n]
+
+def compress_h(s):
+    while 'kh' in s:
+        s = s.replace('kh', 'h')
+    return s
+
+def get_canonical(s):
+    s = compress_h(s)
+    result = []
+    i = 0
+    while i < len(s):
+        if s[i] in 'ou':
+            num_o = 0
+            num_u = 0
+            while i < len(s) and s[i] in 'ou':
+                if s[i] == 'o':
+                    num_o += 1
+                else:
+                    num_u += 1
+                i += 1
+            count = num_o + 2 * num_u
+            result.append(f"U{count}")
+        else:
+            result.append(s[i])
+            i += 1
+    return ''.join(result)
+
+canon_set = set()
+for word in words:
+    canon = get_canonical(word)
+    canon_set.add(canon)
+
+print(len(canon_set))
+```
+completed 137/150, Solved: True, number of success = 48/137, acc = 35.04
+```python
+import sys
+sys.setrecursionlimit(10**6)
+
+def build(node, ns, ne, s, tree):
+    if ns == ne:
+        tree[node] = s[ns]
+        return
+    mid = (ns + ne) // 2
+    build(2 * node, ns, mid, s, tree)
+    build(2 * node + 1, mid + 1, ne, s, tree)
+    tree[node] = max(tree[2 * node], tree[2 * node + 1])
+
+def query_rightmost(ql, qr, V, node, ns, ne, tree, n):
+    if ql > qr or ql > ne or qr < ns:
+        return -1
+    if tree[node] <= V:
+        return -1
+    if ns == ne:
+        return ns
+    mid = (ns + ne) // 2
+    res = query_rightmost(ql, qr, V, 2 * node + 1, mid + 1, ne, tree, n)
+    if res != -1:
+        return res
+    return query_rightmost(ql, qr, V, 2 * node, ns, mid, tree, n)
+
+def query_leftmost(ql, qr, V, node, ns, ne, tree, n):
+    if ql > qr or ql > ne or qr < ns:
+        return -1
+    if tree[node] <= V:
+        return -1
+    if ns == ne:
+        return ns
+    mid = (ns + ne) // 2
+    res = query_leftmost(ql, qr, V, 2 * node, ns, mid, tree, n)
+    if res != -1:
+        return res
+    return query_leftmost(ql, qr, V, 2 * node + 1, mid + 1, ne, tree, n)
+
+n = int(input())
+nums = list(map(int, input().split()))
+s = [0] * (n + 1)
+for i in range(1, n + 1):
+    s[i] = nums[i - 1]
+
+tree = [0] * (4 * (n + 2))
+build(1, 1, n, s, tree)
+
+# Compute left larger
+left = [0] * (n + 1)
+stack = []
+for i in range(1, n + 1):
+    while stack and s[stack[-1]] <= s[i]:
+        stack.pop()
+    left[i] = stack[-1] if stack else 0
+    stack.append(i)
+
+L = [0] * (n + 1)
+for i in range(1, n + 1):
+    L[i] = left[i] + 1
+
+# Compute right larger
+rightt = [n + 1] * (n + 1)
+stack = []
+for i in range(n, 0, -1):
+    while stack and s[stack[-1]] <= s[i]:
+        stack.pop()
+    rightt[i] = stack[-1] if stack else n + 1
+    stack.append(i)
+
+R = [0] * (n + 1)
+for i in range(1, n + 1):
+    R[i] = rightt[i] - 1
+
+ans = 0
+for i in range(1, n + 1):
+    local = 0
+    # left chain
+    cur_p = i - 1
+    while cur_p >= L[i]:
+        local = max(local, s[i] ^ s[cur_p])
+        V = s[cur_p]
+        np = query_rightmost(L[i], cur_p - 1, V, 1, 1, n, tree, n)
+        if np == -1:
+            break
+        cur_p = np
+    # right chain
+    cur_p = i + 1
+    while cur_p <= R[i]:
+        local = max(local, s[i] ^ s[cur_p])
+        V = s[cur_p]
+        np = query_leftmost(cur_p + 1, R[i], V, 1, 1, n, tree, n)
+        if np == -1:
+            break
+        cur_p = np
+    ans = max(ans, local)
+
+print(ans)
+```
+completed 138/150, Solved: True, number of success = 49/138, acc = 35.51
+```python
+import sys
+from collections import defaultdict
+
+def sieve(maxa):
+    spf = list(range(maxa + 1))
+    for i in range(2, int(maxa ** 0.5) + 1):
+        if spf[i] == i:
+            for j in range(i * i, maxa + 1, i):
+                if spf[j] == j:
+                    spf[j] = i
+    return spf
+
+def factorize(x, spf):
+    res = {}
+    while x > 1:
+        p = spf[x]
+        e = 0
+        while x % p == 0:
+            x //= p
+            e += 1
+        res[p] = e
+    return res
+
+input = sys.stdin.read
+data = input().split()
+index = 0
+n = int(data[index])
+index += 1
+a = [int(data[i]) for i in range(index, index + n)]
+
+MAXA = 200000
+spf = sieve(MAXA)
+
+exps = defaultdict(list)
+for ai in a:
+    if ai == 1:
+        continue
+    factors = factorize(ai, spf)
+    for p, e in factors.items():
+        exps[p].append(e)
+
+ans = 1
+for p, lst in exps.items():
+    m = len(lst)
+    z = n - m
+    if z >= 2:
+        continue
+    lst.sort()
+    if z == 0:
+        e = lst[1]
+    else:
+        e = lst[0]
+    ans *= (p ** e)
+
+print(ans)
+```
+completed 139/150, Solved: True, number of success = 50/139, acc = 35.97
+```python
+import sys
+
+input = sys.stdin.read
+data = input().strip()
+n = int(data)
+
+if n % 4 == 2 or n % 4 == 3:
+    print(-1)
+else:
+    p = [0] * (n + 1)
+    if n % 2 == 1:
+        m = (n + 1) // 2
+        p[m] = m
+    num_pairs = n // 2
+    for j in range(num_pairs // 2):
+        a_idx = 2 * j + 1
+        b_idx = 2 * j + 2
+        a1 = a_idx
+        a2 = n + 1 - a1
+        b1 = b_idx
+        b2 = n + 1 - b1
+        p[a1] = b1
+        p[b1] = a2
+        p[a2] = b2
+        p[b2] = a1
+    print(' '.join(str(p[i]) for i in range(1, n + 1)))
+```
+completed 140/150, Solved: True, number of success = 51/140, acc = 36.43
+
+completed 141/150, Solved: False, number of success = 51/141, acc = 36.17
+```python
+import sys
+import bisect
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+
+beacons = []
+for i in range(n):
+    a = int(data[index])
+    b = int(data[index + 1])
+    beacons.append((a, b))
+    index += 2
+
+beacons.sort()
+pos = [p[0] for p in beacons]
+power = [p[1] for p in beacons]
+destroy_left = [pos[i] - power[i] for i in range(n)]
+
+prevv = [-1] * n
+s = [0] * n
+
+for i in range(n):
+    if i == 0:
+        s[0] = 1
+        continue
+    idx = bisect.bisect_left(pos, destroy_left[i], 0, i)
+    if idx == 0:
+        prevv[i] = -1
+        s[i] = 1
+    else:
+        prevv[i] = idx - 1
+        s[i] = 1 + s[prevv[i]]
+
+max_s = 0
+if n > 0:
+    max_s = max(s)
+
+min_destroyed = n - max_s
+print(min_destroyed)
+```
+completed 142/150, Solved: True, number of success = 52/142, acc = 36.62
+```python
+import sys
+
+input = sys.stdin.read
+data = input().splitlines()
+
+n = int(data[0])
+a = data[1].strip()
+b = data[2].strip()
+
+total_mis = 0
+m = 0
+i = 0
+while i < n:
+    if a[i] == b[i]:
+        i += 1
+        continue
+    chain_len = 1
+    total_mis += 1
+    prev_type = 1 if a[i] == '1' else 0
+    j = i + 1
+    while j < n and a[j] != b[j] and ((1 if a[j] == '1' else 0) != prev_type):
+        chain_len += 1
+        total_mis += 1
+        prev_type = 1 - prev_type
+        j += 1
+    m += chain_len // 2
+    i = j
+
+print(total_mis - m)
+```
+completed 143/150, Solved: True, number of success = 53/143, acc = 37.06
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+
+v = []
+for i in range(n):
+    v.append(int(data[index]))
+    index += 1
+
+v.sort()
+
+def can(D):
+    i = 0
+    right = 0
+    while i < n:
+        while right < n and v[right] - v[i] <= D:
+            right += 1
+        j = right - 1
+        if j < i + k - 1:
+            return False
+        i = j + 1
+    return True
+
+l = 0
+r = v[-1] - v[0]
+while l < r:
+    mid = (l + r) // 2
+    if can(mid):
+        r = mid
+    else:
+        l = mid + 1
+
+print(l)
+```
+completed 144/150, Solved: False, number of success = 53/144, acc = 36.81
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+l = int(data[index])
+index += 1
+r = int(data[index])
+index += 1
+Ql = int(data[index])
+index += 1
+Qr = int(data[index])
+index += 1
+
+w = [int(data[i]) for i in range(index, index + n)]
+
+prefix = [0] * (n + 1)
+for i in range(1, n + 1):
+    prefix[i] = prefix[i - 1] + w[i - 1]
+
+min_cost = float('inf')
+for k in range(n + 1):
+    base = l * prefix[k] + r * (prefix[n] - prefix[k])
+    lefts = k
+    rights = n - k
+    val1 = (Ql + Qr) * min(lefts, rights)
+    t2 = min(rights, lefts - 1)
+    val2 = 0
+    if t2 >= 0:
+        val2 = Ql * (t2 + 1) + Qr * t2
+    t3 = min(lefts, rights - 1)
+    val3 = 0
+    if t3 >= 0:
+        val3 = Ql * t3 + Qr * (t3 + 1)
+    maxw = max(val1, val2, val3)
+    penalty = Ql * lefts + Qr * rights - maxw
+    cost = base + penalty
+    if cost < min_cost:
+        min_cost = cost
+
+print(int(min_cost))
+```
+completed 145/150, Solved: True, number of success = 54/145, acc = 37.24
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+k = int(data[index])
+index += 1
+
+c = [0] * (k + 1)
+for i in range(1, k + 1):
+    c[i] = int(data[index])
+    index += 1
+
+MOD = 1000000007
+MAXN = 1005
+
+fact = [1] * (MAXN + 1)
+for i in range(1, MAXN + 1):
+    fact[i] = fact[i - 1] * i % MOD
+
+invfact = [0] * (MAXN + 1)
+invfact[MAXN] = pow(fact[MAXN], MOD - 2, MOD)
+for i in range(MAXN - 1, -1, -1):
+    invfact[i] = invfact[i + 1] * (i + 1) % MOD
+
+dp = [[0] * (MAXN + 1) for _ in range(k + 1)]
+
+for e in range(MAXN + 1):
+    tot = c[1] + e
+    if tot <= MAXN:
+        dp[1][e] = fact[tot] * invfact[c[1]] * invfact[e] % MOD
+
+for i in range(2, k + 1):
+    ci1 = c[i] - 1
+    if ci1 < 0:
+        continue  # impossible
+    inv_ci1 = invfact[ci1]
+    offset = ci1
+    temp = [0] * (MAXN + 1)
+    for s in range(MAXN + 1):
+        idx = offset + s
+        if idx > MAXN:
+            temp[s] = 0
+        else:
+            temp[s] = dp[i - 1][idx] * fact[idx] * invfact[s] % MOD
+    prefix = [0] * (MAXN + 2)
+    for s in range(MAXN + 1):
+        prefix[s + 1] = (prefix[s] + temp[s]) % MOD
+    for e in range(MAXN + 1):
+        dp[i][e] = inv_ci1 * prefix[e + 1] % MOD
+
+print(dp[k][0])
+```
+completed 146/150, Solved: True, number of success = 55/146, acc = 37.67
+completed 147/150, Solved: False, number of success = 55/147, acc = 37.41
+```python
+import sys
+
+input = sys.stdin.read
+data = input().split()
+
+index = 0
+n = int(data[index])
+index += 1
+k = int(data[index])
+index += 1
+a = []
+for i in range(n):
+    a.append(int(data[index]))
+    index += 1
+
+prefix = [0] * (n + 1)
+for i in range(1, n + 1):
+    prefix[i] = prefix[i - 1] + a[i - 1]
+
+S = prefix[n]
+if S % k != 0:
+    print("No")
+else:
+    T = S // k
+    sum_to_pos = {}
+    for i in range(1, n + 1):
+        sum_to_pos[prefix[i]] = i
+    positions = []
+    ok = True
+    for m in range(1, k):
+        target = m * T
+        if target not in sum_to_pos:
+            ok = False
+            break
+        positions.append(sum_to_pos[target])
+    if ok:
+        print("Yes")
+        sizes = []
+        prev = 0
+        for pos in positions:
+            sizes.append(pos - prev)
+            prev = pos
+        sizes.append(n - prev)
+        print(' '.join(map(str, sizes)))
+    else:
+        print("No")
+```
+completed 148/150, Solved: True, number of success = 56/148, acc = 37.84
+```python
+import sys
+sys.setrecursionlimit(10000)
+
+def get_cycles(n):
+    if n == 3:
+        return [
+            [3, 1, 2, 3],
+            [3, 1, 2, 3]
+        ]
+    elif n == 4:
+        return [
+            [3, 1, 2, 3],
+            [3, 1, 2, 4],
+            [3, 1, 3, 4],
+            [3, 2, 3, 4]
+        ]
+    else:
+        old_cycles = get_cycles(n - 2)
+        cycles = old_cycles[:]
+        v = 1
+        A = n - 1
+        B = n
+        tri = [3, v, A, B]
+        cycles.append(tri)
+        cycles.append(tri)
+        rem = list(range(2, n - 1))
+        m = len(rem)
+        if m == 2:
+            cyc = [4, rem[0], A, rem[1], B]
+            cycles.append(cyc)
+            cycles.append(cyc)
+        elif m > 0:
+            for i in range(m):
+                p1 = rem[i]
+                p2 = rem[(i + 1) % m]
+                cyc = [4, p1, A, p2, B]
+                cycles.append(cyc)
+        return cycles
+
+n = int(input().strip())
+cycles = get_cycles(n)
+print(len(cycles))
+for cyc in cycles:
+    print(' '.join(map(str, cyc)))
+```
+completed 149/150, Solved: False, number of success = 56/149, acc = 37.58
+completed 150/150, Solved: False, number of success = 56/150, acc = 37.33
+
+##################################################
+Experiment end results/APPS/Direct/grok-4.1-fast/Python3-0-0.95-1/Run-1, Time: 2025-12-11 04:42:08.836082
+###################################################
+
