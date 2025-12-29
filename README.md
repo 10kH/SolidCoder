@@ -59,7 +59,7 @@ The core insight of SolidCoder is that LLMs *hallucinate* execution traces durin
 | CodeSIM | Mental Simulation ("imagines") | Hallucinates correct behavior for buggy code |
 | **SolidCoder** | Live Execution ("executes") | Grounds verification in runtime reality |
 
-![Mental-Reality Gap Example](fig2.jpeg)
+![Mental-Reality Gap Example](fig2.png)
 
 *Figure 2: Concrete example demonstrating the Mental-Reality Gap. **Left (CodeSIM):** Mental simulation hallucinates correct behavior for buggy code, incorrectly validating a flawed solution. **Right (SolidCoder):** Live execution catches the bug through concrete runtime feedback, enabling proper debugging and test accumulation. This illustrates how execution-grounded verification detects errors that mental simulation misses.*
 
