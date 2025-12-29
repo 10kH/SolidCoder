@@ -10,11 +10,11 @@ We introduce **SolidCoder**, a framework that bridges this gap by anchoring veri
 
 | Component | Description |
 |:----------|:------------|
-| **S**hift-left | Edge-case planning before code generation |
-| **O**racle-based | Property assertions without ground-truth outputs |
-| **L**ive | Sandboxed code execution for verification |
-| **I**ntermediate | Code simulation to catch translation errors |
-| **D**efensive | Test accumulation to prevent regression |
+| **S**hift-left Planning | Identifies edge cases (empty inputs, boundary values, corner cases) *before* formulating the algorithmic plan, forcing robust algorithm design from the outset |
+| **O**racle-based Assertions | Generates property-based tests without ground-truth outputs by verifying domain-invariant properties (e.g., output length, permutation constraints) rather than exact values |
+| **L**ive Execution | Runs generated code in a sandboxed environment (5-second timeout) to provide concrete runtime feedback, eliminating hallucinated execution traces |
+| **I**ntermediate Simulation | Traces code step-by-step on sample inputs immediately after generation to catch plan-to-code translation errors (off-by-one, operator precedence) before live execution |
+| **D**efensive Accumulation | Maintains a persistent test suite that grows throughout debugging; all accumulated tests are re-executed after every code modification to prevent regression |
 
 ## Key Results
 
