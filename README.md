@@ -46,7 +46,7 @@ The largest gains appear on **CodeContests**—where mental simulation begins to
 
 ## Architecture Overview
 
-![SolidCoder Architecture](fig1.jpeg)
+![SolidCoder Architecture](fig1.png)
 
 *Figure 1: Comparison between CodeSIM (mental simulation) and SolidCoder (concrete execution). Gray boxes are shared with CodeSIM; blue boxes are S.O.L.I.D. components introduced by SolidCoder.*
 
