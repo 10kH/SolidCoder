@@ -299,7 +299,6 @@ SolidCoder implements safety measures for live code execution:
 ## Comparison with Related Work
 
 |  | *Generation* |  |  |  | *Verification* |  |  |
-|:--|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | **Approach** | Exemplar | Plan | Edge Aware | Mental Sim. | Live Exec. | Debug | Defensive |
 |:--|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 | Reflexion | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
