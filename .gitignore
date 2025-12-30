@@ -19,3 +19,6 @@ usage*.csv
 .venv
 
 temp*
+
+# Paper folder (local only, not synced to GitHub)
+paper/
