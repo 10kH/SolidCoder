@@ -1,6 +1,6 @@
 # SolidCoder: Bridging the Mental-Reality Gap in LLM Code Generation through Concrete Execution
 
-> **ARR January 2026 Submission** | Anonymous Repository
+> **ACL 2026 Findings** | Official Repository
 
 ## Abstract
 
@@ -314,12 +314,11 @@ SolidCoder implements safety measures for live code execution:
 ## Citation
 
 ```bibtex
-@inproceedings{anonymous2026solidcoder,
+@inproceedings{lee2026solidcoder,
     title={SolidCoder: Bridging the Mental-Reality Gap in LLM Code Generation through Concrete Execution},
-    author={Anonymous},
-    booktitle={ARR January 2026},
-    year={2026},
-    note={Under review}
+    author={Woojin Lee and Jin-Xia Huang},
+    booktitle={Findings of the Association for Computational Linguistics: ACL 2026},
+    year={2026}
 }
 ```
 
