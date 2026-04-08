@@ -8,7 +8,8 @@ from tenacity import retry, stop_after_attempt, wait_random_exponential
 from .Base import BaseModel
 
 # HuggingFace token for gated models
-HF_TOKEN = os.getenv("HF_TOKEN", "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")
+# NOTE: never hardcode Hugging Face tokens; provide HF_TOKEN via the environment.
+HF_TOKEN = os.getenv("HF_TOKEN")
 
 # Model name mapping
 MODEL_MAPPING = {
