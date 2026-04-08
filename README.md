@@ -4,9 +4,11 @@
 
 ## Abstract
 
-Large Language Models (LLMs) have driven remarkable progress in automated code generation. State-of-the-art multi-agent frameworks such as CodeSIM leverage *Mental Simulation*—where the model internally traces code execution—to verify plans and debug errors. However, this approach is fundamentally limited by the **Mental-Reality Gap**: LLMs frequently hallucinate execution traces, believing incorrect code to be correct.
+State-of-the-art code generation frameworks rely on *mental simulation*, where LLMs internally trace execution to verify correctness. We expose a fundamental limitation: the **Mental-Reality Gap**—where models hallucinate execution traces and confidently validate buggy code. This gap manifests along two orthogonal dimensions: the **Specification Gap** (overlooking edge cases during planning) and the **Verification Gap** (hallucinating correct behavior for flawed code).
 
-We introduce **SolidCoder**, a framework that bridges this gap by anchoring verification in **Concrete Reality**—actual code execution rather than imagined traces. Our **S.O.L.I.D.** architecture integrates five synergistic components:
+We propose **SolidCoder** with a simple principle: *don't imagine—execute*. The **S.O.L.I.D.** architecture addresses both dimensions by forcing edge-case awareness before algorithm design and replacing imagined traces with sandboxed execution using property-based oracles. With GPT-4o, SolidCoder achieves state-of-the-art pass@1: **95.7%** on HumanEval (+0.6%p), **77.0%** on CodeContests (+4.3%p), and **26.7%** on APPS (+3.4%p). Ablation reveals that edge-case awareness provides the largest individual gain, while execution grounding catches categorically different errors that specification improvements cannot address. These gains generalize to RL post-trained models, validating that bridging both gap dimensions is essential for robust code synthesis. We release our code and framework to facilitate future research.
+
+Our **S.O.L.I.D.** architecture integrates five synergistic components:
 
 | Component | Description |
 |:----------|:------------|
