@@ -9,6 +9,8 @@ desktop.ini
 logs
 
 test*
+!/tests/
+!/tests/**
 
 # results  # uncomment to exclude results from git
 outputs
