@@ -10,10 +10,9 @@ S.O.L.I.D.:
 """
 
 import re
-import builtins
 from typing import Optional
 
-from evaluations.executor_utils import function_with_timeout
+from evaluations.concrete_verify import concrete_verify_script
 
 from .CodeSIM import (
     CodeSIM,
@@ -457,6 +456,36 @@ Wrap the code in ```{self.language} ... ``` block.
                 if self.verbose >= VERBOSE_FULL:
                     print(f"[SolidCoder] Live Attack Result:\n{attack_result}\n")
 
+                if self.is_competitive:
+                    # Stdin-driven programs: verify with an injected stdin
+                    # payload instead of a function-call script.
+                    stdin_payload = self._extract_stdin_payload(attack_result)
+                    if not stdin_payload:
+                        if self.verbose >= VERBOSE_FULL:
+                            print("[SolidCoder] No stdin payload parsed; skipping fix.\n")
+                        break
+
+                    test_repr = f"# Standard input fed to the program:\n{stdin_payload}"
+                    is_valid_test = self._judge_test_case(problem, test_repr)
+                    if not is_valid_test:
+                        if self.verbose >= VERBOSE_FULL:
+                            print("[SolidCoder] Judge rejected the test case as INVALID.\n")
+                        continue
+
+                    verify_status = self._concrete_verify_script(code, "", stdin_payload=stdin_payload)
+                    if verify_status in {"FAIL_CRASH", "FAIL_ASSERT"}:
+                        if self.enable_defensive_test:
+                            # Payloads are plain stdin text, not the
+                            # {input, output} dicts the contest evaluator
+                            # expects, so they must never be pushed into
+                            # additional_io. Recorded for run details only.
+                            self.accumulated_inputs.append(stdin_payload)
+                        code = self._fix_with_stdin_case(problem, code, stdin_payload)
+                        continue
+
+                    # Robust or non-actionable -> stop
+                    break
+
                 test_script = self._extract_test_script(attack_result)
                 if not test_script:
                     if self.verbose >= VERBOSE_FULL:
@@ -546,6 +575,34 @@ If it violates constraints or expects wrong output, output: **INVALID**
 
     def _build_live_assumption_prompt(self, problem: str, code: str, oracle: bool) -> str:
         """Create prompt asking for a runnable Python test script to break the code."""
+        if self.is_competitive:
+            # Stdin-driven programs expose no callable to attack; ask for a
+            # breaking standard-input payload instead of a test script.
+            return f"""
+You are an expert software tester (Red Team).
+Your goal is to break the following program by finding hidden assumptions.
+The program reads its input from standard input.
+
+## Problem
+{problem}
+
+## Code
+```{self.language}
+{code}
+```
+
+## Your Task
+1. Identify a weak assumption (Type, Value, Structure, or Relationship).
+2. Produce a **standard-input payload** (the exact text the program reads from stdin) that violates the assumption while staying within the problem's input format and constraints.
+3. Any crash on this input is a failure.
+
+Format:
+Assumption: <short text>
+Input:
+```
+<the exact stdin payload, one value per line as the problem's input format requires>
+```
+"""
         if oracle:
             return f"""
 You are an expert software tester (Red Team).
@@ -614,6 +671,45 @@ Test Script:
             return generic_block.group(1).strip()
         return None
 
+    def _extract_stdin_payload(self, attack_result: str) -> Optional[str]:
+        """Extract a standard-input payload from the LLM attack response."""
+        payload_match = re.search(
+            r"Input:\s*```(?:text)?\s*\n?(.*?)```",
+            attack_result,
+            re.DOTALL | re.IGNORECASE,
+        )
+        if not payload_match:
+            return None
+        payload = payload_match.group(1).strip("\n")
+        if not payload.strip():
+            return None
+        return payload + "\n"
+
+    def _fix_with_stdin_case(self, problem: str, code: str, stdin_payload: str) -> str:
+        """Ask the LLM to patch code based on a breaking stdin payload."""
+        prompt_fix = f"""
+## Problem
+{problem}
+
+## Code
+```{self.language}
+{code}
+```
+
+## Vulnerability Found
+The program crashed (or produced an assertion failure) when fed the following standard input:
+```
+{stdin_payload}
+```
+
+## Task
+Fix the code to handle this input correctly.
+Keep reading input from standard input and writing the result to standard output.
+Wrap the code in ```{self.language} ... ``` block.
+"""
+        code_response = self.gpt_chat(processed_input=[{"role": "user", "content": prompt_fix}])
+        return parse_response(code_response)
+
     def _fix_with_test_script(self, problem: str, code: str, test_script_str: str) -> str:
         """Ask the LLM to patch code based on a failing test script."""
         prompt_fix = f"""
@@ -638,27 +734,11 @@ Wrap the code in ```{self.language} ... ``` block.
         code_response = self.gpt_chat(processed_input=[{"role": "user", "content": prompt_fix}])
         return parse_response(code_response)
 
-    def _concrete_verify_script(self, code, test_script, timeout: int = 5):
-        if not self.language.lower().startswith("python"):
-            return "SKIP_NON_PY"
-
-        full_code = f"""
-import sys
-import math
-from typing import List, Dict, Any, Optional, Union, Tuple
-
-{code}
-
-{test_script}
-"""
-        try:
-            # Create a new global namespace for execution with input disabled
-            safe_builtins = builtins.__dict__.copy()
-            safe_builtins["input"] = lambda *_, **__: (_ for _ in ()).throw(RuntimeError("input() disabled during live verify"))
-            exec_globals = {"__builtins__": safe_builtins}
-            function_with_timeout(exec, (full_code, exec_globals), timeout)
-            return "PASS"
-        except AssertionError:
-            return "FAIL_ASSERT"
-        except Exception:
-            return "FAIL_CRASH"
+    def _concrete_verify_script(self, code, test_script, timeout: int = 5, stdin_payload: Optional[str] = None):
+        return concrete_verify_script(
+            code,
+            test_script,
+            language=self.language,
+            timeout=timeout,
+            stdin_payload=stdin_payload,
+        )
