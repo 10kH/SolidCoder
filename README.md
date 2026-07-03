@@ -76,7 +76,7 @@ The core insight of SolidCoder is that LLMs *hallucinate* execution traces durin
 
 ```bash
 # Clone repository
-git clone https://github.com/Anonymous-ARR-Submissions/SolidCoder.git
+git clone https://github.com/10kH/SolidCoder.git
 cd SolidCoder
 
 # Create virtual environment
