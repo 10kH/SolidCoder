@@ -1,4 +1,7 @@
-# python==3.11
+# Tested with Python 3.11.
+# Note: the exact package versions of the original paper environment were not
+# recorded; the packages below are intentionally left unpinned. The released
+# numbers live in results/ and do not depend on re-installing this environment.
 openai
 numpy
 pandas

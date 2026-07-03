@@ -1,6 +1,4 @@
 from typing import *
-import contextlib
-import signal
 
 from .executor_utils import function_with_timeout
 
@@ -20,9 +18,11 @@ def evaluate_io(
         try:
             code = ("from typing import *\n" if "from typing import *" not in completion else "") + \
                 completion + "\n" + io + "\n"
+            # Fresh namespace per execution: keeps generated code out of this
+            # module's globals and prevents state leaking across test cases.
             function_with_timeout(
                 exec,
-                (code, globals()),
+                (code, {}),
                 timeout
             )
             test_log += f"Passed in test case: {io}\n"
@@ -47,7 +47,7 @@ def evaluate_io_et(
             prompt + completion + "\n" + io + "\n"
         function_with_timeout(
             exec,
-            (code, globals()),
+            (code, {}),
             timeout
         )
         return True
@@ -68,7 +68,7 @@ def evaluate_functional_correctness(
 
         function_with_timeout(
             exec,
-            (code, globals()),
+            (code, {}),
             timeout
         )
         return "passed"
