@@ -174,6 +174,28 @@ export ANTHROPIC_API_KEY='your-api-key'
 
 ## Experiment Reproduction
 
+### Reproducibility & Provenance
+
+- All numbers reported in the paper are provided as static artifacts under
+  `results/` (per-problem `Results.jsonl`, `Log.txt`, `Summary.txt`).
+- The tag **`acl2026-camera-ready`** marks this repository **as submitted**
+  (an as-submitted provenance marker, not a certified re-run): check it out to
+  study the exact code state behind the released artifacts.
+- Current `main` contains post-camera-ready bugfixes (see
+  [CHANGELOG.md](CHANGELOG.md)). The released numbers are unaffected — the
+  fixed paths left no footprint in the released records — but a fresh re-run
+  of `main` may follow different trajectories than the released runs, and live
+  model APIs may themselves have drifted since the original experiments.
+
+### Known Limitations
+
+- Before the fixes on `main`, Live Execution `[L]` could not genuinely verify
+  stdin-driven (APPS/CodeContests-style) programs: `input()` was disabled, so
+  judged-and-accepted attack rounds always reported a crash. See CHANGELOG
+  entry W1 for how this is fixed and what it means for re-runs.
+- A worker thread that exceeds the execution timeout cannot be killed; it is
+  daemonized and abandoned, and may keep running until the process exits.
+
 ### Models Used in Paper
 
 | Model | Description | OpenRouter ID |
@@ -294,8 +316,8 @@ SolidCoder implements safety measures for live code execution:
 | Mechanism | Implementation | Purpose |
 |:----------|:---------------|:--------|
 | Timeout | 5-second limit | Prevent infinite loops |
-| Input Blocking | `input()` → RuntimeError | Prevent hanging on stdin |
-| Isolated Namespace | Fresh `exec_globals` per run | Prevent state leakage |
+| Input Control | Function-style: `input()` → RuntimeError; stdin-style: in-memory injected payload | Prevent hanging on stdin |
+| Isolated Namespace | Fresh `exec_globals` per execution | Prevent state leakage |
 | ExecEval Docker | Sandboxed container | Secure execution for competition problems |
 
 ## Comparison with Related Work

@@ -11,6 +11,7 @@ logs
 test*
 !/tests/
 !/tests/**
+/tests/__pycache__/
 
 # results  # uncomment to exclude results from git
 outputs
