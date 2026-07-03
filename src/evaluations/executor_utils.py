@@ -12,6 +12,7 @@ from threading import Thread
 class PropagatingThread(Thread):
     def run(self):
         self.exc = None
+        self.ret = None
         try:
             if hasattr(self, '_Thread__target'):
                 # Thread uses name mangling prior to Python 3.
@@ -35,6 +36,10 @@ def function_with_timeout(func, args, timeout):
         result_container.append(func(*args))
 
     thread = PropagatingThread(target=wrapper)
+    # Daemonize so a timed-out worker (e.g. generated code stuck in an infinite
+    # loop) cannot block interpreter exit. Note: daemonizing does not kill the
+    # abandoned thread; it may keep running until the process ends.
+    thread.daemon = True
     thread.start()
     thread.join(timeout)
 
