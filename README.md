@@ -316,11 +316,23 @@ SolidCoder implements safety measures for live code execution:
 ## Citation
 
 ```bibtex
-@inproceedings{lee2026solidcoder,
-    title={SolidCoder: Bridging the Mental-Reality Gap in LLM Code Generation through Concrete Execution},
-    author={Woojin Lee and Jin-Xia Huang},
-    booktitle={Findings of the Association for Computational Linguistics: ACL 2026},
-    year={2026}
+@inproceedings{lee-huang-2026-solidcoder,
+    title = "{S}olid{C}oder: Bridging the Mental-Reality Gap in {LLM} Code Generation through Concrete Execution",
+    author = "Lee, Woojin  and
+      Huang, Jin-Xia",
+    editor = "Liakata, Maria  and
+      Moreira, Viviane P.  and
+      Zhang, Jiajun  and
+      Jurgens, David",
+    booktitle = "Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2026",
+    month = jul,
+    year = "2026",
+    address = "San Diego, California, United States",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2026.findings-acl.361/",
+    doi = "10.18653/v1/2026.findings-acl.361",
+    pages = "7294--7316",
+    ISBN = "979-8-89176-395-1"
 }
 ```
 
