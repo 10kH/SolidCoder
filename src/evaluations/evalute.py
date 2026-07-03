@@ -127,6 +127,17 @@ def contest_evaluate_public_tests(
     id: int,
     tests: List[dict],
 ):
+    # Diagnostic guard only (no behavioral change): this evaluator requires
+    # {input, output} dicts; anything else would fail below in confusing ways.
+    malformed = [t for t in tests if not (isinstance(t, dict) and "input" in t and "output" in t)]
+    if malformed:
+        print(
+            f"[contest_evaluate_public_tests] WARNING: {len(malformed)}/{len(tests)} "
+            "test entries are not {input, output} dicts; they cannot be evaluated "
+            "by the contest judge.",
+            flush=True,
+        )
+
     results, error, _ = api_comm.execute_code(
         language=LANGUAGE_MAPPING[lang],
         source_code=generated_code,
